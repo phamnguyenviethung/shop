@@ -19,7 +19,7 @@ const CartTable = ({ data }) => {
         {data.map((item, key) => {
           return (
             <Tr key={key}>
-              <Td>{item.stickerName}</Td>
+              <Td>{item.name}</Td>
               <Td>{item.count}</Td>
               <Td isNumeric>
                 <Button onClick={() => dispatch(increase(item))}>+</Button>

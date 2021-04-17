@@ -26,7 +26,7 @@ const Product = ({ data }) => {
                 h="full"
               />
               <Heading as="h3" size="xl" my={4}>
-                {item.stickerName}
+                {item.name}
               </Heading>
               <Button onClick={() => dispatch(addToCart(item))}>
                 Add to cart

@@ -2,8 +2,20 @@ import axiosClient from './axiosclient';
 
 const productApi = {
   getAll: params => {
-    const url = 'http://localhost:3001/api/products';
-    return axiosClient.get(url, { params });
+    const url = '/products/list';
+    return axiosClient.get(url);
+  },
+  addNew: params => {
+    const url = '/products/add';
+    return axiosClient.post(url, params);
+  },
+  update: params => {
+    const url = '/products/edit';
+    return axiosClient.put(url, params);
+  },
+  delete: id => {
+    const url = `/products/delete/${id}`;
+    return axiosClient.delete(url);
   },
 };
 
