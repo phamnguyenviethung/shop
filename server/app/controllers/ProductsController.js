@@ -11,10 +11,11 @@ class ProductsController {
   // [POST] /products/add
   add(req, res, next) {
     const name = req.body.name;
+    const price = req.body.price;
     const quantity = req.body.quantity;
     const thumb = req.body.thumb;
 
-    const product = new ProductModel({ name, quantity, thumb });
+    const product = new ProductModel({ name, price, quantity, thumb });
     product
       .save()
       .then(() => res.send("added"))
@@ -24,12 +25,14 @@ class ProductsController {
   // [PUT] /products/edit
   edit(req, res, next) {
     const newName = req.body.newProductName;
+    const newPrice = req.body.newProductPrice;
     const newQuantity = req.body.newProductQuantity;
     const newImg = req.body.newProductImg;
     const id = req.body.id;
 
     ProductModel.findById(id, (err, updatedProduct) => {
       updatedProduct.name = newName;
+      updatedProduct.price = newPrice;
       updatedProduct.quantity = newQuantity;
       updatedProduct.thumb = newImg;
       updatedProduct.save();

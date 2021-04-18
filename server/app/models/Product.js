@@ -26,5 +26,5 @@ const ProductSchema = new Schema(
   }
 );
 
-const Product = mongoose.model("Sticker", ProductSchema);
+const Product = mongoose.model("Product", ProductSchema);
 module.exports = Product;
