@@ -14,12 +14,14 @@ import productsApi from '../api/productsApi';
 
 const Admin = () => {
   const [productName, setProductName] = useState('');
+  const [productPrice, setProductPrice] = useState('');
   const [productQuantity, setProductQuantity] = useState('');
   const [productImg, setProductImg] = useState('');
 
   const [productsList, setProductsList] = useState([]);
 
   const [newProductName, setNewProductName] = useState('');
+  const [newProductPrice, setNewProductPrice] = useState('');
   const [newProductQuantity, setNewProductQuantity] = useState('');
   const [newProductImg, setNewProductImg] = useState('');
 
@@ -27,6 +29,7 @@ const Admin = () => {
     try {
       const params = {
         name: productName,
+        price: productPrice,
         quantity: productQuantity,
         thumb: productImg,
       };
@@ -99,6 +102,15 @@ const Admin = () => {
           }}
           value={productName}
         />
+        <FormLabel>Giá</FormLabel>
+        <Input
+          placeholder="Price"
+          mb={4}
+          onChange={e => {
+            setProductPrice(e.target.value);
+          }}
+          value={productPrice}
+        />
         <FormLabel>Số lượng</FormLabel>
         <Input
           type="number"
@@ -148,6 +160,15 @@ const Admin = () => {
                 mb={4}
                 onChange={e => {
                   setNewProductName(e.target.value);
+                }}
+              />
+              <FormLabel>Giá</FormLabel>
+              <Input
+                value={newProductPrice}
+                placeholder={item.price}
+                mb={4}
+                onChange={e => {
+                  setNewProductPrice(e.target.value);
                 }}
               />
               <FormLabel>Số lượng</FormLabel>
