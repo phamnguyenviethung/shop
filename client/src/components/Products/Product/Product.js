@@ -1,5 +1,5 @@
 import React from 'react';
-import { Container, Flex, Heading, Button } from '@chakra-ui/react';
+import { Container, Flex, Heading, Button, Text } from '@chakra-ui/react';
 import { addToCart } from '../../../actions/cartActions';
 import { useDispatch } from 'react-redux';
 
@@ -28,6 +28,9 @@ const Product = ({ data }) => {
               <Heading as="h3" size="xl" my={4}>
                 {item.name}
               </Heading>
+              <Text size="md" mb={4} color="black.800">
+                {item.price} VND
+              </Text>
               <Button onClick={() => dispatch(addToCart(item))}>
                 Add to cart
               </Button>

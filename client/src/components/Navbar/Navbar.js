@@ -8,7 +8,7 @@ import Logo from '../shared/Logo';
 const Navbar = () => {
   return (
     <Flex w="full" h="100px" alignItems="center" justifyContent="space-around">
-      <Logo src="https://i.imgur.com/FtvHAzy.png" desc="logo" size="100px" />
+      <Logo src="https://i.imgur.com/ZBpuXT2.png" desc="logo" size="120px" />
       <HStack>
         <Link to="/" px={2}>
           Home
@@ -20,7 +20,9 @@ const Navbar = () => {
           Admin
         </Link>
       </HStack>
-      <CartIcon />
+      <Link to="/cart">
+        <CartIcon />
+      </Link>
     </Flex>
   );
 };
