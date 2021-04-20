@@ -92,7 +92,7 @@ const Admin = () => {
         Admin
       </Heading>
       {/* Add new product */}
-      <FormControl id="adminForm" isRequired>
+      <FormControl isRequired>
         <FormLabel>Tên</FormLabel>
         <Input
           placeholder="Name"

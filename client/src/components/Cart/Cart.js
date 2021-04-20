@@ -6,14 +6,11 @@ import CartEmpty from './CartEmpty';
 const Cart = () => {
   const data = useSelector(state => state.cart.cartItems);
   return (
-    <Container w="full" maxW="80%" px={0} h="100vh">
+    <Container w="full" maxW="95%" px={0} h="100vh">
       {data.length === 0 ? (
         <CartEmpty />
       ) : (
         <>
-          {/* <Heading as="h2" w="full" textAlign="center" my={4}>
-            Carts
-          </Heading> */}
           <CartTable data={data} />
         </>
       )}

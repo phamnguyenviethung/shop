@@ -2,6 +2,7 @@ import React from 'react';
 import { Container, Flex, Heading, Button, Text } from '@chakra-ui/react';
 import { addToCart } from '../../../actions/cartActions';
 import { useDispatch } from 'react-redux';
+import formartCurrency from '../../../utils/formartCurrency';
 
 const Product = ({ data }) => {
   const dispatch = useDispatch();
@@ -29,7 +30,7 @@ const Product = ({ data }) => {
                 {item.name}
               </Heading>
               <Text size="md" mb={4} color="black.800">
-                {item.price} VND
+                {formartCurrency(item.price)}
               </Text>
               <Button onClick={() => dispatch(addToCart(item))}>
                 Add to cart
