@@ -92,48 +92,54 @@ const Admin = () => {
         Admin
       </Heading>
       {/* Add new product */}
-      <FormControl isRequired>
-        <FormLabel>Tên</FormLabel>
-        <Input
-          placeholder="Name"
-          mb={4}
-          onChange={e => {
-            setProductName(e.target.value);
-          }}
-          value={productName}
-        />
-        <FormLabel>Giá</FormLabel>
-        <Input
-          placeholder="Price"
-          mb={4}
-          onChange={e => {
-            setProductPrice(e.target.value);
-          }}
-          value={productPrice}
-        />
-        <FormLabel>Số lượng</FormLabel>
-        <Input
-          type="number"
-          placeholder="Nhập số lượng"
-          mb={4}
-          onChange={e => {
-            setProductQuantity(e.target.value);
-          }}
-          value={productQuantity}
-        />
-        <FormLabel>Ảnh</FormLabel>
-        <Input
-          placeholder="Give me the link..."
-          mb={4}
-          onChange={e => {
-            setProductImg(e.target.value);
-          }}
-          value={productImg}
-        />
-        <Button w="full" onClick={addNewProduct}>
-          Add new
-        </Button>
-      </FormControl>
+      <form>
+        <FormControl>
+          <FormLabel>Tên</FormLabel>
+          <Input
+            placeholder="Name"
+            mb={4}
+            onChange={e => {
+              setProductName(e.target.value);
+            }}
+            value={productName}
+            isRequired="true"
+          />
+          <FormLabel>Giá</FormLabel>
+          <Input
+            placeholder="Price"
+            mb={4}
+            onChange={e => {
+              setProductPrice(e.target.value);
+            }}
+            value={productPrice}
+            isRequired="true"
+          />
+          <FormLabel>Số lượng</FormLabel>
+          <Input
+            type="number"
+            placeholder="Nhập số lượng"
+            mb={4}
+            onChange={e => {
+              setProductQuantity(e.target.value);
+            }}
+            value={productQuantity}
+            isRequired="true"
+          />
+          <FormLabel>Ảnh</FormLabel>
+          <Input
+            placeholder="Give me the link..."
+            mb={4}
+            onChange={e => {
+              setProductImg(e.target.value);
+            }}
+            value={productImg}
+            isRequired="true"
+          />
+          <Button w="full" onClick={addNewProduct}>
+            Add new
+          </Button>
+        </FormControl>
+      </form>
       {/* Product List */}
       <Heading as="h3" textAlign="center" my={6}>
         Products Manage
