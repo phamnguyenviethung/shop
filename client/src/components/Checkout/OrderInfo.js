@@ -70,9 +70,7 @@ const OrderInfo = ({ data }) => {
         </Flex>
         <Divider my={4} />
       </Flex>
-      <Button mt={6} borderRadius="3xl" colorScheme="teal">
-        Place Order
-      </Button>
+      
     </Flex>
   );
 };

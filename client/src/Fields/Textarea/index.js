@@ -4,50 +4,49 @@ import { ErrorMessage } from 'formik';
 import {
   FormControl,
   FormLabel,
-  Input,
   FormErrorMessage,
+  Textarea,
 } from '@chakra-ui/react';
 
-InputField.propTypes = {
+TextareaField.propTypes = {
   field: PropTypes.object.isRequired,
   form: PropTypes.object.isRequired,
 
   type: PropTypes.string,
   label: PropTypes.string,
   placeholder: PropTypes.string,
-  maxW: PropTypes.string,
   disabled: PropTypes.bool,
 };
 
-InputField.defaultProps = {
+TextareaField.defaultProps = {
   type: 'text',
   label: '',
   placeholder: '',
   disabled: false,
-  maxW: '100%',
 };
 
-function InputField({ field, form, type, label, placeholder, disabled, maxW }) {
+function TextareaField({ field, form, type, label, placeholder, disabled }) {
   const { name } = field;
   const { errors, touched } = form;
   const showError = errors[name] && touched[name];
 
   return (
-    <FormControl isInvalid={showError}>
-      {label && <FormLabel htmlFor={name}>{label}</FormLabel>}
+    <FormControl>
+      {label && <FormLabel for={name}>{label}</FormLabel>}
 
-      <Input
+      <Textarea
         mb={2}
         id={name}
         {...field}
         type={type}
         disabled={disabled}
         placeholder={placeholder}
-        maxW={maxW}
+        invalid={showError}
       />
-      {showError && <FormErrorMessage>{errors[name]}</FormErrorMessage>}
+
+      <ErrorMessage name={name} component={FormErrorMessage} />
     </FormControl>
   );
 }
 
-export default InputField;
+export default TextareaField;

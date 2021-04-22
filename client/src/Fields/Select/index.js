@@ -49,7 +49,7 @@ function SelectField(props) {
   };
 
   return (
-    <FormControl isRequired>
+    <FormControl>
       {label && <FormLabel for={name}>{label}</FormLabel>}
 
       <Select

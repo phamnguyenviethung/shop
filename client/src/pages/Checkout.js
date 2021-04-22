@@ -1,7 +1,6 @@
 import { Container, Flex, HStack } from '@chakra-ui/react';
 import React from 'react';
 import { useSelector } from 'react-redux';
-import { Formik, Form } from 'formik';
 import UserInfo from '../components/Checkout/UserInfo';
 import OrderInfo from '../components/Checkout/OrderInfo';
 
@@ -12,7 +11,7 @@ const Checkout = () => {
     <HStack>
       <Container height="100vh" px={0} maxW="75%">
         <Flex>
-          <UserInfo  />
+          <UserInfo />
           <OrderInfo data={data} />
         </Flex>
       </Container>
