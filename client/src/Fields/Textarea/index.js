@@ -16,6 +16,7 @@ TextareaField.propTypes = {
   label: PropTypes.string,
   placeholder: PropTypes.string,
   disabled: PropTypes.bool,
+  required: PropTypes.bool,
 };
 
 TextareaField.defaultProps = {
@@ -23,15 +24,24 @@ TextareaField.defaultProps = {
   label: '',
   placeholder: '',
   disabled: false,
+  required: false,
 };
 
-function TextareaField({ field, form, type, label, placeholder, disabled }) {
+function TextareaField({
+  field,
+  form,
+  type,
+  label,
+  placeholder,
+  disabled,
+  required,
+}) {
   const { name } = field;
   const { errors, touched } = form;
   const showError = errors[name] && touched[name];
 
   return (
-    <FormControl>
+    <FormControl isRequired={required}>
       {label && <FormLabel for={name}>{label}</FormLabel>}
 
       <Textarea

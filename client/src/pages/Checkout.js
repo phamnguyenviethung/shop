@@ -11,7 +11,7 @@ const Checkout = () => {
     <HStack>
       <Container height="100vh" px={0} maxW="75%">
         <Flex>
-          <UserInfo />
+          <UserInfo data={data} />
           <OrderInfo data={data} />
         </Flex>
       </Container>

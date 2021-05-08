@@ -16,6 +16,7 @@ SelectField.propTypes = {
   label: PropTypes.string,
   placeholder: PropTypes.string,
   disabled: PropTypes.bool,
+  required: PropTypes.bool,
   options: PropTypes.array,
 };
 
@@ -23,20 +24,30 @@ SelectField.defaultProps = {
   label: '',
   placeholder: '',
   disabled: false,
+  required: false,
   options: [],
 };
 
-function SelectField(props) {
-  const { field, form, options, label, placeholder, disabled } = props;
+function SelectField({
+  field,
+  form,
+  options,
+  label,
+  placeholder,
+  disabled,
+  required,
+}) {
   const { name, value } = field;
   const { errors, touched } = form;
   const showError = errors[name] && touched[name];
 
   const selectedOption = options.find(option => option.value === value);
+  console.log(options);
+  // console.log('select la', selectedOption);
 
   const handleSelectedOptionChange = selectedOption => {
     const selectedValue = selectedOption
-      ? selectedOption.value
+      ? selectedOption.target.value
       : selectedOption;
 
     const changeEvent = {
@@ -49,7 +60,7 @@ function SelectField(props) {
   };
 
   return (
-    <FormControl>
+    <FormControl isRequired={required}>
       {label && <FormLabel for={name}>{label}</FormLabel>}
 
       <Select
@@ -60,14 +71,13 @@ function SelectField(props) {
         onChange={handleSelectedOptionChange}
         placeholder={placeholder}
         isDisabled={disabled}
-        className={showError ? 'is-invalid' : ''}
+        isInvalid={showError}
       >
         {options.map((item, key) => {
           return <option key={key}>{item.label}</option>;
         })}
       </Select>
-
-      <ErrorMessage name={name} component={FormErrorMessage} />
+      {showError && <FormErrorMessage>{errors[name]}</FormErrorMessage>}
     </FormControl>
   );
 }

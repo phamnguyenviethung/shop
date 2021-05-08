@@ -17,6 +17,7 @@ InputField.propTypes = {
   placeholder: PropTypes.string,
   maxW: PropTypes.string,
   disabled: PropTypes.bool,
+  required: PropTypes.bool,
 };
 
 InputField.defaultProps = {
@@ -24,16 +25,26 @@ InputField.defaultProps = {
   label: '',
   placeholder: '',
   disabled: false,
+  required: false,
   maxW: '100%',
 };
 
-function InputField({ field, form, type, label, placeholder, disabled, maxW }) {
+function InputField({
+  field,
+  form,
+  type,
+  label,
+  placeholder,
+  disabled,
+  maxW,
+  required,
+}) {
   const { name } = field;
   const { errors, touched } = form;
   const showError = errors[name] && touched[name];
 
   return (
-    <FormControl isInvalid={showError}>
+    <FormControl isInvalid={showError} isRequired={required}>
       {label && <FormLabel htmlFor={name}>{label}</FormLabel>}
 
       <Input
