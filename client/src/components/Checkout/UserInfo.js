@@ -1,4 +1,5 @@
 import React from 'react';
+
 import { Button, Flex, Heading } from '@chakra-ui/react';
 import { Formik, Form, FastField } from 'formik';
 import InputField from '../../Fields/Inputs/';
@@ -7,21 +8,55 @@ import TextareaField from '../../Fields/Textarea/';
 import { paymentOptions } from './paymentOptions';
 import * as yup from 'yup';
 
-const UserInfo = () => {
+import orderApi from '../../api/orderApi';
+
+const UserInfo = ({ data }) => {
+  const reducer = (a, item) => a + item.count * item.price;
+  const total = data.reduce(reducer, 0);
   const initialValues = {
     name: '',
     email: '',
     phone: null,
     address: '',
-    payment: null,
+    payment: '',
     note: '',
+  };
+
+  const createOrder = async values => {
+    try {
+      const { name, address, email, phone, payment, note } = values;
+
+      const orderInfo = {
+        isPaid: false,
+        isDelivered: false,
+        deliveredAt: Date.now(),
+        products: data,
+        fullname: name,
+        address,
+        email,
+        phone,
+        payment,
+        note,
+        total,
+        shipping: 0,
+      };
+
+      const params = { orderInfo };
+      console.log('params ', params);
+
+      await orderApi.create(params);
+      alert('thanh cong');
+    } catch (error) {
+      console.log('cannot create order', error);
+    }
   };
 
   const validationSchema = yup.object().shape({
     name: yup.string().required('Vui lòng nhập họ tên. '),
     phone: yup.number().required().nullable(),
     email: yup.string().email().required('Vui lòng nhập email.'),
-    // address: yup.string().number().required(),
+    payment: yup.string().required('Vui lòng chọn phương thức thanh toán. '),
+    // address: yup.required(),
   });
 
   return (
@@ -42,6 +77,7 @@ const UserInfo = () => {
               <Form mb={2}>
                 <Flex justifyContent="space-between">
                   <FastField
+                    // required={true}
                     maxW="94%"
                     name="name"
                     component={InputField}
@@ -50,6 +86,7 @@ const UserInfo = () => {
                   />
 
                   <FastField
+                    // required={true}
                     name="email"
                     component={InputField}
                     label="Email"
@@ -58,6 +95,7 @@ const UserInfo = () => {
                 </Flex>
 
                 <FastField
+                  // required={true}
                   name="phone"
                   component={InputField}
                   label="Số điện thoại"
@@ -65,6 +103,7 @@ const UserInfo = () => {
                 />
 
                 <FastField
+                  // required={true}
                   name="address"
                   component={InputField}
                   label="Địa chỉ"
@@ -72,8 +111,10 @@ const UserInfo = () => {
                 />
 
                 <FastField
+                  // required={true}
                   name="payment"
                   component={SelectField}
+                  // required={true}
                   label="Phương thức thanh toán"
                   placeholder="Chọn phương thức"
                   options={paymentOptions}
@@ -90,6 +131,7 @@ const UserInfo = () => {
                     borderRadius="4px"
                     colorScheme="teal"
                     type="submit"
+                    onClick={() => createOrder(values)}
                   >
                     Place Order
                   </Button>
