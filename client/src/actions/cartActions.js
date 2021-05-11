@@ -3,6 +3,7 @@ import {
   REMOVE_FROM_CART,
   INCREASE,
   DECREASE,
+  CLEAR_CART,
 } from './actionsTypes';
 import store from '../store';
 
@@ -56,4 +57,11 @@ export const decrease = product => {
   });
   localStorage.setItem('cartItems', JSON.stringify(cartItems));
   return { type: DECREASE, payload: { cartItems } };
+};
+
+export const clearCart = () => {
+  const cartItems = [];
+
+  localStorage.setItem('cartItems', JSON.stringify(cartItems));
+  return { type: CLEAR_CART, payload: { cartItems } };
 };
