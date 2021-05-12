@@ -1,12 +1,11 @@
-import PropTypes from 'prop-types';
-import React from 'react';
-import { ErrorMessage } from 'formik';
 import {
   FormControl,
+  FormErrorMessage,
   FormLabel,
   Input,
-  FormErrorMessage,
 } from '@chakra-ui/react';
+import PropTypes from 'prop-types';
+import React from 'react';
 
 InputField.propTypes = {
   field: PropTypes.object.isRequired,
@@ -15,6 +14,7 @@ InputField.propTypes = {
   type: PropTypes.string,
   label: PropTypes.string,
   placeholder: PropTypes.string,
+  bgColor: PropTypes.string,
   maxW: PropTypes.string,
   disabled: PropTypes.bool,
   required: PropTypes.bool,
@@ -38,6 +38,7 @@ function InputField({
   disabled,
   maxW,
   required,
+  bgColor,
 }) {
   const { name } = field;
   const { errors, touched } = form;
@@ -55,6 +56,7 @@ function InputField({
         disabled={disabled}
         placeholder={placeholder}
         maxW={maxW}
+        bgColor={bgColor}
       />
       {showError && <FormErrorMessage>{errors[name]}</FormErrorMessage>}
     </FormControl>

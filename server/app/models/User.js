@@ -1,0 +1,29 @@
+const mongoose = require("mongoose");
+
+const Schema = mongoose.Schema;
+
+const userSchema = new Schema(
+  {
+    name: { type: String, required: true },
+    email: { type: String, required: true, unique: true },
+    password: {
+      type: String,
+      required: true,
+      min: [6, "Tối thiếu 6 ký tự"],
+      max: [1024, "Quá nhiều ký tự"],
+    },
+    isAdmin: { type: Boolean, default: false, required: false },
+    address: { type: String, required: false },
+    phone: {
+      type: Number,
+      required: false,
+      min: [8, "Tối thiểu 8 số"],
+      max: [11, "Tối đa 11 số"],
+    },
+  },
+  {
+    timestamps: true,
+  }
+);
+const User = mongoose.model("User", userSchema);
+module.exports = User;

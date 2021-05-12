@@ -4,9 +4,11 @@ const cors = require("cors");
 const app = express();
 const db = require("./config/db");
 const route = require("./routes");
-
+const dotenv = require("dotenv");
 // Connect to DB
 db.connect();
+
+dotenv.config();
 
 app.use(express.json());
 app.use(cors());
