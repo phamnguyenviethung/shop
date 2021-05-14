@@ -37,8 +37,8 @@ class UserController {
       .catch((err) => res.send(err));
   }
 
-  // [POST] /user/register
-  async login(req, res, next) {
+  // [POST] /user/login
+  async login(req, res) {
     const { email, password } = req.body;
 
     // Validate
@@ -47,7 +47,10 @@ class UserController {
 
     // Checking email
     const user = await UserModel.findOne({ email });
+    console.log(user);
     if (!user) return res.status(400).send("Email does not found");
+
+    const { name, isAdmin } = user;
 
     // Checking Password
     const validatePassword = await bcrypt.compare(password, user.password);
@@ -55,7 +58,30 @@ class UserController {
 
     // Create token
     const token = jwt.sign({ _id: user._id }, process.env.TOKEN_SECRET);
-    res.header("auth-token", token).send(token);
+    res.header("auth-token", token).send({
+      name,
+      isAdmin,
+      email: user.email,
+      token,
+    });
+  }
+
+  // [GET] /user/cart/:id
+  getCart(req, res) {
+    const { id } = req.params;
+
+    UserModel.findOne({ _id: id })
+      .then((user) => res.send(user.cartItems))
+      .catch((err) => res.send(err));
+  }
+
+  updateCart(req, res) {
+    const { id } = req.params;
+
+    const { cartItems } = req.body;
+    UserModel.updateOne({ cartItems })
+      .then((user) => res.send("done"))
+      .catch((err) => res.send(err));
   }
 }
 

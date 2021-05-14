@@ -12,7 +12,6 @@ const userSchema = new Schema(
       min: [6, "Tối thiếu 6 ký tự"],
       max: [1024, "Quá nhiều ký tự"],
     },
-    isAdmin: { type: Boolean, default: false, required: false },
     address: { type: String, required: false },
     phone: {
       type: Number,
@@ -20,6 +19,8 @@ const userSchema = new Schema(
       min: [8, "Tối thiểu 8 số"],
       max: [11, "Tối đa 11 số"],
     },
+    isAdmin: { type: Boolean, default: false, required: false },
+    cartItems: [{ type: String, default: {}, required: false }],
   },
   {
     timestamps: true,
