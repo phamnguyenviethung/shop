@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useEffect } from 'react';
 import {
   Flex,
   Image,
@@ -12,8 +12,13 @@ import {
   Input,
 } from '@chakra-ui/react';
 
-import { removeFromCart, increase, decrease } from '../../actions/cartActions';
-import { useDispatch } from 'react-redux';
+import {
+  removeFromCart,
+  increase,
+  decrease,
+  updateCart,
+} from '../../actions/cartActions';
+import { useDispatch, useSelector } from 'react-redux';
 import { AiOutlineDelete } from 'react-icons/ai';
 import formatCurrency from '../../utils/formartCurrency';
 import { Link } from 'react-router-dom';
@@ -24,6 +29,11 @@ const CartTable = ({ data }) => {
   //  Total price
   const reducer = (a, item) => a + item.count * item.price;
   const total = data.reduce(reducer, 0);
+
+  const increaseHandler = item => {
+    dispatch(increase(item));
+    dispatch(updateCart(data));
+  };
 
   return (
     <>
@@ -91,7 +101,7 @@ const CartTable = ({ data }) => {
                         }}
                         border="none"
                         borderRadius="none"
-                        onClick={() => dispatch(increase(item))}
+                        onClick={() => increaseHandler(item)}
                         color="black.300"
                         fontWeight="600"
                       >

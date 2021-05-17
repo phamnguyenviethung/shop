@@ -20,7 +20,6 @@ const userSchema = new Schema(
       max: [11, "Tối đa 11 số"],
     },
     isAdmin: { type: Boolean, default: false, required: false },
-    cartItems: [{ type: String, default: {}, required: false }],
   },
   {
     timestamps: true,

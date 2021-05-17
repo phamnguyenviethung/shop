@@ -1,5 +1,6 @@
 const bcrypt = require("bcryptjs");
 const UserModel = require("../models/User");
+const CartModel = require("../models/Cart");
 const jwt = require("jsonwebtoken");
 const {
   registerValidation,
@@ -33,8 +34,15 @@ class UserController {
     const user = new UserModel({ name, email, password: hashedPassword });
     user
       .save()
-      .then((rs) => res.send("done"))
+      .then(() => {
+        res.send("done");
+      })
       .catch((err) => res.send(err));
+
+    const cart = new CartModel({
+      userId: user._id,
+      productList: [],
+    }).save();
   }
 
   // [POST] /user/login
@@ -47,10 +55,9 @@ class UserController {
 
     // Checking email
     const user = await UserModel.findOne({ email });
-    console.log(user);
     if (!user) return res.status(400).send("Email does not found");
 
-    const { name, isAdmin } = user;
+    const { name, isAdmin, cartItems } = user;
 
     // Checking Password
     const validatePassword = await bcrypt.compare(password, user.password);
@@ -63,25 +70,8 @@ class UserController {
       isAdmin,
       email: user.email,
       token,
+      cartItems,
     });
-  }
-
-  // [GET] /user/cart/:id
-  getCart(req, res) {
-    const { id } = req.params;
-
-    UserModel.findOne({ _id: id })
-      .then((user) => res.send(user.cartItems))
-      .catch((err) => res.send(err));
-  }
-
-  updateCart(req, res) {
-    const { id } = req.params;
-
-    const { cartItems } = req.body;
-    UserModel.updateOne({ cartItems })
-      .then((user) => res.send("done"))
-      .catch((err) => res.send(err));
   }
 }
 

@@ -1,4 +1,4 @@
-import { Container, Flex, Text, Button } from '@chakra-ui/react';
+import { Flex, Text, Button } from '@chakra-ui/react';
 import React from 'react';
 import { AiOutlineShopping } from 'react-icons/ai';
 import { Link } from 'react-router-dom';

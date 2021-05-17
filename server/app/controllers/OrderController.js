@@ -1,6 +1,15 @@
 const OrderModel = require("../models/Order");
 
 class OrderController {
+  // [GET] /order/list
+  list(req, res, next) {
+    OrderModel.find({})
+      .then((result) => res.send(result))
+      .catch(next);
+  }
+
+
+
   // [POST] /order/create
   create(req, res, next) {
     const {

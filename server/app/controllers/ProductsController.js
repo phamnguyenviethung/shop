@@ -5,15 +5,20 @@ class ProductsController {
   list(req, res, next) {
     ProductModel.find({})
       .then((result) => res.send(result))
-      .catch(next);
+      .catch((err) => res.send(err));
+  }
+
+  // [GET] /products/:id
+  getByID(req, res) {
+    const { id } = req.params;
+    ProductModel.findOne({ _id: id })
+      .then((result) => res.send(result))
+      .catch((err) => res.send(err));
   }
 
   // [POST] /products/add
   add(req, res, next) {
-    const name = req.body.name;
-    const price = req.body.price;
-    const quantity = req.body.quantity;
-    const thumb = req.body.thumb;
+    const { name, price, quantity, thumb } = req.body;
 
     const product = new ProductModel({ name, price, quantity, thumb });
     product
