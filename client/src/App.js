@@ -1,5 +1,5 @@
 import { ChakraProvider, theme } from '@chakra-ui/react';
-import React, { useEffect, useState } from 'react';
+import React, { useEffect } from 'react';
 import { Route, Switch } from 'react-router-dom';
 import Login from './pages/Auth/Login';
 import Register from './pages/Auth/Register';
@@ -16,16 +16,26 @@ import { saveCart } from './actions/cartActions';
 
 function App() {
   const dispatch = useDispatch();
+  const cartLength = useSelector(state => state.cart.cartItems.length);
   useEffect(() => {
-    // const cartData =
-    //   JSON.parse(localStorage.getItem('userInfo')).cartItems || [];
+    const getCart = async () => {
+      try {
+        const currentUserToken = JSON.parse(
+          localStorage.getItem('userInfo')
+        ).token;
+        const id = jwtDecode(currentUserToken)._id;
 
-    dispatch(saveCart([]));
-  }, []);
-
+        const data = await userApi.getCartData(id);
+        dispatch(saveCart(data));
+      } catch (error) {
+        console.log(error);
+      }
+    };
+    getCart();
+  }, [dispatch]);
   return (
     <ChakraProvider theme={theme}>
-      <Navbar />
+      <Navbar cart={cartLength} />
 
       <Switch>
         <Route exact path="/" component={Home}></Route>

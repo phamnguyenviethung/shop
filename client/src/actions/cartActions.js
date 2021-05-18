@@ -5,8 +5,6 @@ import {
   INCREASE,
   DECREASE,
   CLEAR_CART,
-  UPDATE_CART_REQUEST,
-  UPDATE_CART_SUCCESS,
   UPDATE_CART_FAIL,
 } from './actionsTypes';
 import store from '../store';
@@ -21,15 +19,13 @@ export const saveCart = data => {
   };
 };
 
-export const updateCart = data => async (dispatch, getState) => {
-  dispatch({ type: UPDATE_CART_REQUEST });
-
+export const updateCart = () => async (dispatch, getState) => {
   try {
+    const data = getState().cart.cartItems;
     const currentUserToken = JSON.parse(localStorage.getItem('userInfo')).token;
     const id = decode(currentUserToken)._id;
 
     const response = await userApi.updateCart(id, data);
-    dispatch({ type: UPDATE_CART_SUCCESS, payload: response });
     localStorage.setItem('cartItems', JSON.stringify(response));
   } catch (error) {
     dispatch({
@@ -42,7 +38,7 @@ export const updateCart = data => async (dispatch, getState) => {
   }
 };
 
-export const addToCart = product => {
+export const addToCart = product => (dispatch, getState) => {
   const cartItems = store.getState().cart.cartItems.slice();
   let alreadyExists = false;
   cartItems.forEach(x => {
@@ -54,20 +50,22 @@ export const addToCart = product => {
   if (!alreadyExists) {
     cartItems.push({ ...product, count: 1 });
   }
+
   localStorage.setItem('cartItems', JSON.stringify(cartItems));
-  return {
+  dispatch({
     type: ADD_TO_CART,
     payload: { cartItems },
-  };
+  });
+  dispatch(updateCart());
 };
 
-export const removeFromCart = product => {
-  const cartItems = store
-    .getState()
+export const removeFromCart = product => (dispatch, getState) => {
+  const cartItems = getState()
     .cart.cartItems.slice()
     .filter(x => x._id !== product._id);
   localStorage.setItem('cartItems', JSON.stringify(cartItems));
-  return { type: REMOVE_FROM_CART, payload: { cartItems } };
+  dispatch({ type: REMOVE_FROM_CART, payload: { cartItems } });
+  dispatch(updateCart());
 };
 
 export const increase = product => (dispatch, getState) => {
@@ -79,6 +77,7 @@ export const increase = product => (dispatch, getState) => {
   });
   localStorage.setItem('cartItems', JSON.stringify(cartItems));
   dispatch({ type: INCREASE, payload: { cartItems } });
+  dispatch(updateCart());
 };
 
 export const decrease = product => (dispatch, getState) => {
@@ -92,12 +91,11 @@ export const decrease = product => (dispatch, getState) => {
   });
   localStorage.setItem('cartItems', JSON.stringify(cartItems));
   dispatch({ type: DECREASE, payload: { cartItems } });
-  // dispatch(updateCart(cartItems));
+  dispatch(updateCart());
 };
 
 export const clearCart = () => {
   const cartItems = [];
-
   localStorage.setItem('cartItems', JSON.stringify(cartItems));
   return { type: CLEAR_CART, payload: { cartItems } };
 };

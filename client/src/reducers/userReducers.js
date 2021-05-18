@@ -10,9 +10,9 @@ const userReducers = (
 ) => {
   switch (action.type) {
     case USER_LOGIN_REQUEST:
-      return { loading: true };
+      return { loading: true, user: action.payload };
     case USER_LOGIN_SUCCESS:
-      return { loading: false, userInfo: action.payload };
+      return { loading: false, user: action.payload };
     case USER_LOGIN_FAIL:
       return { loading: false, error: action.payload };
 

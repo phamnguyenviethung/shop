@@ -7,7 +7,7 @@ import {
   Text,
   UnorderedList,
 } from '@chakra-ui/layout';
-import formartCurrency from '../../utils/formartCurrency';
+import formartCurrency from '../../utils/formatCurrency';
 
 import React from 'react';
 
@@ -70,7 +70,6 @@ const OrderInfo = ({ data }) => {
         </Flex>
         <Divider my={4} />
       </Flex>
-      
     </Flex>
   );
 };

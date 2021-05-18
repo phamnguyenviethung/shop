@@ -7,9 +7,6 @@ import {
   UPDATE_CART_REQUEST,
   UPDATE_CART_SUCCESS,
   UPDATE_CART_FAIL,
-  GET_CART_FAIL,
-  GET_CART_REQUEST,
-  GET_CART_SUCCESS,
   SAVE_CART,
 } from '../actions/actionsTypes';
 
@@ -19,7 +16,7 @@ const cartReducers = (
 ) => {
   switch (action.type) {
     case UPDATE_CART_REQUEST:
-      return { loading: true };
+      return { loading: true, cartItems: action.payload };
     case UPDATE_CART_SUCCESS:
       return { loading: false, cartItems: action.payload };
     case UPDATE_CART_FAIL:

@@ -1,20 +1,8 @@
-import React, { useEffect, useState } from 'react';
+import React from 'react';
 import { Stack, Text } from '@chakra-ui/react';
 import { AiOutlineShoppingCart } from 'react-icons/ai';
-import { useSelector } from 'react-redux';
 
-const CartIcon = () => {
-  const [number, setNumber] = useState(0);
-
-  useEffect(() => {
-    const token = JSON.parse(localStorage.getItem('userInfo')).token;
-    if (token) {
-      setNumber(JSON.parse(localStorage.getItem('cartItems')).length);
-    } else {
-      setNumber(0);
-    }
-  }, []);
-
+const CartIcon = ({ length }) => {
   return (
     <Stack pos="relative">
       <AiOutlineShoppingCart size={34} />
@@ -28,7 +16,7 @@ const CartIcon = () => {
         color="white"
         borderRadius="full"
       >
-        {number}
+        {length}
       </Text>
     </Stack>
   );

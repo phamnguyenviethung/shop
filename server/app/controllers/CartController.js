@@ -16,8 +16,17 @@ class CartController {
     const user = await CartModel.find({ userId: id });
     if (!user) return res.status(400).send("User doesnt exist");
 
-    CartModel.findOneAndUpdate({ userId: id }, { productList: cart })
-      .then(() => res.send("updated"))
+    CartModel.findOneAndUpdate(
+      { _id: user[0].id },
+      { productList: cart },
+
+      (err) => {
+        if (err) {
+          console.log(err);
+        }
+      }
+    )
+      .then((cart) => res.send(cart.productList))
       .catch(() => res.send("cannot update"));
   }
 }

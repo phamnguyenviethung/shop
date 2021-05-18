@@ -2,7 +2,7 @@ import React from 'react';
 import { Container, Flex, Heading, Button, Text } from '@chakra-ui/react';
 import { addToCart } from '../../../actions/cartActions';
 import { useDispatch } from 'react-redux';
-import formartCurrency from '../../../utils/formartCurrency';
+import formartCurrency from '../../../utils/formatCurrency';
 
 const Product = ({ data }) => {
   const dispatch = useDispatch();
