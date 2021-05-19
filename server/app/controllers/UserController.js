@@ -38,11 +38,6 @@ class UserController {
         res.send("done");
       })
       .catch((err) => res.send(err));
-
-    const cart = new CartModel({
-      userId: user._id,
-      productList: [],
-    }).save();
   }
 
   // [POST] /user/login

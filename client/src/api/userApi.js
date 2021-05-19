@@ -5,6 +5,12 @@ const userApi = {
     const url = '/user/login';
     return axiosClient.post(url, params);
   },
+
+  register: params => {
+    const url = '/user/register';
+    return axiosClient.post(url, params);
+  },
+
   getCartData: id => {
     const url = `/cart/${id}`;
     return axiosClient.get(url);

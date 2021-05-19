@@ -41,8 +41,6 @@ function SelectField({
   const showError = errors[name] && touched[name];
 
   const selectedOption = options.find(option => option.value === value);
-  console.log(options);
-  // console.log('select la', selectedOption);
 
   const handleSelectedOptionChange = selectedOption => {
     const selectedValue = selectedOption

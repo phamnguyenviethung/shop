@@ -1,22 +1,22 @@
 import { Button } from '@chakra-ui/button';
 import { Flex } from '@chakra-ui/layout';
-import { FastField, Form, Formik } from 'formik';
-import React, { useState } from 'react';
+import { FastField, Form, Formik, useFormik } from 'formik';
+import React from 'react';
 import * as yup from 'yup';
 import InputField from '../../../Fields/Inputs';
 import { useDispatch } from 'react-redux';
 import { login } from '../../../actions/userActions';
 
-
 const Login = () => {
   const dispatch = useDispatch();
-  const [userInfo, setUserInfo] = useState({});
 
-  // Validation
-  const initialValues = {
-    email: '',
-    password: '',
-  };
+  const formik = useFormik({
+    initialValues: {
+      email: '',
+      password: '',
+    },
+  });
+
   const validationSchema = yup.object().shape({
     email: yup
       .string()
@@ -25,21 +25,19 @@ const Login = () => {
     password: yup.string().required('Vui lòng nhập mật khẩu.').min(6),
   });
 
-  const submitHandler = () => {
-    const { email, password } = userInfo;
-
+  const submitHandler = values => {
+    const { email, password } = values;
     dispatch(login(email, password));
   };
 
   return (
     <Formik
-      initialValues={initialValues}
+      initialValues={formik.initialValues}
       validationSchema={validationSchema}
-      onSubmit={submitHandler}
+      onSubmit={values => submitHandler(values)}
     >
-      {formikProps => {
-        const { values } = formikProps;
-        setUserInfo(values);
+      {() => {
+        const { email, password } = formik.values;
         return (
           <Flex
             justifyContent="space-between"
@@ -53,6 +51,8 @@ const Login = () => {
                 label="Email"
                 placeholder="Nhập địa chỉ email"
                 bgColor="white"
+                onChange={formik.handleChange}
+                value={email}
               />
 
               <FastField
@@ -61,6 +61,8 @@ const Login = () => {
                 label="Password"
                 placeholder="Nhập password"
                 bgColor="white"
+                onChange={formik.handleChange}
+                value={password}
               />
               <Button
                 mt={6}
