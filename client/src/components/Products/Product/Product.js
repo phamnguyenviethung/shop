@@ -7,7 +7,7 @@ import formartCurrency from '../../../utils/formatCurrency';
 const Product = ({ data }) => {
   const dispatch = useDispatch();
   return (
-    <Container class="row">
+    <Container className="row" maxW="full">
       {data.map((item, key) => {
         return (
           <Container
