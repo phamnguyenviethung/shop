@@ -5,6 +5,7 @@ import {
   USER_REGISTER_REQUEST,
   USER_REGISTER_SUCCESS,
   USER_REGISTER_FAIL,
+  USER_SIGN_OUT,
 } from '../actions/actionsTypes';
 
 const userReducers = (
@@ -24,6 +25,9 @@ const userReducers = (
     case USER_REGISTER_SUCCESS:
       return { loading: false, user: action.payload };
     case USER_REGISTER_FAIL:
+      return { loading: false, user: action.payload };
+
+    case USER_SIGN_OUT:
       return { loading: false, user: action.payload };
 
     default:

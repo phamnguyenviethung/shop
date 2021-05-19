@@ -5,6 +5,7 @@ import {
   USER_REGISTER_REQUEST,
   USER_REGISTER_FAIL,
   USER_REGISTER_SUCCESS,
+  USER_SIGN_OUT,
 } from './actionsTypes';
 import userApi from '../api/userApi';
 
@@ -39,7 +40,7 @@ export const register = (name, email, password) => async dispatch => {
 
   try {
     const params = { name, email, password };
-    const data = await userApi.register(params);
+    await userApi.register(params);
     dispatch({
       type: USER_REGISTER_SUCCESS,
       payload: {
@@ -60,4 +61,11 @@ export const register = (name, email, password) => async dispatch => {
       },
     });
   }
+};
+
+export const signout = () => dispatch => {
+  localStorage.removeItem('userInfo');
+  localStorage.removeItem('cartItems');
+  dispatch({ type: USER_SIGN_OUT, payload: {} });
+  window.location.replace('/');
 };

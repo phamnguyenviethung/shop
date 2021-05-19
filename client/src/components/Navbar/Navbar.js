@@ -4,18 +4,19 @@ import { Link } from 'react-router-dom';
 import CartIcon from '../Cart/CartIcon';
 import { useLocation } from 'react-router';
 import checkPathName from '../../utils/checkPathName';
-import { useSelector } from 'react-redux';
+import { useDispatch, useSelector } from 'react-redux';
+import { signout } from '../../actions/userActions';
 
 const Navbar = ({ cart }) => {
   const location = useLocation();
   const path = checkPathName(location.pathname);
 
+  const dispatch = useDispatch();
+
   const user = useSelector(state => state.user.user.name);
   if (!path) {
     return null;
   }
-
-  console.log(user);
 
   return (
     <Flex w="full" h="80px" alignItems="center" justifyContent="space-around">
@@ -53,7 +54,12 @@ const Navbar = ({ cart }) => {
       </HStack>
 
       {user ? (
-        `Hi ${user}`
+        <HStack>
+          <Text>Hi {user}</Text>
+          <Text cursor="pointer" onClick={() => dispatch(signout())}>
+            Sign Out
+          </Text>
+        </HStack>
       ) : (
         <HStack>
           <Link to="/login" px={2}>
