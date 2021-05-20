@@ -10,6 +10,10 @@ const userApi = {
     const url = '/user/register';
     return axiosClient.post(url, params);
   },
+  refreshTokens: params => {
+    const url = '/user/refresh';
+    return axiosClient.post(url, params);
+  },
 
   getCartData: id => {
     const url = `/cart/${id}`;

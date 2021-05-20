@@ -1,6 +1,8 @@
 import {
   ADD_TO_CART,
-  SAVE_CART,
+  GET_CART_REQUEST,
+  GET_CART_SUCCESS,
+  GET_CART_FAIL,
   REMOVE_FROM_CART,
   INCREASE,
   DECREASE,
@@ -10,13 +12,35 @@ import {
 import store from '../store';
 import decode from 'jwt-decode';
 import userApi from '../api/userApi';
+import checkTokenExpire from '../utils/checkTokenExpire';
+import { updateToken } from './userActions';
 
-export const saveCart = data => {
-  localStorage.setItem('cartItems', JSON.stringify(data));
-  return {
-    type: SAVE_CART,
-    payload: data,
-  };
+export const getCart = () => async (dispatch, getState) => {
+  dispatch({
+    type: GET_CART_REQUEST,
+    payload: [],
+  });
+  const token = getState().user.user.token;
+  if (checkTokenExpire(token)) {
+    await dispatch(updateToken());
+  }
+
+  try {
+    const currentUserToken = JSON.parse(localStorage.getItem('userInfo')).token;
+    const id = decode(currentUserToken)._id;
+
+    const data = await userApi.getCartData(id);
+    localStorage.setItem('cartItems', JSON.stringify(data));
+    dispatch({
+      type: GET_CART_SUCCESS,
+      payload: data,
+    });
+  } catch (error) {
+    dispatch({
+      type: GET_CART_FAIL,
+      payload: {},
+    });
+  }
 };
 
 export const updateCart = () => async (dispatch, getState) => {
@@ -33,12 +57,16 @@ export const updateCart = () => async (dispatch, getState) => {
       payload:
         error.response && error.response.data.message
           ? error.response.data.message
-          : error.message,
+          : error.response.data,
     });
   }
 };
 
-export const addToCart = product => (dispatch, getState) => {
+export const addToCart = product => async (dispatch, getState) => {
+  const token = getState().user.user.token;
+  if (checkTokenExpire(token)) {
+    await dispatch(updateToken());
+  }
   const cartItems = store.getState().cart.cartItems.slice();
   let alreadyExists = false;
   cartItems.forEach(x => {
@@ -59,7 +87,11 @@ export const addToCart = product => (dispatch, getState) => {
   dispatch(updateCart());
 };
 
-export const removeFromCart = product => (dispatch, getState) => {
+export const removeFromCart = product => async (dispatch, getState) => {
+  const token = getState().user.user.token;
+  if (checkTokenExpire(token)) {
+    await dispatch(updateToken());
+  }
   const cartItems = getState()
     .cart.cartItems.slice()
     .filter(x => x._id !== product._id);
@@ -68,7 +100,11 @@ export const removeFromCart = product => (dispatch, getState) => {
   dispatch(updateCart());
 };
 
-export const increase = product => (dispatch, getState) => {
+export const increase = product => async (dispatch, getState) => {
+  const token = getState().user.user.token;
+  if (checkTokenExpire(token)) {
+    await dispatch(updateToken());
+  }
   const cartItems = getState().cart.cartItems.slice();
   cartItems.forEach(x => {
     if (x._id === product._id) {
@@ -80,7 +116,11 @@ export const increase = product => (dispatch, getState) => {
   dispatch(updateCart());
 };
 
-export const decrease = product => (dispatch, getState) => {
+export const decrease = product => async (dispatch, getState) => {
+  const token = getState().user.user.token;
+  if (checkTokenExpire(token)) {
+    await dispatch(updateToken());
+  }
   const cartItems = getState().cart.cartItems.slice();
   cartItems.forEach(x => {
     if (x._id === product._id) {

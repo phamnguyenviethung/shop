@@ -6,6 +6,7 @@ import {
   USER_REGISTER_FAIL,
   USER_REGISTER_SUCCESS,
   USER_SIGN_OUT,
+  USER_UPDATE_TOKEN,
 } from './actionsTypes';
 import userApi from '../api/userApi';
 
@@ -40,14 +41,16 @@ export const register = (name, email, password) => async dispatch => {
 
   try {
     const params = { name, email, password };
-    await userApi.register(params);
+    const data = await userApi.register(params);
+
     dispatch({
       type: USER_REGISTER_SUCCESS,
       payload: {
         status: 'Success',
+        user: { email: data.email, name: data.name, isAdmin: data.isAdmin },
       },
     });
-    window.location.replace('/');
+    // window.location.replace('/');
   } catch (error) {
     console.log();
     dispatch({
@@ -68,4 +71,25 @@ export const signout = () => dispatch => {
   localStorage.removeItem('cartItems');
   dispatch({ type: USER_SIGN_OUT, payload: {} });
   window.location.replace('/');
+};
+
+export const updateToken = () => async (dispatch, getState) => {
+  const currentUser = getState().user.user;
+  const { refreshToken } = currentUser;
+
+  try {
+    const params = { refresh: refreshToken };
+
+    const data = await userApi.refreshTokens(params);
+
+    const updateToken = {
+      ...currentUser,
+      token: data.token,
+      refreshToken: data.refreshToken,
+    };
+
+    dispatch({ type: USER_UPDATE_TOKEN, payload: updateToken });
+  } catch (error) {
+    console.log(error);
+  }
 };

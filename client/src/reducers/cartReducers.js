@@ -7,7 +7,9 @@ import {
   UPDATE_CART_REQUEST,
   UPDATE_CART_SUCCESS,
   UPDATE_CART_FAIL,
-  SAVE_CART,
+  GET_CART_REQUEST,
+  GET_CART_SUCCESS,
+  GET_CART_FAIL,
 } from '../actions/actionsTypes';
 
 const cartReducers = (
@@ -20,10 +22,14 @@ const cartReducers = (
     case UPDATE_CART_SUCCESS:
       return { loading: false, cartItems: action.payload };
     case UPDATE_CART_FAIL:
-      return { loading: false, error: action.payload };
+      return { loading: false, error: action.payload, cartItems: [] };
 
-    case SAVE_CART:
-      return { cartItems: action.payload };
+    case GET_CART_REQUEST:
+      return { loading: true, cartItems: action.payload };
+    case GET_CART_SUCCESS:
+      return { loading: false, cartItems: action.payload };
+    case GET_CART_FAIL:
+      return { loading: false, cartItems: [], error: action.payload };
 
     case ADD_TO_CART:
       return { cartItems: action.payload.cartItems };

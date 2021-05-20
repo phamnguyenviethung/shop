@@ -1,7 +1,7 @@
 import { Button } from '@chakra-ui/button';
 import { Flex } from '@chakra-ui/layout';
 import { FastField, Form, Formik, useFormik } from 'formik';
-import React, { useState } from 'react';
+import React from 'react';
 import * as yup from 'yup';
 import InputField from '../../../Fields/Inputs';
 import { register } from '../../../actions/userActions';
