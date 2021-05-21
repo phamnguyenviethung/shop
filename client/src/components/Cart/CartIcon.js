@@ -5,7 +5,7 @@ import { AiOutlineShoppingCart } from 'react-icons/ai';
 const CartIcon = ({ length }) => {
   return (
     <Stack pos="relative">
-      <AiOutlineShoppingCart size={34} />
+      <AiOutlineShoppingCart size={24} />
       <Text
         pos="absolute"
         bottom="60%"
