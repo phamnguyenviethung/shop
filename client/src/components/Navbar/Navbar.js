@@ -25,6 +25,12 @@ import {
   ListIcon,
   OrderedList,
   UnorderedList,
+  Accordion,
+  AccordionItem,
+  AccordionButton,
+  AccordionPanel,
+  AccordionIcon,
+  Box,
 } from '@chakra-ui/react';
 import { Link } from 'react-router-dom';
 import CartIcon from '../Cart/CartIcon';
@@ -34,8 +40,17 @@ import { useDispatch, useSelector } from 'react-redux';
 import { signout } from '../../actions/userActions';
 
 import { VscAccount } from 'react-icons/vsc';
-import { AiOutlineMenu } from 'react-icons/ai';
+import {
+  AiOutlineMenu,
+  AiOutlineCopyright,
+  AiOutlineFacebook,
+  AiOutlineInstagram,
+  AiOutlineTwitter,
+  AiFillYoutube,
+  AiOutlineYoutube,
+} from 'react-icons/ai';
 import userLogo from '../../assets/img/customer.png';
+import { drawerItems } from './data';
 
 const Navbar = ({ cart }) => {
   const [isMobile] = useMediaQuery('(max-width: 768px)');
@@ -86,22 +101,71 @@ const Navbar = ({ cart }) => {
                     )}
                   </VStack>
                   <Divider my={4} />
+
                   <VStack w="full">
-                    <UnorderedList listStyleType="none" w="full">
-                      <ListItem>Home</ListItem>
-                      <ListItem>Shop</ListItem>
-                      <ListItem>Collection</ListItem>
-                      <ListItem>Blog</ListItem>
-                    </UnorderedList>
+                    <Accordion allowToggle w="full">
+                      {drawerItems.map((item, key) => {
+                        if (item.type === 'Link') {
+                          return (
+                            <Box
+                              py={2}
+                              px={4}
+                              key={key}
+                              w="full"
+                              _hover={{ background: '#f5f5f5' }}
+                              onClick={onClose}
+                            >
+                              <Link to={item.path}>
+                                <Text>{item.label}</Text>
+                              </Link>
+                            </Box>
+                          );
+                        }
+
+                        return (
+                          <AccordionItem border="0">
+                            <h2>
+                              <AccordionButton _focus={{ outline: 0 }}>
+                                <Box flex="1" textAlign="left">
+                                  {item.label}
+                                </Box>
+                                <AccordionIcon />
+                              </AccordionButton>
+                            </h2>
+                            <AccordionPanel pb={4}>
+                              <VStack w="full">
+                                <UnorderedList listStyleType="none" w="full">
+                                  {item.list.map((listItem, key) => {
+                                    return (
+                                      <Link
+                                        to={listItem.path}
+                                        key={key}
+                                        onClick={onClose}
+                                      >
+                                        <ListItem>{listItem.label}</ListItem>
+                                      </Link>
+                                    );
+                                  })}
+                                </UnorderedList>
+                              </VStack>
+                            </AccordionPanel>
+                          </AccordionItem>
+                        );
+                      })}
+                    </Accordion>
                   </VStack>
                 </Flex>
               </DrawerBody>
 
-              <DrawerFooter>
-                <Button variant="outline" mr={3} onClick={onClose}>
-                  Cancel
-                </Button>
-                <Button colorScheme="blue">Save</Button>
+              <DrawerFooter
+                px={2}
+                justifyContent="flex-start"
+                alignItems="center"
+              >
+                <AiOutlineFacebook size={20} />
+                <AiOutlineInstagram size={20} />
+                <AiOutlineTwitter size={20} />
+                <AiOutlineYoutube size={20} />
               </DrawerFooter>
             </DrawerContent>
           </Drawer>
