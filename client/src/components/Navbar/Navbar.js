@@ -20,10 +20,7 @@ import {
   VStack,
   Image,
   Divider,
-  List,
   ListItem,
-  ListIcon,
-  OrderedList,
   UnorderedList,
   Accordion,
   AccordionItem,
@@ -33,7 +30,7 @@ import {
   Box,
 } from '@chakra-ui/react';
 import { Link } from 'react-router-dom';
-import CartIcon from '../Cart/CartIcon';
+import { CartIcon, CartIconDetails } from '../Cart/CartIcon';
 import { useLocation } from 'react-router';
 import checkPathName from '../../utils/checkPathName';
 import { useDispatch, useSelector } from 'react-redux';
@@ -42,11 +39,9 @@ import { signout } from '../../actions/userActions';
 import { VscAccount } from 'react-icons/vsc';
 import {
   AiOutlineMenu,
-  AiOutlineCopyright,
   AiOutlineFacebook,
   AiOutlineInstagram,
   AiOutlineTwitter,
-  AiFillYoutube,
   AiOutlineYoutube,
 } from 'react-icons/ai';
 import userLogo from '../../assets/img/customer.png';
@@ -231,9 +226,13 @@ const Navbar = ({ cart }) => {
           </Menu>
         )}
 
-        <Link to="/cart">
-          <CartIcon length={cart} />
-        </Link>
+        {isMobile ? (
+          <Link to="/cart">
+            <CartIcon cart={cart} />
+          </Link>
+        ) : (
+          <CartIconDetails cart={cart} />
+        )}
       </Flex>
     </Flex>
   );
