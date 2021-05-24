@@ -113,7 +113,7 @@ export const CartIconDetails = ({ cart }) => {
               </UnorderedList>
             </VStack>
             <Flex
-              h={cart.length === 1 ? '50%' : cart.length === 2 ? '35%' : '50%'}
+              h={cart.length === 1 ? '50%' : cart.length === 2 ? '35%' : '30%'}
               w="100%"
               direction="column"
               backgroundColor="white"
