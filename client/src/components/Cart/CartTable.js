@@ -31,7 +31,14 @@ const CartTable = ({ data }) => {
 
   return (
     <>
-      <Flex py={4} w="full" mt={4} minH="30%" px={6}>
+      <Flex
+        py={4}
+        w="full"
+        mt={4}
+        minH="30%"
+        px={[0, 6]}
+        direction={['column', 'column', 'column', 'row']}
+      >
         <Flex direction="column" flex="2">
           <Flex justifyContent="space-between">
             <Heading as="h4" size="md" color="gray.500" fontWeight="600">
@@ -40,7 +47,7 @@ const CartTable = ({ data }) => {
             <Text>{data.length} sản phẩm</Text>
           </Flex>
 
-          <UnorderedList mt={8}>
+          <UnorderedList mt={8} ml="0">
             {data.map((item, key) => {
               return (
                 <ListItem key={key} listStyleType="none" mt={4} px={2}>
@@ -49,19 +56,76 @@ const CartTable = ({ data }) => {
                     justifyContent="space-between"
                     w="full"
                   >
-                    <Flex mr={4} maxW="28%" alignItems="center">
-                      <Image src={item.thumb} boxSize="80px" mr={6} />
+                    <Flex mr={4} maxW={['50%', '28%']} alignItems="center">
+                      <Image
+                        src={item.thumb}
+                        boxSize={['60px', '70px', '80px']}
+                        mr={[2, 2, 6]}
+                      />
                       <Flex direction="column" w="full">
-                        <Heading as="h3" size="md" minW="0" isTruncated>
+                        <Heading
+                          as="h3"
+                          size={['sm', 'md']}
+                          minW="0"
+                          isTruncated
+                          mb={1}
+                        >
                           {item.name}
                         </Heading>
-                        <Text fontSize="xs">
+                        <Text fontSize="xs" display={['none', 'none', 'block']}>
                           Giá: {formatCurrency(item.price)}
                         </Text>
+
+                        {/* Show on mobile/tablet */}
+                        <Flex
+                          display={['flex', 'flex', 'none']}
+                          maxW="full"
+                          ml={0}
+                        >
+                          <Button
+                            bgColor="gray.50"
+                            _focus={{
+                              boxShadow: 'none',
+                            }}
+                            borderRadius="none"
+                            onClick={() =>
+                              item.count === 1
+                                ? dispatch(removeFromCart(item))
+                                : dispatch(decrease(item))
+                            }
+                            color="black.100"
+                          >
+                            <Text>-</Text>
+                          </Button>
+                          <Button
+                            bgColor="gray.50"
+                            _focus={{
+                              boxShadow: 'none',
+                            }}
+                            border="none"
+                            borderRadius="none"
+                            color="teal.400"
+                          >
+                            {item.count}
+                          </Button>
+                          <Button
+                            bgColor="gray.50"
+                            _focus={{
+                              boxShadow: 'none',
+                            }}
+                            border="none"
+                            borderRadius="none"
+                            onClick={() => increaseHandler(item)}
+                            color="black.300"
+                            fontWeight="600"
+                          >
+                            <Text>+</Text>
+                          </Button>
+                        </Flex>
                       </Flex>
                     </Flex>
 
-                    <Flex ml={2}>
+                    <Flex ml={2} display={['none', 'none', 'flex']}>
                       <Button
                         bgColor="gray.50"
                         _focus={{
@@ -102,7 +166,10 @@ const CartTable = ({ data }) => {
                         <Text>+</Text>
                       </Button>
                     </Flex>
-                    <Box textAlign="left" w="10%">
+                    <Box
+                      textAlign={['center', 'left']}
+                      w={['20%', '20%', '10%']}
+                    >
                       <Text color="black.300" fontWeight="600" fontSize="sm">
                         {formatCurrency(item.price * item.count)}
                       </Text>
@@ -121,7 +188,15 @@ const CartTable = ({ data }) => {
           </UnorderedList>
         </Flex>
 
-        <Flex direction="column" flex="1" px={8} justifyContent="space-between">
+        <Flex
+          direction="column"
+          flex="1"
+          px={8}
+          justifyContent="space-between"
+          mt={[20, 20, 20, 0]}
+          backgroundColor="white"
+          ml={[0, 0, 0, 4]}
+        >
           <Heading as="h4" size="md" color="gray.500" fontWeight="600">
             Order Summary
           </Heading>
