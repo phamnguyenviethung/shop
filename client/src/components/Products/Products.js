@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { Container, Heading } from '@chakra-ui/react';
+import { Container } from '@chakra-ui/react';
 import productsApi from '../../api/productsApi';
 import Product from './Product/Product';
 
@@ -19,9 +19,6 @@ const Products = () => {
   }, []);
   return (
     <Container w="full" maxW="full" mt={6}>
-      <Heading as="h2" textAlign="center" mb={14}>
-        Our Products
-      </Heading>
       <Product data={producstList} />
     </Container>
   );
