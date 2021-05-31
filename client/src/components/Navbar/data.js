@@ -4,6 +4,16 @@ export const navbarItems = [
     label: 'Home',
     icons: null,
   },
+  {
+    path: '/cart',
+    label: 'Cart',
+    icons: null,
+  },
+  {
+    path: '/checkout',
+    label: 'Checkout',
+    icons: null,
+  },
 ];
 
 export const drawerItems = [
