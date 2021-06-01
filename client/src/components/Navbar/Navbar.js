@@ -1,5 +1,4 @@
 import {
-  Box,
   Button,
   Flex,
   HStack,
@@ -21,7 +20,7 @@ import checkPathName from '../../utils/checkPathName';
 import { CartIcon, CartIconDetails } from '../Cart/CartIcon';
 import { navbarItems } from './data';
 import { DrawerMobile } from './Drawer';
-import { SearchBox, SearchInput } from './SearchBox';
+import { SearchBox, SearchDrawer } from './SearchBox';
 
 const Navbar = ({ cart }) => {
   const [isMobile] = useMediaQuery('(max-width: 768px)');
@@ -110,7 +109,7 @@ const Navbar = ({ cart }) => {
 
           {isMobile ? (
             <Flex>
-              <SearchInput />
+              <SearchDrawer />
 
               <Link to="/cart">
                 <CartIcon cart={cart} />

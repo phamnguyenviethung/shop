@@ -8,7 +8,7 @@ const Search = () => {
   const query = history.location.search;
   const [search, setSearch] = useState([]);
   useEffect(() => {
-    const search = async () => {
+    const result = async () => {
       try {
         const data = await searchApi.search(query);
         setSearch(data);
@@ -16,8 +16,8 @@ const Search = () => {
         console.log('lỗi', error);
       }
     };
-    search();
-  }, []);
+    result();
+  }, [query]);
 
   return <Products list={search} hideTabs={true} />;
 };
