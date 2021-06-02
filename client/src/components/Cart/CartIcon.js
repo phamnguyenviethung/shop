@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useRef } from 'react';
 import {
   Box,
   Collapse,
@@ -7,6 +7,7 @@ import {
   Stack,
   Text,
   useDisclosure,
+  useOutsideClick,
   VStack,
 } from '@chakra-ui/react';
 import { ListItem, UnorderedList, Heading, Button } from '@chakra-ui/react';
@@ -15,7 +16,12 @@ import formatCurrency from '../../utils/formatCurrency';
 import { Link } from 'react-router-dom';
 
 export const CartIconDetails = ({ cart }) => {
-  const { isOpen, onToggle } = useDisclosure();
+  const ref = useRef();
+  const { isOpen, onToggle, onClose } = useDisclosure();
+  useOutsideClick({
+    ref: ref,
+    handler: () => onClose(),
+  });
 
   return (
     <Stack pos="relative" onClick={onToggle} cursor="pointer">
@@ -33,7 +39,7 @@ export const CartIconDetails = ({ cart }) => {
         {cart.length}
       </Text>
 
-      <Collapse in={isOpen} animateOpacity style={{ zIndex: 9999 }}>
+      <Collapse in={isOpen} animateOpacity style={{ zIndex: 9999 }} ref={ref}>
         {cart.length === 0 ? (
           <Flex
             w="350px"
@@ -89,7 +95,7 @@ export const CartIconDetails = ({ cart }) => {
               >
                 {cart.map((item, key) => {
                   return (
-                    <ListItem mb={2} w="full" py={2}>
+                    <ListItem mb={2} w="full" py={2} key={key}>
                       <Flex align="center">
                         <Image
                           src={item.thumb}
@@ -99,7 +105,7 @@ export const CartIconDetails = ({ cart }) => {
                           mr={0.5}
                         />
                         <Flex direction="column" maxW="80%">
-                          <Text noOfLines={2} fontSize="18px" fontWeight="bold">
+                          <Text noOfLines={2} fontSize="sm" fontWeight="bold">
                             {item.name}
                           </Text>
                           <Text fontSize="12px">
@@ -132,15 +138,19 @@ export const CartIconDetails = ({ cart }) => {
                   Total: 200.000VNĐ
                 </Heading>
               </Box>
-              <Button
-                w="90%"
-                minH="40px"
-                borderRadius="sm"
-                backgroundColor="green.400"
-                color="white"
-              >
-                Go To Cart
-              </Button>
+              <Box w="full" px={4}>
+                <Link to="/cart">
+                  <Button
+                    w="100%"
+                    minH="40px"
+                    borderRadius="sm"
+                    backgroundColor="green.400"
+                    color="white"
+                  >
+                    Go To Cart
+                  </Button>
+                </Link>
+              </Box>
             </Flex>
           </Flex>
         )}
