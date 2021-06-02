@@ -15,6 +15,23 @@ import userApi from '../api/userApi';
 import checkTokenExpire from '../utils/checkTokenExpire';
 import { updateToken } from './userActions';
 
+const calcPrice = data => {
+  // Total
+  const reducerTotal = (a, item) => a + item.count * item.price;
+  const total = data.reduce(reducerTotal, 0);
+
+  // Discount
+  const reducerDiscount = (a, item) =>
+    a + (item.count * item.price * item.discount) / 100;
+  const discount = data.reduce(reducerDiscount, 0);
+
+  const percent = ((discount / total) * 100).toFixed(0) - 0;
+
+  const price = { total, discount, percent };
+
+  return price;
+};
+
 export const getCart = () => async (dispatch, getState) => {
   dispatch({
     type: GET_CART_REQUEST,
@@ -30,10 +47,11 @@ export const getCart = () => async (dispatch, getState) => {
     const id = decode(currentUserToken)._id;
 
     const data = await userApi.getCartData(id);
+
     localStorage.setItem('cartItems', JSON.stringify(data));
     dispatch({
       type: GET_CART_SUCCESS,
-      payload: data,
+      payload: { data, price: calcPrice(data) },
     });
   } catch (error) {
     dispatch({
@@ -82,7 +100,7 @@ export const addToCart = product => async (dispatch, getState) => {
   localStorage.setItem('cartItems', JSON.stringify(cartItems));
   dispatch({
     type: ADD_TO_CART,
-    payload: { cartItems },
+    payload: { cartItems, price: calcPrice(cartItems) },
   });
   dispatch(updateCart());
 };
@@ -96,7 +114,10 @@ export const removeFromCart = product => async (dispatch, getState) => {
     .cart.cartItems.slice()
     .filter(x => x._id !== product._id);
   localStorage.setItem('cartItems', JSON.stringify(cartItems));
-  dispatch({ type: REMOVE_FROM_CART, payload: { cartItems } });
+  dispatch({
+    type: REMOVE_FROM_CART,
+    payload: { cartItems, price: calcPrice(cartItems) },
+  });
   dispatch(updateCart());
 };
 
@@ -112,7 +133,10 @@ export const increase = product => async (dispatch, getState) => {
     }
   });
   localStorage.setItem('cartItems', JSON.stringify(cartItems));
-  dispatch({ type: INCREASE, payload: { cartItems } });
+  dispatch({
+    type: INCREASE,
+    payload: { cartItems, price: calcPrice(cartItems) },
+  });
   dispatch(updateCart());
 };
 
@@ -130,12 +154,18 @@ export const decrease = product => async (dispatch, getState) => {
     }
   });
   localStorage.setItem('cartItems', JSON.stringify(cartItems));
-  dispatch({ type: DECREASE, payload: { cartItems } });
+  dispatch({
+    type: DECREASE,
+    payload: { cartItems, price: calcPrice(cartItems) },
+  });
   dispatch(updateCart());
 };
 
 export const clearCart = () => {
   const cartItems = [];
   localStorage.setItem('cartItems', JSON.stringify(cartItems));
-  return { type: CLEAR_CART, payload: { cartItems } };
+  return {
+    type: CLEAR_CART,
+    payload: { cartItems, price: calcPrice(cartItems) },
+  };
 };

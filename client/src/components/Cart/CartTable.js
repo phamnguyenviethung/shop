@@ -13,17 +13,15 @@ import {
 } from '@chakra-ui/react';
 
 import { removeFromCart, increase, decrease } from '../../actions/cartActions';
-import { useDispatch } from 'react-redux';
+import { useDispatch, useSelector } from 'react-redux';
 import { AiOutlineDelete } from 'react-icons/ai';
 import formatCurrency from '../../utils/formatCurrency';
 import { Link } from 'react-router-dom';
 
 const CartTable = ({ data }) => {
   const dispatch = useDispatch();
-
-  //  Total price
-  const reducer = (a, item) => a + item.count * item.price;
-  const total = data.reduce(reducer, 0);
+  const cartPrice = useSelector(state => state.cart.price);
+  const { total, discount } = cartPrice;
 
   const increaseHandler = item => {
     dispatch(increase(item));
@@ -36,11 +34,11 @@ const CartTable = ({ data }) => {
         w="full"
         mt={4}
         minH="30%"
-        px={[0, 6]}
+        px={[0, 10]}
         direction={['column', 'column', 'column', 'row']}
       >
         <Flex direction="column" flex="2">
-          <Flex justifyContent="space-between">
+          <Flex justifyContent="space-between" px={2}>
             <Heading as="h4" size="md" color="gray.500" fontWeight="600">
               Shopping Cart
             </Heading>
@@ -56,7 +54,7 @@ const CartTable = ({ data }) => {
                     justifyContent="space-between"
                     w="full"
                   >
-                    <Flex mr={4} maxW={['50%', '28%']} alignItems="center">
+                    <Flex mr={4} maxW={['40%', '28%']} alignItems="center">
                       <Image
                         src={item.thumb}
                         boxSize={['60px', '70px', '80px']}
@@ -212,20 +210,24 @@ const CartTable = ({ data }) => {
 
           <Flex mt={1}>
             <Text flex="1" color="black.300" fontWeight="600">
-              Shipping
+              Discount
             </Text>
             <Text color="black.300" fontWeight="600">
-              {formatCurrency(0)}
+              {formatCurrency(discount)}
             </Text>
           </Flex>
 
-          <Select placeholder="Chọn thời gian muốn nhận hàng" my={4}>
+          <Select
+            placeholder="Chọn thời gian muốn nhận hàng"
+            my={4}
+            display="none"
+          >
             <option value="1">1 ngày</option>
             <option value="3">3 ngày</option>
             <option value="7">7 ngày</option>
           </Select>
 
-          <Flex direction="column" mb={4}>
+          <Flex direction="column" my={4}>
             <Text>Promo code</Text>
             <Input placeholder="Enter code" my={2} p={2} />
             <Button
@@ -233,9 +235,9 @@ const CartTable = ({ data }) => {
                 boxShadow: 'none',
               }}
               border="none"
-              maxW="30%"
-              px={2}
-              py={6}
+              maxW="25%"
+              px={1}
+              py={2}
               textAlign="center"
               colorScheme="teal"
             >
@@ -244,23 +246,36 @@ const CartTable = ({ data }) => {
           </Flex>
 
           <Flex direction="column">
-            <Flex w="full">
-              <Text
-                flex="1"
-                color="black.300"
-                fontWeight="600"
-                fontSize="xl"
-                mb={4}
-              >
+            <Flex w="full" alignItems="center">
+              <Text flex="1" color="black.300" fontWeight="600" fontSize="xl">
                 Total cost
               </Text>
-              <Text fontWeight="600" fontSize="lg">
-                {formatCurrency(total)}
-              </Text>
+
+              {discount === 0 ? (
+                <Text fontWeight="600" fontSize="lg">
+                  {formatCurrency(total)}
+                </Text>
+              ) : (
+                <Flex alignItems="center">
+                  <Text
+                    fontWeight="600"
+                    fontSize="sm"
+                    decoration="line-through"
+                    color="gray.400"
+                    mr={1}
+                  >
+                    {formatCurrency(total)}
+                  </Text>
+                  <Text fontWeight="600" fontSize="lg">
+                    {formatCurrency(total - discount)}
+                  </Text>
+                </Flex>
+              )}
             </Flex>
           </Flex>
           <Link to="/checkout">
             <Button
+              mt={4}
               _focus={{
                 boxShadow: 'none',
               }}

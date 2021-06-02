@@ -25,22 +25,50 @@ const cartReducers = (
       return { loading: false, error: action.payload, cartItems: [] };
 
     case GET_CART_REQUEST:
-      return { loading: true, cartItems: action.payload };
+      return {
+        loading: true,
+        cartItems: action.payload,
+        price: action.payload,
+      };
     case GET_CART_SUCCESS:
-      return { loading: false, cartItems: action.payload };
+      return {
+        loading: false,
+        cartItems: action.payload.data,
+        price: action.payload.price,
+      };
     case GET_CART_FAIL:
-      return { loading: false, cartItems: [], error: action.payload };
+      return {
+        loading: false,
+        cartItems: [],
+        price: [],
+        error: action.payload.data,
+      };
 
     case ADD_TO_CART:
-      return { cartItems: action.payload.cartItems };
+      return {
+        cartItems: action.payload.cartItems,
+        price: action.payload.price,
+      };
     case REMOVE_FROM_CART:
-      return { cartItems: action.payload.cartItems };
+      return {
+        cartItems: action.payload.cartItems,
+        price: action.payload.price,
+      };
     case CLEAR_CART:
-      return { cartItems: action.payload.cartItems };
+      return {
+        cartItems: action.payload.cartItems,
+        price: action.payload.price,
+      };
     case INCREASE:
-      return { cartItems: action.payload.cartItems };
+      return {
+        cartItems: action.payload.cartItems,
+        price: action.payload.price,
+      };
     case DECREASE:
-      return { cartItems: action.payload.cartItems };
+      return {
+        cartItems: action.payload.cartItems,
+        price: action.payload.price,
+      };
 
     default:
       return state;
