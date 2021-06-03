@@ -1,26 +1,98 @@
-import React, { useState, useEffect } from 'react';
+import React from 'react';
 import { Container } from '@chakra-ui/react';
-import productsApi from '../../api/productsApi';
 import Product from './Product/Product';
+import { useSelector } from 'react-redux';
 
-const Products = () => {
-  const [producstList, setProducstList] = useState([]);
-  useEffect(() => {
-    const getProductList = async () => {
-      try {
-        const params = {};
-        const response = await productsApi.getAll(params);
-        setProducstList(response);
-      } catch (error) {
-        console.log('Failed to fetch products list', error);
-      }
-    };
-    getProductList();
-  }, []);
+import { Tabs, TabList, TabPanels, Tab, TabPanel } from '@chakra-ui/react';
+
+const Products = ({ list, hideTabs }) => {
+  const products = useSelector(state => state.product);
+  const data = list || products;
+  const discount = data.filter(item => item.discount > 0);
+
+  if (hideTabs) {
+    return (
+      <Container className="row" maxW="full">
+        {data.map((item, key) => {
+          return (
+            <Product
+              key={key}
+              name={item.name}
+              thumb={item.thumb}
+              price={item.price}
+              item={item}
+            />
+          );
+        })}
+      </Container>
+    );
+  }
+
   return (
-    <Container w="full" maxW="full" mt={6}>
-      <Product data={producstList} />
-    </Container>
+    <>
+      <Tabs align="center" variant="unstyled">
+        <TabList border="0">
+          <Tab
+            _selected={{
+              fontWeight: 'bold',
+            }}
+            color="gray.700"
+            fontSize="md"
+            _focus={{
+              boxShadow: 'none',
+            }}
+          >
+            New Arrival
+          </Tab>
+          <Tab
+            _selected={{
+              fontWeight: 'bold',
+            }}
+            color="gray.700"
+            fontSize="md"
+            _focus={{
+              boxShadow: 'none',
+            }}
+          >
+            Sale off
+          </Tab>
+        </TabList>
+
+        <TabPanels>
+          <TabPanel w="full" maxW="full" mt={10} p={0}>
+            <Container className="row" maxW="full">
+              {data.map((item, key) => {
+                return (
+                  <Product
+                    key={key}
+                    name={item.name}
+                    thumb={item.thumb}
+                    price={item.price}
+                    item={item}
+                  />
+                );
+              })}
+            </Container>
+          </TabPanel>
+
+          <TabPanel w="full" maxW="full" mt={10}>
+            <Container className="row" maxW="full">
+              {discount.map((item, key) => {
+                return (
+                  <Product
+                    key={key}
+                    name={item.name}
+                    thumb={item.thumb}
+                    price={item.price}
+                    item={item}
+                  />
+                );
+              })}
+            </Container>
+          </TabPanel>
+        </TabPanels>
+      </Tabs>
+    </>
   );
 };
 

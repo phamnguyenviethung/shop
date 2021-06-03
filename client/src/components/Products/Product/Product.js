@@ -1,9 +1,8 @@
-import React, { useState } from 'react';
+import React from 'react';
 import {
   Container,
   Flex,
   Heading,
-  Button,
   Text,
   HStack,
   Box,
@@ -17,7 +16,7 @@ import { AiOutlineEye } from 'react-icons/ai';
 import { HiShoppingCart } from 'react-icons/hi';
 import styled from 'styled-components';
 
-const Product = ({ data }) => {
+const Product = ({ name, thumb, price, item }) => {
   const dispatch = useDispatch();
 
   const HoverIcon = styled(HStack)`
@@ -37,73 +36,70 @@ const Product = ({ data }) => {
   `;
 
   return (
-    <Container className="row" maxW="full">
-      {data.map((item, key) => {
-        return (
+    <Container
+      className="col-xl-4 col-lg-6 col-md-6 col-sm-12 "
+      p={0}
+      m={0}
+      mb={10}
+      maxW="full"
+    >
+      <Flex
+        direction="column"
+        alignItems="center"
+        justifyContent="center"
+        cursor="pointer"
+      >
+        <Box w="full" h="full" pos="relative">
           <Container
-            className="col-lg-3 col-md-6 col-sm-12"
-            p={0}
-            m={0}
-            mb={10}
-            key={key}
-          >
-            <Flex direction="column" alignItems="center" cursor="pointer">
-              <Box w="full" h="full" pos="relative">
-                <Container
-                  bgImage={`url(${item.thumb})`}
-                  bgPosition="center"
-                  bgSize="contain"
-                  bgRepeat="no-repeat"
-                  pt="50%"
-                  h="full"
-                  w="full"
-                />
+            bgImage={`url(${thumb})`}
+            bgPosition="center"
+            bgSize="contain"
+            bgRepeat="no-repeat"
+            pt="50%"
+            h="full"
+            w="full"
+          />
 
-                <HoverIconContainer
-                  h="full"
-                  w="full"
-                  pos="absolute"
-                  top="0"
-                  bottom="0"
-                  left="0"
-                  right="0"
-                >
-                  <HoverIcon>
-                    <Center
-                      p={4}
-                      backgroundColor="green.300"
-                      borderRadius="full"
-                    >
-                      <AiOutlineEye size={18} color="white" />
-                    </Center>
-                    <Center
-                      p={4}
-                      backgroundColor="green.300"
-                      borderRadius="full"
-                      onClick={() => dispatch(addToCart(item))}
-                    >
-                      <HiShoppingCart size={18} color="white" />
-                    </Center>
-                  </HoverIcon>
-                </HoverIconContainer>
-              </Box>
-              <Heading
-                as="h2"
-                size="md"
-                my={4}
-                fontWeight="400"
-                color="gray.700"
+          <HoverIconContainer
+            h="full"
+            w="full"
+            pos="absolute"
+            top="0"
+            bottom="0"
+            left="0"
+            right="0"
+          >
+            <HoverIcon>
+              <Center p={4} backgroundColor="green.300" borderRadius="full">
+                <AiOutlineEye size={18} color="white" />
+              </Center>
+              <Center
+                p={4}
+                backgroundColor="green.300"
+                borderRadius="full"
+                onClick={() => dispatch(addToCart(item))}
               >
-                {item.name}
-              </Heading>
-              <Rate rate={5} />
-              <Text size="sm" mb={4} color="black.500" fontWeight="bold">
-                {formatCurrency(item.price)}
-              </Text>
-            </Flex>
-          </Container>
-        );
-      })}
+                <HiShoppingCart size={18} color="white" />
+              </Center>
+            </HoverIcon>
+          </HoverIconContainer>
+        </Box>
+        <Heading
+          as="h2"
+          size="sm"
+          my={4}
+          fontWeight="400"
+          color="gray.700"
+          isTruncated
+          maxW="80%"
+        >
+          {name}
+        </Heading>
+        <Rate rate={5} />
+        <Text size="sm" mb={4} color="black.500" fontWeight="bold">
+          {formatCurrency(price)}
+        </Text>
+      </Flex>
     </Container>
   );
 };
