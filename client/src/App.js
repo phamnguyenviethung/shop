@@ -8,6 +8,7 @@ import Cart from './components/Cart/Cart';
 import Navbar from './components/Navbar/Navbar';
 import Checkout from './pages/Checkout';
 import Home from './pages/Home';
+import Details from './pages/Details';
 import Search from './pages/Search';
 import { useDispatch, useSelector } from 'react-redux';
 
@@ -32,7 +33,9 @@ function App() {
       <Switch>
         <Route exact path="/" component={Home}></Route>
         <Route path="/search" component={Search}></Route>
-        <Route path="/cart" render={props => <Cart {...props} />} />
+        <Route path="/cart" component={Cart}></Route>
+        <Route exact path="/product/:id" component={Details}></Route>
+        <Route path="/search" component={Search}></Route>
 
         <Route path="/login" component={Login}></Route>
         <Route path="/register" component={Register}></Route>

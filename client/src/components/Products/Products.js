@@ -6,23 +6,16 @@ import { useSelector } from 'react-redux';
 import { Tabs, TabList, TabPanels, Tab, TabPanel } from '@chakra-ui/react';
 
 const Products = ({ list, hideTabs }) => {
-  const products = useSelector(state => state.product);
-  const data = list || products;
+  const products = useSelector(state => state.product.productList);
+  console.log(products);
+  const data = list || products || [];
   const discount = data.filter(item => item.discount > 0);
 
   if (hideTabs) {
     return (
       <Container className="row" maxW="full">
         {data.map((item, key) => {
-          return (
-            <Product
-              key={key}
-              name={item.name}
-              thumb={item.thumb}
-              price={item.price}
-              item={item}
-            />
-          );
+          return <Product key={key} item={item} />;
         })}
       </Container>
     );
