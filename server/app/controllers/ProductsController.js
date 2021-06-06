@@ -16,15 +16,44 @@ class ProductsController {
       .catch((err) => res.send(err));
   }
 
-  // [POST] /products/add
-  add(req, res, next) {
-    const { name, price, quantity, thumb } = req.body;
+  // [GET] /products/:slug
+  getBySlug(req, res) {
+    const { slug } = req.params;
 
-    const product = new ProductModel({ name, price, quantity, thumb });
+    ProductModel.findOne({ slug })
+      .then((result) => res.send(result))
+      .catch((err) => res.send(err));
+  }
+
+  // [POST] /products/add
+  add(req, res) {
+    const {
+      name,
+      price,
+      quantity,
+      thumb,
+      desc,
+      discount,
+      categories,
+      size,
+      color,
+    } = req.body;
+
+    const product = new ProductModel({
+      name,
+      price,
+      size,
+      quantity,
+      thumb,
+      desc,
+      discount,
+      categories,
+      color,
+    });
     product
       .save()
-      .then(() => res.send("added"))
-      .catch(res.send("error"));
+      .then((rs) => res.send(rs))
+      .catch((err) => res.send(err));
   }
 
   // [PUT] /products/edit

@@ -14,6 +14,7 @@ const ProductSchema = new Schema(
       unique: true,
       slug: "name",
     },
+
     price: {
       type: Number,
       required: true,
@@ -23,10 +24,23 @@ const ProductSchema = new Schema(
       required: true,
       default: "",
     },
+
     quantity: {
-      type: Number,
+      type: Array,
       required: true,
+      default: [],
     },
+    size: {
+      type: Array,
+      required: true,
+      default: [],
+    },
+    color: {
+      type: Array,
+      required: true,
+      default: [],
+    },
+
     thumb: {
       type: String,
       required: true,
