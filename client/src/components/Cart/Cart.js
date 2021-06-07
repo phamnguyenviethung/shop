@@ -1,5 +1,5 @@
 import React from 'react';
-import { Center, Container } from '@chakra-ui/react';
+import { Container } from '@chakra-ui/react';
 import CartTable from './CartTable';
 import CartEmpty from './CartEmpty';
 import { useSelector } from 'react-redux';
@@ -8,7 +8,7 @@ const Cart = () => {
   const cart = useSelector(state => state.cart.cartItems);
 
   return (
-    <Container w="full" maxW="full" px={0} h="100%">
+    <Container w="full" maxW="full" px={0} h="100vh">
       {cart.length === 0 ? (
         <CartEmpty />
       ) : (

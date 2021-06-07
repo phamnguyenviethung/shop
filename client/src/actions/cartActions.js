@@ -9,7 +9,6 @@ import {
   CLEAR_CART,
   UPDATE_CART_FAIL,
 } from './actionsTypes';
-import store from '../store';
 import decode from 'jwt-decode';
 import userApi from '../api/userApi';
 import checkTokenExpire from '../utils/checkTokenExpire';
@@ -56,7 +55,7 @@ export const getCart = () => async (dispatch, getState) => {
   } catch (error) {
     dispatch({
       type: GET_CART_FAIL,
-      payload: {},
+      payload: [],
     });
   }
 };
@@ -80,86 +79,99 @@ export const updateCart = () => async (dispatch, getState) => {
   }
 };
 
-export const addToCart = product => async (dispatch, getState) => {
-  const token = getState().user.user.token;
-  if (checkTokenExpire(token)) {
-    await dispatch(updateToken());
-  }
-  const cartItems = store.getState().cart.cartItems.slice();
-  let alreadyExists = false;
-  cartItems.forEach(x => {
-    if (x._id === product._id) {
-      alreadyExists = true;
-      x.count++;
+export const addToCart =
+  (product, size, color) => async (dispatch, getState) => {
+    const token = getState().user.user.token;
+    if (checkTokenExpire(token)) {
+      await dispatch(updateToken());
     }
-  });
-  if (!alreadyExists) {
-    cartItems.push({ ...product, count: 1 });
-  }
 
-  localStorage.setItem('cartItems', JSON.stringify(cartItems));
-  dispatch({
-    type: ADD_TO_CART,
-    payload: { cartItems, price: calcPrice(cartItems) },
-  });
-  dispatch(updateCart());
-};
-
-export const removeFromCart = product => async (dispatch, getState) => {
-  const token = getState().user.user.token;
-  if (checkTokenExpire(token)) {
-    await dispatch(updateToken());
-  }
-  const cartItems = getState()
-    .cart.cartItems.slice()
-    .filter(x => x._id !== product._id);
-  localStorage.setItem('cartItems', JSON.stringify(cartItems));
-  dispatch({
-    type: REMOVE_FROM_CART,
-    payload: { cartItems, price: calcPrice(cartItems) },
-  });
-  dispatch(updateCart());
-};
-
-export const increase = product => async (dispatch, getState) => {
-  const token = getState().user.user.token;
-  if (checkTokenExpire(token)) {
-    await dispatch(updateToken());
-  }
-  const cartItems = getState().cart.cartItems.slice();
-  cartItems.forEach(x => {
-    if (x._id === product._id) {
-      x.count++;
-    }
-  });
-  localStorage.setItem('cartItems', JSON.stringify(cartItems));
-  dispatch({
-    type: INCREASE,
-    payload: { cartItems, price: calcPrice(cartItems) },
-  });
-  dispatch(updateCart());
-};
-
-export const decrease = product => async (dispatch, getState) => {
-  const token = getState().user.user.token;
-  if (checkTokenExpire(token)) {
-    await dispatch(updateToken());
-  }
-  const cartItems = getState().cart.cartItems.slice();
-  cartItems.forEach(x => {
-    if (x._id === product._id) {
-      if (x.count > 0) {
-        x.count--;
+    const cartItems = getState().cart.cartItems.slice();
+    let alreadyExists = false;
+    cartItems.forEach(x => {
+      if (x._id === product._id && x.size === size && x.color === color) {
+        alreadyExists = true;
+        x.count++;
       }
+    });
+    if (!alreadyExists) {
+      cartItems.push({ ...product, count: 1, size, color });
     }
-  });
-  localStorage.setItem('cartItems', JSON.stringify(cartItems));
-  dispatch({
-    type: DECREASE,
-    payload: { cartItems, price: calcPrice(cartItems) },
-  });
-  dispatch(updateCart());
-};
+
+    localStorage.setItem('cartItems', JSON.stringify(cartItems));
+    dispatch({
+      type: ADD_TO_CART,
+      payload: { cartItems, price: calcPrice(cartItems) },
+    });
+    dispatch(updateCart());
+  };
+
+export const removeFromCart =
+  (product, size, color) => async (dispatch, getState) => {
+    const token = getState().user.user.token;
+    if (checkTokenExpire(token)) {
+      await dispatch(updateToken());
+    }
+    const cartItems = getState().cart.cartItems.slice();
+
+    const removeID = cartItems.filter(item => item._id === product._id);
+    const removeItem = removeID.filter(
+      item => item.size === size && item.color === color
+    );
+    const removeIndex = cartItems.indexOf(removeItem[0]);
+
+    // Remove item
+    cartItems.splice(removeIndex, 1);
+
+    localStorage.setItem('cartItems', JSON.stringify(cartItems));
+    dispatch({
+      type: REMOVE_FROM_CART,
+      payload: { cartItems, price: calcPrice(cartItems) },
+    });
+    dispatch(updateCart());
+  };
+
+export const increase =
+  (product, size, color) => async (dispatch, getState) => {
+    const token = getState().user.user.token;
+    if (checkTokenExpire(token)) {
+      await dispatch(updateToken());
+    }
+    const cartItems = getState().cart.cartItems.slice();
+    cartItems.forEach(x => {
+      if (x._id === product._id && x.size === size && x.color === color) {
+        x.count++;
+      }
+    });
+    localStorage.setItem('cartItems', JSON.stringify(cartItems));
+    dispatch({
+      type: INCREASE,
+      payload: { cartItems, price: calcPrice(cartItems) },
+    });
+    dispatch(updateCart());
+  };
+
+export const decrease =
+  (product, size, color) => async (dispatch, getState) => {
+    const token = getState().user.user.token;
+    if (checkTokenExpire(token)) {
+      await dispatch(updateToken());
+    }
+    const cartItems = getState().cart.cartItems.slice();
+    cartItems.forEach(x => {
+      if (x._id === product._id && x.size === size && x.color === color) {
+        if (x.count > 0) {
+          x.count--;
+        }
+      }
+    });
+    localStorage.setItem('cartItems', JSON.stringify(cartItems));
+    dispatch({
+      type: DECREASE,
+      payload: { cartItems, price: calcPrice(cartItems) },
+    });
+    dispatch(updateCart());
+  };
 
 export const clearCart = () => {
   const cartItems = [];

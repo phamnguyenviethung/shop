@@ -8,11 +8,11 @@ import { useDispatch } from 'react-redux';
 const Home = () => {
   const dispatch = useDispatch();
   useEffect(() => {
-    const getList = async () => {
-      await dispatch(getProductList());
+    const getList = () => {
+      dispatch(getProductList());
     };
     getList();
-  }, []);
+  }, [dispatch]);
   return (
     <>
       <Slide />

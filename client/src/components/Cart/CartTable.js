@@ -23,10 +23,6 @@ const CartTable = ({ data }) => {
   const cartPrice = useSelector(state => state.cart.price);
   const { total, discount } = cartPrice;
 
-  const increaseHandler = item => {
-    dispatch(increase(item));
-  };
-
   return (
     <>
       <Flex
@@ -34,11 +30,11 @@ const CartTable = ({ data }) => {
         w="full"
         mt={4}
         minH="30%"
-        px={[0, 10]}
+        px={[0, 2, 4, 10]}
         direction={['column', 'column', 'column', 'row']}
       >
         <Flex direction="column" flex="2">
-          <Flex justifyContent="space-between" px={2}>
+          <Flex justifyContent="space-between" px={4}>
             <Heading as="h4" size="md" color="gray.500" fontWeight="600">
               Shopping Cart
             </Heading>
@@ -56,7 +52,7 @@ const CartTable = ({ data }) => {
                   >
                     <Flex mr={4} maxW={['40%', '28%']} alignItems="center">
                       <Image
-                        src={item.thumb}
+                        src={item.thumb[0]}
                         boxSize={['60px', '70px', '80px']}
                         mr={[2, 2, 6]}
                       />
@@ -71,7 +67,7 @@ const CartTable = ({ data }) => {
                           {item.name}
                         </Heading>
                         <Text fontSize="xs" display={['none', 'none', 'block']}>
-                          Giá: {formatCurrency(item.price)}
+                          {item.color} / {item.size}
                         </Text>
 
                         {/* Show on mobile/tablet */}
@@ -88,8 +84,12 @@ const CartTable = ({ data }) => {
                             borderRadius="none"
                             onClick={() =>
                               item.count === 1
-                                ? dispatch(removeFromCart(item))
-                                : dispatch(decrease(item))
+                                ? dispatch(
+                                    removeFromCart(item, item.size, item.color)
+                                  )
+                                : dispatch(
+                                    decrease(item, item.size, item.color)
+                                  )
                             }
                             color="black.100"
                           >
@@ -113,7 +113,9 @@ const CartTable = ({ data }) => {
                             }}
                             border="none"
                             borderRadius="none"
-                            onClick={() => increaseHandler(item)}
+                            onClick={() =>
+                              dispatch(increase(item, item.size, item.color))
+                            }
                             color="black.300"
                             fontWeight="600"
                           >
@@ -132,16 +134,24 @@ const CartTable = ({ data }) => {
                         borderRadius="none"
                         onClick={() =>
                           item.count === 1
-                            ? dispatch(removeFromCart(item))
-                            : dispatch(decrease(item))
+                            ? dispatch(
+                                removeFromCart(item, item.size, item.color)
+                              )
+                            : dispatch(decrease(item, item.size, item.color))
                         }
                         color="black.100"
                       >
                         <Text>-</Text>
                       </Button>
                       <Button
-                        bgColor="gray.50"
+                        bgColor="gray.100"
                         _focus={{
+                          boxShadow: 'none',
+                        }}
+                        _hover={{
+                          boxShadow: 'none',
+                        }}
+                        _active={{
                           boxShadow: 'none',
                         }}
                         border="none"
@@ -157,7 +167,9 @@ const CartTable = ({ data }) => {
                         }}
                         border="none"
                         borderRadius="none"
-                        onClick={() => increaseHandler(item)}
+                        onClick={() =>
+                          dispatch(increase(item, item.size, item.color))
+                        }
                         color="black.300"
                         fontWeight="600"
                       >
@@ -168,14 +180,16 @@ const CartTable = ({ data }) => {
                       textAlign={['center', 'left']}
                       w={['20%', '20%', '10%']}
                     >
-                      <Text color="black.300" fontWeight="600" fontSize="sm">
+                      <Text color="black.300" fontWeight="600" fontSize="md">
                         {formatCurrency(item.price * item.count)}
                       </Text>
                     </Box>
 
                     <Text
                       color="red.500"
-                      onClick={() => dispatch(removeFromCart(item))}
+                      onClick={() =>
+                        dispatch(removeFromCart(item, item.size, item.color))
+                      }
                     >
                       <AiOutlineDelete size={34} />
                     </Text>
@@ -210,10 +224,10 @@ const CartTable = ({ data }) => {
 
           <Flex mt={1}>
             <Text flex="1" color="black.300" fontWeight="600">
-              Discount
+              Giảm giá:
             </Text>
             <Text color="black.300" fontWeight="600">
-              {formatCurrency(discount)}
+              - {formatCurrency(discount)}
             </Text>
           </Flex>
 

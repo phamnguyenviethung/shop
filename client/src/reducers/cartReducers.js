@@ -28,7 +28,7 @@ const cartReducers = (
       return {
         loading: true,
         cartItems: action.payload,
-        price: action.payload,
+        price: 0,
       };
     case GET_CART_SUCCESS:
       return {
@@ -40,7 +40,7 @@ const cartReducers = (
       return {
         loading: false,
         cartItems: [],
-        price: [],
+        price: 0,
         error: action.payload.data,
       };
 

@@ -7,7 +7,7 @@ class CartController {
 
     CartModel.findOne({ userId: id })
       .then((cart) => res.send(cart.productList))
-      .catch((err) => res.send("lỗi"));
+      .catch((err) => res.send(err));
   }
   // [POST] /cart/update
   async updateCart(req, res) {

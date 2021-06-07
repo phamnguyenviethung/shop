@@ -7,7 +7,6 @@ import { Tabs, TabList, TabPanels, Tab, TabPanel } from '@chakra-ui/react';
 
 const Products = ({ list, hideTabs }) => {
   const products = useSelector(state => state.product.productList);
-  console.log(products);
   const data = list || products || [];
   const discount = data.filter(item => item.discount > 0);
 

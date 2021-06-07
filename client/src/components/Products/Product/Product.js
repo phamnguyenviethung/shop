@@ -50,7 +50,7 @@ const Product = ({ item }) => {
         >
           <Box w="full" h="full" pos="relative">
             <Container
-              bgImage={`url(${thumb})`}
+              bgImage={`url(${thumb[0]})`}
               bgPosition="center"
               bgSize="contain"
               bgRepeat="no-repeat"
