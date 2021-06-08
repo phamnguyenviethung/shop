@@ -1,30 +1,18 @@
-import { FiTruck } from 'react-icons/fi';
-import { HiOutlineSupport } from 'react-icons/hi';
-import { RiRefund2Line } from 'react-icons/ri';
-import { BiReceipt } from 'react-icons/bi';
-
-export const featuresData = [
+export const images = [
   {
-    icon: <FiTruck size={50} />,
-    title: 'Free shipping',
-    desc: 'Lorem ipsum dolor sit amet', // Short
+    src: 'https://shop-redq.vercel.app/_next/static/images/offer-2-90d3534e1ad62a8b8a977f1290e61e9f.png',
+    alt: 'free ship',
   },
-
   {
-    icon: <HiOutlineSupport size={50} />,
-    title: 'Support 24/7',
-    desc: 'Lorem ipsum dolor sit amet', // Short
+    src: 'https://shop-redq.vercel.app/_next/static/images/offer-3-2f8285b13bef950f843cb4147666af6e.png',
+    alt: 'gift',
   },
-
   {
-    icon: <RiRefund2Line size={50} />,
-    title: 'Money Return',
-    desc: 'Lorem ipsum dolor sit amet', // Short
+    src: 'https://shop-redq.vercel.app/_next/static/images/offer-1-1f7a4c9ea0ba5a216bc7af1f60d044e0.png',
+    alt: 'coupons',
   },
-
   {
-    icon: <BiReceipt size={50} />,
-    title: 'Order Discount',
-    desc: 'Lorem ipsum dolor sit amet', // Short
+    src: 'https://shop-redq.vercel.app/_next/static/images/offer-1-1f7a4c9ea0ba5a216bc7af1f60d044e0.png',
+    alt: 'coupons',
   },
 ];
