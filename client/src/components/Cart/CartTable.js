@@ -10,11 +10,12 @@ import {
   Text,
   Select,
   Input,
+  VStack,
 } from '@chakra-ui/react';
 
 import { removeFromCart, increase, decrease } from '../../actions/cartActions';
 import { useDispatch, useSelector } from 'react-redux';
-import { AiOutlineDelete } from 'react-icons/ai';
+import { RiDeleteBack2Line } from 'react-icons/ri';
 import formatCurrency from '../../utils/formatCurrency';
 import { Link } from 'react-router-dom';
 
@@ -180,18 +181,38 @@ const CartTable = ({ data }) => {
                       textAlign={['center', 'left']}
                       w={['20%', '20%', '10%']}
                     >
-                      <Text color="black.300" fontWeight="600" fontSize="md">
-                        {formatCurrency(item.price * item.count)}
-                      </Text>
+                      {discount === 0 ? (
+                        <Text color="black.300" fontWeight="600" fontSize="md">
+                          {formatCurrency(item.price * item.count)}
+                        </Text>
+                      ) : (
+                        <VStack>
+                          <Text color="red.500" fontWeight="700" fontSize="lg">
+                            {formatCurrency(
+                              item.price * item.count -
+                                (item.discount / 100) * item.price * item.count
+                            )}
+                          </Text>
+                          <Text
+                            color="gray.400"
+                            fontWeight="400"
+                            fontSize="sm"
+                            textDecor="line-through"
+                          >
+                            {formatCurrency(item.price * item.count)}
+                          </Text>
+                        </VStack>
+                      )}
                     </Box>
 
                     <Text
-                      color="red.500"
                       onClick={() =>
                         dispatch(removeFromCart(item, item.size, item.color))
                       }
+                      fontSize="sm"
+                      cursor="pointer"
                     >
-                      <AiOutlineDelete size={34} />
+                      <RiDeleteBack2Line size={24} color="#474554" />
                     </Text>
                   </Flex>
                 </ListItem>
