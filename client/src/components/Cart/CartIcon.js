@@ -1,31 +1,34 @@
-import React, { useRef } from 'react';
+import React from 'react';
 import {
   Box,
   Collapse,
   Flex,
+  HStack,
   Image,
   Stack,
   Text,
   useDisclosure,
-  useOutsideClick,
   VStack,
 } from '@chakra-ui/react';
-import { ListItem, UnorderedList, Heading, Button } from '@chakra-ui/react';
-import { AiOutlineShoppingCart } from 'react-icons/ai';
+import { ListItem, UnorderedList, Button } from '@chakra-ui/react';
+import { AiFillCloseCircle } from 'react-icons/ai';
 import formatCurrency from '../../utils/formatCurrency';
 import { Link } from 'react-router-dom';
+import { useDispatch, useSelector } from 'react-redux';
+import { removeFromCart } from '../../actions/cartActions';
+import { FiShoppingBag } from 'react-icons/fi';
 
 export const CartIconDetails = ({ cart }) => {
-  const ref = useRef();
-  const { isOpen, onToggle, onClose } = useDisclosure();
-  useOutsideClick({
-    ref: ref,
-    handler: () => onClose(),
-  });
+  const price = useSelector(state => state.cart.price);
+  const { total, discount } = price;
+
+  const dispatch = useDispatch();
+
+  const { isOpen, onToggle } = useDisclosure();
 
   return (
-    <Stack pos="relative" onClick={onToggle} cursor="pointer">
-      <AiOutlineShoppingCart size={24} />
+    <Stack pos="relative" onClick={onToggle} cursor="pointer" zIndex="99">
+      <FiShoppingBag size={24} onClick={onToggle} />
       <Text
         pos="absolute"
         bottom="60%"
@@ -39,11 +42,11 @@ export const CartIconDetails = ({ cart }) => {
         {cart.length}
       </Text>
 
-      <Collapse in={isOpen} animateOpacity style={{ zIndex: 9999 }} ref={ref}>
+      <Collapse in={isOpen} animateOpacity style={{ zIndex: 9999 }}>
         {cart.length === 0 ? (
           <Flex
             w="350px"
-            h="150px"
+            h="300px"
             backgroundColor="white"
             pos="absolute"
             top="100%"
@@ -57,6 +60,11 @@ export const CartIconDetails = ({ cart }) => {
             alignItems="center"
             direction="column"
           >
+            <Image
+              src="https://cdn.dribbble.com/users/2058104/screenshots/4198771/dribbble.jpg?compress=1&resize=800x600"
+              alt="empty cart"
+              boxSize="200px"
+            />
             <Text color="gray.500">Your cart is empty</Text>
             <Link to="/">
               <Text color="green.500" fontWeight="bold">
@@ -67,21 +75,21 @@ export const CartIconDetails = ({ cart }) => {
         ) : (
           <Flex
             h={
-              cart.length === 1 ? '200px' : cart.length <= 2 ? '250px' : '330px'
+              cart.length === 1 ? '210px' : cart.length <= 2 ? '300px' : '420px'
             }
-            maxH="700px"
+            maxH="800px"
             w="350px"
             pos="absolute"
             top="100%"
             right="0"
             borderWidth="0.9px"
             borderColor="gray.100"
-            zIndex="999"
+            zIndex="99"
             direction="column"
             overflowX="hidden"
             backgroundColor="white"
           >
-            <VStack maxH="70%" pos="relative">
+            <VStack h={cart.length === 2 ? '85%' : '70%'} pos="relative">
               <UnorderedList
                 listStyleType="none"
                 w="100%"
@@ -95,23 +103,47 @@ export const CartIconDetails = ({ cart }) => {
               >
                 {cart.map((item, key) => {
                   return (
-                    <ListItem mb={2} w="full" py={2} key={key}>
+                    <ListItem
+                      key={key}
+                      w="full"
+                      py={4}
+                      borderBottom="1px solid #E2E8F0"
+                    >
                       <Flex align="center">
-                        <Image
-                          src={item.thumb}
-                          alt={item.name}
-                          w="50px"
-                          h="50px"
-                          mr={0.5}
-                        />
-                        <Flex direction="column" maxW="80%">
-                          <Text noOfLines={2} fontSize="sm" fontWeight="bold">
-                            {item.name}
-                          </Text>
+                        <Flex>
+                          <Link to={`/product/${item.slug}`}>
+                            <Image
+                              src={item.thumb[0]}
+                              alt={item.name}
+                              w="80px"
+                              h="80px"
+                              mr={0.5}
+                            />
+                          </Link>
+                        </Flex>
+
+                        <Flex direction="column" maxW="80%" flex="1" mr={1}>
+                          <Link to={`/product/${item.slug}`}>
+                            <Text noOfLines={2} fontSize="sm" fontWeight="bold">
+                              {item.name}
+                            </Text>
+                          </Link>
+
                           <Text fontSize="12px">
                             {formatCurrency(item.price)}
                           </Text>
                         </Flex>
+
+                        <Box
+                          alignSelf="flex-start"
+                          onClick={() =>
+                            dispatch(
+                              removeFromCart(item, item.size, item.color)
+                            )
+                          }
+                        >
+                          <AiFillCloseCircle size={18} color="#b1bdc5" />
+                        </Box>
                       </Flex>
                     </ListItem>
                   );
@@ -119,38 +151,62 @@ export const CartIconDetails = ({ cart }) => {
               </UnorderedList>
             </VStack>
             <Flex
-              h={cart.length === 1 ? '50%' : cart.length === 2 ? '35%' : '30%'}
+              h={
+                cart.length === 1 ? '100px' : cart.length === 2 ? '15%' : '30%'
+              }
               w="100%"
               direction="column"
               backgroundColor="white"
               position="absolute"
               bottom="0"
-              borderTopWidth="1px"
-              borderTopColor="gray.300"
-              borderTopStyle="solid"
               justify="center"
               alignItems="center"
               boxShadow="lg"
               py={2}
             >
               <Box w="90%">
-                <Heading as="h3" fontSize="16px" my={2} textAlign="left">
-                  Total: 200.000VNĐ
-                </Heading>
+                {discount > 0 ? (
+                  <HStack my={2}>
+                    <Text textAlign="left" fontWeight="600" fontSize="sm">
+                      Total:
+                    </Text>
+                    <Text fontSize="lg" fontWeight="700">
+                      {formatCurrency(total - discount)}
+                    </Text>
+                    <Text
+                      fontSize="md"
+                      textDecor="line-through"
+                      color="gray.400"
+                    >
+                      {formatCurrency(total)}
+                    </Text>
+                  </HStack>
+                ) : (
+                  <HStack my={2}>
+                    <Text textAlign="left" fontWeight="600" fontSize="sm">
+                      Total:
+                    </Text>
+                    <Text fontSize="lg" fontWeight="700">
+                      {formatCurrency(total)}
+                    </Text>
+                  </HStack>
+                )}
               </Box>
-              <Box w="full" px={4}>
-                <Link to="/cart">
-                  <Button
-                    w="100%"
-                    minH="40px"
-                    borderRadius="sm"
-                    backgroundColor="green.400"
-                    color="white"
-                  >
-                    Go To Cart
-                  </Button>
-                </Link>
-              </Box>
+              {cart.length > 2 && (
+                <Box w="full" px={4}>
+                  <Link to="/cart">
+                    <Button
+                      w="100%"
+                      minH="40px"
+                      borderRadius="sm"
+                      backgroundColor="green.400"
+                      color="white"
+                    >
+                      Go To Cart
+                    </Button>
+                  </Link>
+                </Box>
+              )}
             </Flex>
           </Flex>
         )}
@@ -162,7 +218,7 @@ export const CartIconDetails = ({ cart }) => {
 export const CartIcon = ({ cart }) => {
   return (
     <Stack pos="relative">
-      <AiOutlineShoppingCart size={24} />
+      <FiShoppingBag size={24} />
       <Text
         pos="absolute"
         bottom="60%"

@@ -30,9 +30,8 @@ const CartTable = ({ data }) => {
         py={4}
         w="full"
         mt={4}
-        minH="30%"
-        px={[0, 2, 4, 10]}
-        direction={['column', 'column', 'column', 'row']}
+        px={[0, 2, 4, 4, 10]}
+        direction={['column', 'column', 'column', 'column', 'row']}
       >
         <Flex direction="column" flex="2">
           <Flex justifyContent="space-between" px={4}>
@@ -52,21 +51,28 @@ const CartTable = ({ data }) => {
                     w="full"
                   >
                     <Flex mr={4} maxW={['40%', '28%']} alignItems="center">
-                      <Image
-                        src={item.thumb[0]}
-                        boxSize={['60px', '70px', '80px']}
-                        mr={[2, 2, 6]}
-                      />
+                      <Link to={`/product/${item.slug}`}>
+                        <Box boxSize={['60px', '70px', '80px']}>
+                          <Image
+                            src={item.thumb[0]}
+                            boxSize="full"
+                            mr={[2, 2, 6]}
+                          />
+                        </Box>
+                      </Link>
+
                       <Flex direction="column" w="full">
-                        <Heading
-                          as="h3"
-                          size={['sm', 'md']}
-                          minW="0"
-                          isTruncated
-                          mb={1}
-                        >
-                          {item.name}
-                        </Heading>
+                        <Link to={`/product/${item.slug}`}>
+                          <Heading
+                            as="h3"
+                            size={['sm', 'md']}
+                            minW="0"
+                            isTruncated
+                            mb={1}
+                          >
+                            {item.name}
+                          </Heading>
+                        </Link>
                         <Text fontSize="xs" display={['none', 'none', 'block']}>
                           {item.color} / {item.size}
                         </Text>
@@ -226,9 +232,9 @@ const CartTable = ({ data }) => {
           flex="1"
           px={8}
           justifyContent="space-between"
-          mt={[20, 20, 20, 0]}
+          mt={[20, 20, 20, 10, 0]}
           backgroundColor="white"
-          ml={[0, 0, 0, 4]}
+          ml={[0, 0, 0, 0, 4]}
         >
           <Heading as="h4" size="md" color="gray.500" fontWeight="600">
             Order Summary
@@ -293,15 +299,15 @@ const CartTable = ({ data }) => {
               ) : (
                 <Flex alignItems="center">
                   <Text
-                    fontWeight="600"
-                    fontSize="sm"
+                    fontWeight="400"
+                    fontSize="md"
                     decoration="line-through"
                     color="gray.400"
-                    mr={1}
+                    mr={2}
                   >
                     {formatCurrency(total)}
                   </Text>
-                  <Text fontWeight="600" fontSize="lg">
+                  <Text fontWeight="700" fontSize="lg">
                     {formatCurrency(total - discount)}
                   </Text>
                 </Flex>

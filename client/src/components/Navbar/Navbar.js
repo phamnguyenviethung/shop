@@ -1,12 +1,13 @@
 import {
+  Box,
   Button,
   Flex,
   HStack,
+  Image,
   Menu,
   MenuButton,
   MenuItem,
   MenuList,
-  Text,
   useMediaQuery,
 } from '@chakra-ui/react';
 
@@ -17,7 +18,7 @@ import { useLocation } from 'react-router';
 import { Link } from 'react-router-dom';
 import { signout } from '../../actions/userActions';
 import checkPathName from '../../utils/checkPathName';
-import { CartIcon, CartIconDetails } from '../Cart/CartIcon';
+import { CartIcon } from '../Cart/CartIcon';
 import { navbarItems } from './data';
 import { DrawerMobile } from './Drawer';
 import { SearchBox, SearchDrawer } from './SearchBox';
@@ -48,16 +49,16 @@ const Navbar = ({ cart }) => {
       >
         {isMobile && <DrawerMobile />}
 
-        <Link to="/">
-          <Text
-            textTransform="lowercase"
-            fontWeight="700"
-            fontSize="lg"
-            fontFamily="Poppins, sans-serif"
-          >
-            thewalkingfish
-          </Text>
-        </Link>
+        <Box w="10%">
+          <Link to="/">
+            <Image
+              src="https://flone.reactdemo.hasthemes.com/assets/img/logo/logo.png"
+              alt="logo"
+              justifySelf="center"
+              maxW="inherit"
+            />
+          </Link>
+        </Box>
         {!isMobile && (
           <HStack>
             {navbarItems.map((item, key) => {
@@ -72,7 +73,7 @@ const Navbar = ({ cart }) => {
 
         <Flex justifyContent="space-between" align="center" mr={3}>
           {!isMobile && (
-            <Menu>
+            <Menu placement="bottom-end" autoSelect="false">
               <MenuButton
                 p={0}
                 _focus={{
@@ -107,17 +108,13 @@ const Navbar = ({ cart }) => {
             </Menu>
           )}
 
-          {isMobile ? (
-            <Flex>
-              <SearchDrawer />
+          <Flex>
+            {isMobile && <SearchDrawer />}
 
-              <Link to="/cart">
-                <CartIcon cart={cart} />
-              </Link>
-            </Flex>
-          ) : (
-            <CartIconDetails cart={cart} />
-          )}
+            <Link to="/cart">
+              <CartIcon cart={cart} />
+            </Link>
+          </Flex>
         </Flex>
       </Flex>
     </>
