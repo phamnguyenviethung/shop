@@ -1,17 +1,47 @@
 export const navbarItems = [
   {
-    path: '/',
-    label: 'Home',
+    type: 'link',
+    path: '/shop',
+    label: 'Shop',
     icons: null,
   },
   {
-    path: '/cart',
-    label: 'Cart',
+    type: 'dropdown',
+    path: '/category/top',
+    label: 'TOP',
     icons: null,
+    list: [
+      {
+        path: '/category/shirt',
+        label: 'Shirt',
+      },
+      {
+        path: '/category/Jacket',
+        label: 'Jacket',
+      },
+    ],
+  },
+
+  {
+    type: 'dropdown',
+    path: '/category/bottom',
+    label: 'BOTTOM',
+    icons: null,
+    list: [
+      {
+        path: '/category/jeans',
+        label: 'Jeans',
+      },
+      {
+        path: '/category/Pants',
+        label: 'Pants',
+      },
+    ],
   },
   {
-    path: '/checkout',
-    label: 'Checkout',
+    type: 'link',
+    path: '/collection',
+    label: 'Collection',
     icons: null,
   },
 ];

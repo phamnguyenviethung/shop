@@ -2,7 +2,6 @@ import {
   Box,
   Button,
   Flex,
-  HStack,
   Image,
   Menu,
   MenuButton,
@@ -10,6 +9,8 @@ import {
   MenuList,
   useMediaQuery,
 } from '@chakra-ui/react';
+
+import { ChevronDownIcon } from '@chakra-ui/icons';
 
 import React from 'react';
 import { VscAccount } from 'react-icons/vsc';
@@ -21,7 +22,7 @@ import checkPathName from '../../utils/checkPathName';
 import { CartIcon } from '../Cart/CartIcon';
 import { navbarItems } from './data';
 import { DrawerMobile } from './Drawer';
-import { SearchBox, SearchDrawer } from './SearchBox';
+import Search from './SearchBox';
 
 const Navbar = ({ cart }) => {
   const [isMobile] = useMediaQuery('(max-width: 768px)');
@@ -38,7 +39,6 @@ const Navbar = ({ cart }) => {
 
   return (
     <>
-      {!isMobile && <SearchBox />}
       <Flex
         w="full"
         maxW="full"
@@ -60,22 +60,67 @@ const Navbar = ({ cart }) => {
           </Link>
         </Box>
         {!isMobile && (
-          <HStack>
+          <Flex justifyContent="space-around" alignItems="center" minW="25%">
             {navbarItems.map((item, key) => {
+              if (item.type === 'dropdown') {
+                return (
+                  <Menu key={key} autoSelect={false}>
+                    <MenuButton
+                      as={Button}
+                      variant="unstyled"
+                      fontWeight="700"
+                      color="gray.600"
+                      fontSize="18px"
+                      textTransform="uppercase"
+                      cursor="pointer"
+                      _focus={{
+                        boxShadow: 'none',
+                      }}
+                    >
+                      <Flex align="center">
+                        {item.label} <ChevronDownIcon />
+                      </Flex>
+                    </MenuButton>
+                    <MenuList zIndex="99">
+                      {item.list.map((item, key) => {
+                        return (
+                          <Link to={item.path} key={key}>
+                            <MenuItem>{item.label}</MenuItem>
+                          </Link>
+                        );
+                      })}
+                    </MenuList>
+                  </Menu>
+                );
+              }
+
               return (
                 <Link to={item.path} key={key} px={2}>
-                  {item.label}
+                  <Button
+                    variant="unstyled"
+                    fontWeight="700"
+                    color="gray.600"
+                    fontSize="18px"
+                    textTransform="uppercase"
+                    _focus={{
+                      boxShadow: 'none',
+                    }}
+                  >
+                    {item.label}
+                  </Button>
                 </Link>
               );
             })}
-          </HStack>
+          </Flex>
         )}
 
-        <Flex justifyContent="space-between" align="center" mr={3}>
+        <Flex justifyContent="space-around" align="center" mr={3}>
+          <Search />
           {!isMobile && (
             <Menu placement="bottom-end" autoSelect="false">
               <MenuButton
-                p={0}
+                minW="auto"
+                p={2}
                 _focus={{
                   boxShadow: 'none',
                 }}
@@ -108,9 +153,7 @@ const Navbar = ({ cart }) => {
             </Menu>
           )}
 
-          <Flex>
-            {isMobile && <SearchDrawer />}
-
+          <Flex px={[0, 0, 2]}>
             <Link to="/cart">
               <CartIcon cart={cart} />
             </Link>

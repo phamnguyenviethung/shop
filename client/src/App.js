@@ -5,11 +5,12 @@ import { Route, Switch } from 'react-router-dom';
 import Login from './pages/Auth/Login';
 import Register from './pages/Auth/Register';
 import Cart from './components/Cart/Cart';
-import Navbar from './components/Navbar/Navbar';
+import Navbar from './components/Navbar/';
 import Checkout from './pages/Checkout';
 import Home from './pages/Home';
 import Details from './pages/Details';
 import Search from './pages/Search';
+import Footer from './components/Footer';
 import { useDispatch, useSelector } from 'react-redux';
 
 // import { ColorModeSwitcher } from './ColorModeSwitcher';
@@ -41,6 +42,7 @@ function App() {
         <Route path="/register" component={Register}></Route>
         <Route path="/checkout" component={Checkout}></Route>
       </Switch>
+      <Footer />
     </ChakraProvider>
   );
 }

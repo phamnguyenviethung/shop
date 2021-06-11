@@ -26,72 +26,10 @@ import formatCurrency from '../../utils/formatCurrency';
 import { useSelector } from 'react-redux';
 import { Link } from 'react-router-dom';
 
-export const SearchBox = () => {
-  const history = useHistory();
-
-  return (
-    <Flex
-      h="60px"
-      bgColor="purple.600"
-      alignItems="center"
-      justifyContent="space-around"
-    >
-      <Text color="white" fontSize="xs">
-        VIETHUNG01234@GMAIL.COM | HOTLINE: 0703 162 716
-      </Text>
-      <Box textAlign="center">
-        <Text color="white" fontSize="xs">
-          Tặng ngay 1 túi Tote Bag khi mua sản phẩm từ 300.000 vnđ
-        </Text>
-        <Text color="white" fontSize="xs">
-          Đơn hàng được FreeShip khi mua từ 1.500.000 vnđ
-        </Text>
-      </Box>
-      <Formik
-        initialValues={{ search: '' }}
-        onSubmit={values => {
-          history.push(`/search?name=${values.search}`);
-        }}
-      >
-        {formikProps => {
-          return (
-            <Form style={{ width: '20%' }}>
-              <Flex alignItems="center" pos="relative" w="full" h="full">
-                <FastField
-                  name="search"
-                  component={InputField}
-                  placeholder="Search"
-                  bgColor="white"
-                  style={{
-                    outline: 0,
-                    border: '1px solid #333',
-                    maxW: '90%',
-                  }}
-                />
-                <Flex
-                  pos="absolute"
-                  right="0"
-                  top="0"
-                  bottom="0"
-                  alignItems="center"
-                >
-                  <AiOutlineSearch size={24} />
-                </Flex>
-              </Flex>
-            </Form>
-          );
-        }}
-      </Formik>
-    </Flex>
-  );
-};
-
-// Mobile
-
-export const SearchDrawer = () => {
+const Search = () => {
   const history = useHistory();
   const { isOpen, onOpen, onClose } = useDisclosure();
-  const productList = useSelector(state => state.product);
+  const productList = useSelector(state => state.product.productList);
 
   const formik = useFormik({
     initialValues: {
@@ -115,24 +53,26 @@ export const SearchDrawer = () => {
       <Box w="full" h="full">
         {data.map((item, key) => {
           return (
-            <ListItem mb={4} key={key}>
-              <Flex alignItems="center">
-                <Flex direction="column" flex="3" maxW="70%">
-                  <Text fontSize="14px" isTruncated color="gray.900">
-                    {item.name}
-                  </Text>
-                  <Text fontSize="12px" color="gray.600">
-                    {formatCurrency(item.price)}
-                  </Text>
+            <ListItem mb={4} key={key} onClick={onClose}>
+              <Link to={`/product/${item.slug}`}>
+                <Flex alignItems="center">
+                  <Flex direction="column" flex="3" maxW="70%">
+                    <Text fontSize="14px" isTruncated color="gray.900">
+                      {item.name}
+                    </Text>
+                    <Text fontSize="12px" color="gray.600">
+                      {formatCurrency(item.price)}
+                    </Text>
+                  </Flex>
+                  <Box w="50px" h="50px" flex="1">
+                    <Image src={item.thumb[0]} alt={item.name} sizes="sm" />
+                  </Box>
                 </Flex>
-                <Box w="50px" h="50px" flex="1">
-                  <Image src={item.thumb} alt={item.name} sizes="sm" />
-                </Box>
-              </Flex>
+              </Link>
             </ListItem>
           );
         })}
-        <ListItem>
+        <ListItem mt={4}>
           <Link to={`/search?name=${value}`} onClick={onClose}>
             <Center>Xem chi tiết</Center>
           </Link>
@@ -202,3 +142,5 @@ export const SearchDrawer = () => {
     </>
   );
 };
+
+export default Search;
