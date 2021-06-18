@@ -1,15 +1,21 @@
 const jwt = require("jsonwebtoken");
+const AppError = require("../../utils/appError");
+const catchAsync = require("../../utils/catchAsync");
 
-module.exports = function (req, res, next) {
+module.exports = catchAsync(async (req, res, next) => {
   const token = req.header("auth");
 
-  if (!token) return res.status(401).send("Access denied");
+  if (!token)
+    return next(
+      new AppError("You are not logged in! Please log in to get access.", 401)
+    );
 
-  try {
-    const verified = jwt.verify(token, process.env.TOKEN_SECRET);
-    req.user = verified;
-    next();
-  } catch (error) {
-    res.status(400).send(error);
+  const verified = jwt.verify(token, process.env.TOKEN_SECRET);
+  if (!verified) {
+    return next(
+      new AppError("You are not logged in! Please log in to get access.", 401)
+    );
   }
-};
+  req.user = verified;
+  next();
+});
