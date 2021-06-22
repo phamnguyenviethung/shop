@@ -2,9 +2,7 @@ import axiosClient from './axiosclient';
 
 const searchApi = {
   search: search => {
-    const text = search ? search : '?name=';
-
-    const url = `/search${text}`;
+    const url = `/products${search}`;
     return axiosClient.get(url);
   },
 };

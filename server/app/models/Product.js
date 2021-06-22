@@ -42,8 +42,9 @@ const ProductSchema = new Schema(
     },
 
     thumb: {
-      type: String,
+      type: Array,
       required: true,
+      default: [],
     },
     discount: {
       type: Number,

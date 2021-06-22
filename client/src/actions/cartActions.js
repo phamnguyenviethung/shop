@@ -11,8 +11,6 @@ import {
 } from './actionsTypes';
 import decode from 'jwt-decode';
 import userApi from '../api/userApi';
-import checkTokenExpire from '../utils/checkTokenExpire';
-import { updateToken } from './userActions';
 
 const calcPrice = data => {
   // Total
@@ -36,23 +34,30 @@ export const getCart = () => async (dispatch, getState) => {
     type: GET_CART_REQUEST,
     payload: [],
   });
-  const token = getState().user.user.token;
-  if (checkTokenExpire(token)) {
-    await dispatch(updateToken());
-  }
+  const token = getState().user.user.accessToken;
 
-  try {
-    const currentUserToken = JSON.parse(localStorage.getItem('userInfo')).token;
-    const id = decode(currentUserToken)._id;
+  if (token) {
+    try {
+      const currentUserToken = JSON.parse(
+        localStorage.getItem('userInfo')
+      ).accessToken;
+      const id = decode(currentUserToken)._id;
 
-    const data = await userApi.getCartData(id);
+      const data = await userApi.getCartData(id);
+      const cart = data.cart || [];
 
-    localStorage.setItem('cartItems', JSON.stringify(data));
-    dispatch({
-      type: GET_CART_SUCCESS,
-      payload: { data, price: calcPrice(data) },
-    });
-  } catch (error) {
+      localStorage.setItem('cartItems', JSON.stringify(cart));
+      dispatch({
+        type: GET_CART_SUCCESS,
+        payload: { cart, price: calcPrice(cart) },
+      });
+    } catch (error) {
+      dispatch({
+        type: GET_CART_FAIL,
+        payload: [],
+      });
+    }
+  } else {
     dispatch({
       type: GET_CART_FAIL,
       payload: [],
@@ -63,7 +68,9 @@ export const getCart = () => async (dispatch, getState) => {
 export const updateCart = () => async (dispatch, getState) => {
   try {
     const data = getState().cart.cartItems;
-    const currentUserToken = JSON.parse(localStorage.getItem('userInfo')).token;
+    const currentUserToken = JSON.parse(
+      localStorage.getItem('userInfo')
+    ).accessToken;
     const id = decode(currentUserToken)._id;
 
     const response = await userApi.updateCart(id, data);
@@ -81,11 +88,6 @@ export const updateCart = () => async (dispatch, getState) => {
 
 export const addToCart =
   (product, size, color) => async (dispatch, getState) => {
-    const token = getState().user.user.token;
-    if (checkTokenExpire(token)) {
-      await dispatch(updateToken());
-    }
-
     const cartItems = getState().cart.cartItems.slice();
     let alreadyExists = false;
     cartItems.forEach(x => {
@@ -108,10 +110,6 @@ export const addToCart =
 
 export const removeFromCart =
   (product, size, color) => async (dispatch, getState) => {
-    const token = getState().user.user.token;
-    if (checkTokenExpire(token)) {
-      await dispatch(updateToken());
-    }
     const cartItems = getState().cart.cartItems.slice();
 
     const removeID = cartItems.filter(item => item._id === product._id);
@@ -133,10 +131,6 @@ export const removeFromCart =
 
 export const increase =
   (product, size, color) => async (dispatch, getState) => {
-    const token = getState().user.user.token;
-    if (checkTokenExpire(token)) {
-      await dispatch(updateToken());
-    }
     const cartItems = getState().cart.cartItems.slice();
     cartItems.forEach(x => {
       if (x._id === product._id && x.size === size && x.color === color) {
@@ -153,10 +147,6 @@ export const increase =
 
 export const decrease =
   (product, size, color) => async (dispatch, getState) => {
-    const token = getState().user.user.token;
-    if (checkTokenExpire(token)) {
-      await dispatch(updateToken());
-    }
     const cartItems = getState().cart.cartItems.slice();
     cartItems.forEach(x => {
       if (x._id === product._id && x.size === size && x.color === color) {

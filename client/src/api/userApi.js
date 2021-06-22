@@ -16,17 +16,16 @@ const userApi = {
   },
 
   getCartData: id => {
-    const url = `/cart/${id}`;
+    const url = `/cart/${id}?fields=cart`;
     return axiosClient.get(url);
   },
 
   updateCart: (id, data) => {
-    const url = `/cart/update`;
+    const url = `/cart/${id}`;
     const params = {
-      id,
       cart: data,
     };
-    return axiosClient.post(url, params);
+    return axiosClient.patch(url, params);
   },
 };
 

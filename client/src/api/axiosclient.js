@@ -22,13 +22,13 @@ axiosClient.interceptors.request.use(async config => {
 axiosClient.interceptors.response.use(
   response => {
     if (response && response.data) {
-      return response.data;
+      return response.data.data.data;
     }
-    // console.log(response);
     return response;
   },
   error => {
     // Handle errors
+    console.log(error);
     throw error;
   }
 );

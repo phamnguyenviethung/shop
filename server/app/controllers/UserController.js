@@ -1,122 +1,105 @@
-const bcrypt = require("bcryptjs");
-const UserModel = require("../models/User");
+const User = require("../models/User");
+const generateToken = require("../../utils/token");
+const catchAsync = require("../../utils/catchAsync");
 const jwt = require("jsonwebtoken");
+
 const {
   registerValidation,
   loginValidation,
-} = require("../../util/Validation");
+} = require("../../utils/Validation");
+const AppError = require("../../utils/appError");
 
-const generateToken = require("../../util/token");
-
-class UserController {
-  // [GET] /products/list
-  list(req, res, next) {
-    UserModel.find({})
-      .then((result) => res.send(result))
-      .catch((err) => res.send(err));
-  }
-
-  // [POST] /user/register
-  async register(req, res, next) {
-    const { name, email, password } = req.body;
-
-    // Validate
-    const { error } = registerValidation(req.body);
-    if (error) return res.status(400).send(error.details[0].message);
-
-    // Checking email exist
-    const existEmail = await UserModel.findOne({ email });
-    if (existEmail) return res.status(400).send("Email already exist");
-
-    // Hash the password
-    const salt = await bcrypt.genSalt(10);
-    const hashedPassword = await bcrypt.hash(password, salt);
-
-    const user = new UserModel({ name, email, password: hashedPassword });
-    user
-      .save()
-      .then((user) => {
-        const { name, email, isAdmin } = user;
-        res.send({ name, email, isAdmin });
-      })
-      .catch((err) => res.send(err));
-  }
-
-  // [POST] /user/login
-  async login(req, res) {
-    const { email, password } = req.body;
-
-    // Validate
-    const { error } = loginValidation(req.body);
-    if (error) return res.status(400).send(error.details[0].message);
-
-    // Checking email
-    const user = await UserModel.findOne({ email });
-    if (!user) return res.status(400).send("Email does not found");
-
-    const { name, isAdmin } = user;
-
-    // Checking Password
-    const validatePassword = await bcrypt.compare(password, user.password);
-    if (!validatePassword) return res.status(400).send("Invalid password");
-
-    // Create token
-    const token = jwt.sign({ _id: user._id }, process.env.TOKEN_SECRET, {
-      expiresIn: process.env.TOKEN_LIFE,
+exports.register = catchAsync(async (req, res, next) => {
+  const { name, email, password } = req.body;
+  // Validate
+  const { error } = registerValidation(req.body);
+  if (error)
+    return res.status(400).json({
+      status: "failed",
+      message: error.details[0].message,
     });
 
-    // Refresh token
-    const refreshToken = jwt.sign(
-      { _id: user._id },
-      process.env.REFRESH_TOKEN_SECRET,
-      {
-        expiresIn: process.env.REFRESH_TOKEN_LIFE,
-      }
-    );
-
-    res.header("auth", token).send({
-      name,
-      isAdmin,
-      email: user.email,
-      token,
-      refreshToken,
+  // Checking email exist
+  const existEmail = await User.findOne({ email });
+  if (existEmail)
+    return res.status(400).json({
+      status: "failed",
+      meesage: "Email already exist",
     });
-  }
-  async refreshToken(req, res) {
-    const { refresh } = req.body;
-    if (!refresh) return res.status(401).send("No refresh token provide");
 
-    try {
-      const verified = jwt.verify(refresh, process.env.REFRESH_TOKEN_SECRET);
-      console.log(verified);
+  const user = await User.create({ name, email, password });
+  const data = { name: user.name, email: user.email };
 
-      const user = await UserModel.find({ _id: verified._id });
+  res.status(201).json({
+    status: "success",
+    data: {
+      data,
+    },
+  });
+});
 
-      if (!user) return res.status(400).send("User does not found");
+exports.login = catchAsync(async (req, res, next) => {
+  const { email, password } = req.body;
 
-      // Create token
-      const token = jwt.sign({ _id: user._id }, process.env.TOKEN_SECRET, {
-        expiresIn: process.env.TOKEN_LIFE,
-      });
-
-      // Refresh token
-      const refreshToken = jwt.sign(
-        { _id: user._id },
-        process.env.REFRESH_TOKEN_SECRET,
-        {
-          expiresIn: process.env.REFRESH_TOKEN_LIFE,
-        }
-      );
-      res.send({ token, refreshToken });
-    } catch (error) {
-      res.status(401).send(error);
-    }
+  // Check if email and password does not exist
+  if (!email || !password) {
+    return next(new AppError("Please provide email and password!", 400));
   }
 
-  test(req, res) {
-    console.log("user: ",req.user);
-    res.send("test");
-  }
-}
+  // Validate
 
-module.exports = new UserController();
+  const { error } = loginValidation(req.body);
+
+  if (error) return next(new AppError(error.details[0].message, 400));
+
+  // Checking email
+  const user = await User.findOne({ email });
+  if (!user) return next(new AppError("Email does not found", 400));
+
+  // Checking password
+  if (!user || !(await user.correctPassword(password, user.password))) {
+    return next(new AppError("Incorrect email or password", 401));
+  }
+
+  // Create token
+  const { accessToken, refreshToken } = generateToken({ _id: user._id });
+
+  const { name, isAdmin } = user;
+
+  res
+    .status(200)
+    .header("auth", accessToken)
+    .json({
+      status: "success",
+      data: {
+        data: {
+          name,
+          isAdmin,
+          email: user.email,
+          accessToken,
+          refreshToken,
+        },
+      },
+    });
+});
+
+exports.refreshToken = catchAsync(async (req, res, next) => {
+  const { refresh } = req.body;
+  if (!refresh) return next(new AppError("No refresh token provide"), 400);
+
+  const verified = jwt.verify(refresh, process.env.REFRESH_TOKEN_SECRET);
+  const user = await User.find({ _id: verified._id });
+  if (!user) return next(new AppError("Invalid token"), 400);
+
+  const { accessToken, refreshToken } = generateToken({ _id: user._id });
+
+  res.status(201).json({
+    status: "success",
+    data: {
+      data: {
+        accessToken,
+        refreshToken,
+      },
+    },
+  });
+});

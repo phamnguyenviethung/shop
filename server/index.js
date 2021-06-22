@@ -6,11 +6,11 @@ const db = require("./config/db");
 const route = require("./routes");
 const dotenv = require("dotenv");
 const morgan = require("morgan");
+dotenv.config();
 
-const AppError = require("./util/appError");
+const AppError = require("./utils/appError");
 const globalErrorHandler = require("./app/controllers/errorController");
 
-dotenv.config();
 // Connect to DB
 db.connect();
 

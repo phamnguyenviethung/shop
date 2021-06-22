@@ -13,7 +13,10 @@ import {
 } from '../actions/actionsTypes';
 
 const cartReducers = (
-  state = { cartItems: JSON.parse(localStorage.getItem('cartItems')) || [] },
+  state = {
+    cartItems: JSON.parse(localStorage.getItem('cartItems')) || [],
+    price: [],
+  },
   action
 ) => {
   switch (action.type) {
@@ -33,14 +36,14 @@ const cartReducers = (
     case GET_CART_SUCCESS:
       return {
         loading: false,
-        cartItems: action.payload.data,
+        cartItems: action.payload.cart,
         price: action.payload.price,
       };
     case GET_CART_FAIL:
       return {
         loading: false,
         cartItems: [],
-        price: 0,
+        price: [],
         error: action.payload.data,
       };
 

@@ -6,9 +6,10 @@ import {
   USER_REGISTER_FAIL,
   USER_REGISTER_SUCCESS,
   USER_SIGN_OUT,
-  USER_UPDATE_TOKEN,
+  USER_VERIFY_TOKEN,
 } from './actionsTypes';
 import userApi from '../api/userApi';
+import checkTokenExpire from '../utils/checkTokenExpire';
 
 export const login = (email, password) => async dispatch => {
   dispatch({ type: USER_LOGIN_REQUEST, payload: {} });
@@ -20,9 +21,9 @@ export const login = (email, password) => async dispatch => {
 
     dispatch({ type: USER_LOGIN_SUCCESS, payload: data });
     localStorage.setItem('userInfo', JSON.stringify(data));
-    window.location.replace('/');
+
+    // window.location.replace('/');
   } catch (error) {
-    console.error(error.response);
     dispatch({
       type: USER_LOGIN_FAIL,
       payload: {
@@ -69,13 +70,18 @@ export const register = (name, email, password) => async dispatch => {
 export const signout = () => dispatch => {
   localStorage.removeItem('userInfo');
   localStorage.removeItem('cartItems');
+  localStorage.setItem('status', JSON.stringify({ isLogged: false }));
   dispatch({ type: USER_SIGN_OUT, payload: {} });
   window.location.replace('/');
 };
 
-export const updateToken = () => async (dispatch, getState) => {
+export const verifyToken = () => async (dispatch, getState) => {
   const currentUser = getState().user.user;
   const { refreshToken } = currentUser;
+
+  if (checkTokenExpire(refreshToken)) {
+    dispatch(signout());
+  }
 
   try {
     const params = { refresh: refreshToken };
@@ -84,11 +90,11 @@ export const updateToken = () => async (dispatch, getState) => {
 
     const updateToken = {
       ...currentUser,
-      token: data.token,
+      accessToken: data.accessToken,
       refreshToken: data.refreshToken,
     };
 
-    dispatch({ type: USER_UPDATE_TOKEN, payload: updateToken });
+    dispatch({ type: USER_VERIFY_TOKEN, payload: updateToken });
   } catch (error) {
     console.log(error);
   }
