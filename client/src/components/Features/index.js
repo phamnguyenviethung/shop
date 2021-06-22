@@ -4,8 +4,13 @@ import React from 'react';
 import Slider from 'react-slick';
 import { images } from './data';
 import { Prev, Next } from './Arrows';
+import FeaturesLoading from '../shared/Loading/FeaturesLoading';
+import { useSelector } from 'react-redux';
 
 const Features = () => {
+  const product = useSelector(state => state.product.productList);
+  const loading = product.length === 0;
+
   const settings = {
     dots: false,
     infinite: true,
@@ -39,11 +44,15 @@ const Features = () => {
 
   return (
     <Container maxW="full" w="full" my={4} overflow="hidden">
-      <Slider {...settings}>
-        {images.map((item, key) => {
-          return <Image src={item.src} alt={item.alt} maxW="98%" />;
-        })}
-      </Slider>
+      {loading ? (
+        <FeaturesLoading />
+      ) : (
+        <Slider {...settings}>
+          {images.map((item, key) => {
+            return <Image src={item.src} alt={item.alt} maxW="98%" key={key} />;
+          })}
+        </Slider>
+      )}
     </Container>
   );
 };
