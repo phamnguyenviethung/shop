@@ -6,20 +6,26 @@ import {
   USER_REGISTER_SUCCESS,
   USER_REGISTER_FAIL,
   USER_SIGN_OUT,
-  USER_UPDATE_TOKEN,
+  USER_VERIFY_TOKEN,
 } from '../actions/actionsTypes';
 
 const userReducers = (
-  state = { user: JSON.parse(localStorage.getItem('userInfo') || '{}') },
+  state = {
+    user: JSON.parse(localStorage.getItem('userInfo')) || {},
+  },
   action
 ) => {
   switch (action.type) {
     case USER_LOGIN_REQUEST:
-      return { loading: true, user: action.payload, logged: false };
+      return { loading: true, user: action.payload };
     case USER_LOGIN_SUCCESS:
-      return { loading: false, user: action.payload, logged: true };
+      return {
+        loading: false,
+        isLogged: true,
+        user: action.payload,
+      };
     case USER_LOGIN_FAIL:
-      return { loading: false, user: action.payload, logged: false };
+      return { loading: false, user: action.payload };
 
     case USER_REGISTER_REQUEST:
       return { loading: true, user: action.payload };
@@ -29,9 +35,9 @@ const userReducers = (
       return { loading: false, user: action.payload };
 
     case USER_SIGN_OUT:
-      return { loading: false, user: action.payload };
+      return { loading: false, user: {} };
 
-    case USER_UPDATE_TOKEN:
+    case USER_VERIFY_TOKEN:
       return { loading: false, user: action.payload };
 
     default:

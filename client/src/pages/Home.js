@@ -1,5 +1,5 @@
 import React, { useEffect } from 'react';
-import Features from '../components/Features/Features';
+import Features from '../components/Features/';
 import Products from '../components/Products/Products';
 import Slide from '../components/Slide/Slide';
 import { getProductList } from '../actions/productAction';

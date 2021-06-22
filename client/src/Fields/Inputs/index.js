@@ -49,7 +49,6 @@ function InputField({
       {label && <FormLabel htmlFor={name}>{label}</FormLabel>}
 
       <Input
-        mb={2}
         id={name}
         {...field}
         type={type}
@@ -57,6 +56,9 @@ function InputField({
         placeholder={placeholder}
         maxW={maxW}
         bgColor={bgColor}
+        _focus={{
+          outline: 0,
+        }}
       />
       {showError && <FormErrorMessage>{errors[name]}</FormErrorMessage>}
     </FormControl>

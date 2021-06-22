@@ -1,4 +1,4 @@
-import React, { useEffect } from 'react';
+import React from 'react';
 import { Container } from '@chakra-ui/react';
 import CartTable from './CartTable';
 import CartEmpty from './CartEmpty';
@@ -7,9 +7,9 @@ import { Redirect } from 'react-router';
 
 const Cart = () => {
   const cart = useSelector(state => state.cart.cartItems);
-  const auth = useSelector(state => state.user.isLogged);
+  const auth = useSelector(state => state.user.user);
 
-  if (!auth) {
+  if (Object.keys(auth).length === 0) {
     return <Redirect to="/login" />;
   }
 

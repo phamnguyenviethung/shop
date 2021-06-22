@@ -3,6 +3,7 @@ import {
   GET_PRODUCT_LIST_REQUEST,
   GET_PRODUCT_LIST_SUCCESS,
   GET_PRODUCT_LIST_FAIL,
+  PRODUCT_FILTER,
 } from './actionsTypes';
 
 export const getProductList = () => async dispatch => {
@@ -10,6 +11,7 @@ export const getProductList = () => async dispatch => {
 
   try {
     const productList = await productApi.list();
+
     localStorage.setItem('products', JSON.stringify(productList));
 
     dispatch({ type: GET_PRODUCT_LIST_SUCCESS, payload: productList });
@@ -25,4 +27,11 @@ export const getProductList = () => async dispatch => {
       },
     });
   }
+};
+
+export const filter = payload => dispatch => {
+  dispatch({
+    type: PRODUCT_FILTER,
+    payload,
+  });
 };

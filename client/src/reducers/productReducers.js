@@ -5,7 +5,10 @@ import {
 } from '../actions/actionsTypes';
 
 const productReducer = (
-  state = JSON.parse(localStorage.getItem('products')) || [],
+  state = {
+    productList: JSON.parse(localStorage.getItem('products')) || [],
+    select: '',
+  },
   action
 ) => {
   switch (action.type) {
