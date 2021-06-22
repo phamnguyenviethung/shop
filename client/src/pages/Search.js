@@ -27,13 +27,15 @@ const Search = () => {
         maxW="full"
         direction="column"
       >
-        <Text fontSize="sm" color="gray.500" fontWeight="600">
-          Có {data.length} kết quả liên quan tới{' '}
-          {history.location.search.slice(
-            history.location.search.indexOf('=') + 1
-          )}
-          .
-        </Text>
+        {history.location.search !== '' && (
+          <Text fontSize="sm" color="gray.500" fontWeight="600">
+            Có {data.length} kết quả liên quan tới{' '}
+            {history.location.search.slice(
+              history.location.search.indexOf('=') + 1
+            )}
+            .
+          </Text>
+        )}
       </Flex>
       <Products hideTabs={true} list={data} />
     </>

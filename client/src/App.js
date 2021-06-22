@@ -18,6 +18,7 @@ import { useDispatch, useSelector } from 'react-redux';
 import { getCart } from './actions/cartActions';
 import checkTokenExpire from './utils/checkTokenExpire';
 import { verifyToken } from './actions/userActions';
+import NotFound from './pages/NotFound';
 
 function App() {
   const dispatch = useDispatch();
@@ -53,6 +54,7 @@ function App() {
         <Route path="/login" component={Login}></Route>
         <Route path="/register" component={Register}></Route>
         <Route path="/checkout" component={Checkout}></Route>
+        <Route path="*" component={NotFound}></Route>
       </Switch>
       <Footer />
     </ChakraProvider>

@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import Product from './Product';
-import { Container, SimpleGrid } from '@chakra-ui/react';
+import { Container, SimpleGrid, Heading, Center } from '@chakra-ui/react';
 import { useSelector } from 'react-redux';
 import searchApi from '../../../api/searchApi';
 
@@ -22,11 +22,19 @@ const FilteredProducts = () => {
 
   return (
     <Container maxW="full" mt={10}>
-      <SimpleGrid columns={[1, 1, 2, 3]} spacing={10}>
-        {data.map((item, key) => {
-          return <Product key={key} item={item} />;
-        })}
-      </SimpleGrid>
+      {data.length === 0 ? (
+        <Center w="full" h="300px">
+          <Heading fontSize={['xl', '3xl']}>
+            Không tìm thấy sản phẩm nào...
+          </Heading>
+        </Center>
+      ) : (
+        <SimpleGrid columns={[1, 1, 2, 3]} spacing={10}>
+          {data.map((item, key) => {
+            return <Product key={key} item={item} />;
+          })}
+        </SimpleGrid>
+      )}
     </Container>
   );
 };
