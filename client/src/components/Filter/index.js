@@ -1,14 +1,13 @@
 import { Flex, HStack, Heading, Badge, Container } from '@chakra-ui/react';
-import { Select } from '@chakra-ui/select';
 import React, { useEffect, useState } from 'react';
 import Options from './Options';
-import { sortOptions } from './data';
 import { useDispatch, useSelector } from 'react-redux';
 import { Text } from '@chakra-ui/react';
 import { AiOutlineClose } from 'react-icons/ai';
 import { productPropsHandler, selectToQuery } from './helpers';
 import { useHistory } from 'react-router-dom';
 import { filter } from '../../actions/productAction';
+import Sort from './Sort';
 
 const Filter = () => {
   const dispatch = useDispatch();
@@ -19,6 +18,7 @@ const Filter = () => {
   });
   const [select, setSelect] = useState([]);
   const data = useSelector(state => state.product.productList);
+  const selectQry = useSelector(state => state.filter.select);
   const history = useHistory();
   const keyword = history.location.search;
   const badgeColor = ['green', 'red', 'yellow', 'blue'];
@@ -51,7 +51,7 @@ const Filter = () => {
       selectToQuery(select);
 
     dispatch(filter(query));
-  }, [select, keyword, dispatch]);
+  }, [select, keyword, dispatch, selectQry]);
 
   // Select Handler
 
@@ -92,6 +92,7 @@ const Filter = () => {
     const result = selected.filter(i => i !== undefined);
     setSelect(result);
   };
+
   return (
     <Container maxW="full">
       {select.length > 0 && (
@@ -157,21 +158,7 @@ const Filter = () => {
             select={select}
           />
         </HStack>
-
-        <Select
-          placeholder="Sắp xếp"
-          justifySelf="flex-end"
-          maxW={['full', '20%']}
-          mt={[2, 0]}
-        >
-          {sortOptions.map((item, key) => {
-            return (
-              <option value={item} key={key}>
-                {item}
-              </option>
-            );
-          })}
-        </Select>
+        <Sort />
       </Flex>
     </Container>
   );

@@ -6,10 +6,10 @@ export const priceOptions = [
 ];
 
 export const sortOptions = [
-  'Tên: A - Z',
-  'Tên: Z - A',
-  'Giá: Tăng dần',
-  'Giá: Giảm dần',
-  'Mới đến Cũ',
-  'Cũ đến Mới',
+  ['Tên: A - Z', 'name'],
+  ['Tên: Z - A', '-name'],
+  ['Giá: Tăng dần', 'price'],
+  ['Giá: Giảm dần', '-price'],
+  ['Mới đến Cũ', '-createdAt'],
+  ['Cũ đến Mới', 'createdAt'],
 ];

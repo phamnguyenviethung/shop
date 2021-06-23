@@ -29,9 +29,25 @@ export const getProductList = () => async dispatch => {
   }
 };
 
-export const filter = payload => dispatch => {
+export const filter = payload => (dispatch, getState) => {
+  const { sort } = getState().filter;
+
   dispatch({
     type: PRODUCT_FILTER,
-    payload,
+    payload: {
+      sort,
+      select: payload,
+    },
+  });
+};
+export const sort = payload => (dispatch, getState) => {
+  const { select } = getState().filter;
+
+  dispatch({
+    type: PRODUCT_FILTER,
+    payload: {
+      select,
+      sort: `&sort=${payload}`,
+    },
   });
 };

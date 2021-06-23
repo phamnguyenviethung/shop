@@ -6,7 +6,9 @@ import searchApi from '../../../api/searchApi';
 
 const FilteredProducts = () => {
   const [data, setData] = useState([]);
-  const query = useSelector(state => state.filter.select) || '';
+  const select = useSelector(state => state.filter.select);
+  const sort = useSelector(state => state.filter.sort) || '&sort=-createdAt';
+  const query = select + sort;
 
   useEffect(() => {
     const getData = async () => {

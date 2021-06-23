@@ -37,7 +37,7 @@ const Option = ({
         >
           {label}
         </MenuButton>
-        <MenuList>
+        <MenuList zIndex="99">
           {type === 'price' ? (
             <RadioGroup
               onChange={e => {

@@ -11,6 +11,7 @@ import Home from './pages/Home';
 import Details from './pages/Details';
 import Shop from './pages/Shop';
 import Search from './pages/Search';
+import Category from './pages/Category';
 import Footer from './components/Footer';
 import { useDispatch, useSelector } from 'react-redux';
 
@@ -50,6 +51,7 @@ function App() {
         <Route exact path="/product/:id" component={Details}></Route>
         <Route path="/shop" component={Shop}></Route>
         <Route path="/search" component={Search}></Route>
+        <Route path="/category/:name" component={Category}></Route>
 
         <Route path="/login" component={Login}></Route>
         <Route path="/register" component={Register}></Route>
