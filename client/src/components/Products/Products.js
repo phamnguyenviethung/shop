@@ -4,9 +4,9 @@ import Product from './Product/Product';
 import { useSelector } from 'react-redux';
 
 import { Tabs, TabList, TabPanels, Tab, TabPanel } from '@chakra-ui/react';
-import ProductsListGrid from '../shared/Loading/ProductsListGrid';
+import ProductsListGridLoading from '../shared/Loading/ProductsListGridLoading';
 
-const Products = ({ list, hideTabs, cols = 6, rows = 3, setQuery }) => {
+const Products = ({ list, hideTabs, item = 6 }) => {
   const products = useSelector(state => state.product.productList);
   const data = list || products || [];
   const discount = data.filter(item => item.discount > 0);
@@ -28,7 +28,7 @@ const Products = ({ list, hideTabs, cols = 6, rows = 3, setQuery }) => {
     <>
       {loading ? (
         <Container maxW="full" my={10}>
-          <ProductsListGrid cols={cols} rows={rows} />
+          <ProductsListGridLoading item={item} />
         </Container>
       ) : (
         <Tabs align="center" variant="unstyled">

@@ -2,7 +2,7 @@ import React, { useEffect, useState } from 'react';
 import { useHistory } from 'react-router';
 import searchApi from '../api/searchApi';
 import Products from '../components//Products/Products';
-import { Text, Flex } from '@chakra-ui/react';
+import { Text, Flex, Center, Heading } from '@chakra-ui/react';
 
 const Search = () => {
   const [data, setData] = useState([]);
@@ -27,9 +27,9 @@ const Search = () => {
         maxW="full"
         direction="column"
       >
-        {history.location.search !== '' && (
+        {history.location.search !== '' && data.length > 0 && (
           <Text fontSize="sm" color="gray.500" fontWeight="600">
-            Có {data.length} kết quả liên quan tới{' '}
+            Có {data.length} kết quả liên quan tới {''}
             {history.location.search.slice(
               history.location.search.indexOf('=') + 1
             )}
@@ -37,7 +37,15 @@ const Search = () => {
           </Text>
         )}
       </Flex>
-      <Products hideTabs={true} list={data} />
+      {data.length === 0 ? (
+        <Center w="full" h="500px">
+          <Heading fontSize={['lg', 'xl']} color="gray.700" fontWeight="600">
+            Không tìm thấy sản phẩm nào. Vui lòng thử từ khóa khác...
+          </Heading>
+        </Center>
+      ) : (
+        <Products hideTabs={true} list={data} />
+      )}
     </>
   );
 };

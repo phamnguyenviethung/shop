@@ -16,11 +16,11 @@ const Rate = ({ rate }) => {
     <HStack>
       {stars.map((item, key) => {
         return item ? (
-          <Box color="yellow.500">
+          <Box color="yellow.500" key={key}>
             <AiFillStar size={22} />
           </Box>
         ) : (
-          <Box color="yellow.500">
+          <Box color="yellow.500" key={key}>
             <AiOutlineStar size={22} />
           </Box>
         );
