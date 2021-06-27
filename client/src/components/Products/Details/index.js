@@ -14,6 +14,7 @@ import {
 } from '@chakra-ui/react';
 import { Tabs, TabList, TabPanels, Tab, TabPanel } from '@chakra-ui/react';
 import { addToCart } from '../../../actions/cartActions';
+import ProductSlider from '../../Widget/ProductSlider';
 
 import formatCurrency from '../../../utils/formatCurrency';
 import Rate from '../../shared/Rate';
@@ -25,7 +26,7 @@ import {
   AiOutlineInstagram,
   AiOutlineTwitter,
 } from 'react-icons/ai';
-import { useDispatch } from 'react-redux';
+import { useDispatch, useSelector } from 'react-redux';
 import SizePicker from './Options';
 
 import productApi from '../../../api/productApi';
@@ -40,6 +41,7 @@ const ProductDetail = ({ slug }) => {
   const [error, setError] = useState(false);
   const loading = Object.keys(product).length === 0;
 
+  const products = useSelector(state => state.product.productList);
   useEffect(() => {
     const getInfo = async () => {
       try {
@@ -76,6 +78,11 @@ const ProductDetail = ({ slug }) => {
     quantity,
     discount,
   } = product;
+  const getProductListByCategory = category => {
+    const data = [...products] || [];
+    const result = data.filter(i => i.categories.includes(category));
+    return result;
+  };
 
   useEffect(() => {
     color && setSelectColor(color[0].value);
@@ -199,7 +206,7 @@ const ProductDetail = ({ slug }) => {
                   </Flex>
                   <Flex mt={10} direction="column">
                     <Text color="gray" mb={2}>
-                      Categories : {categories ? categories.toString() : null}
+                      Categories : {categories ? categories.join(', ') : null}
                     </Text>
                     <HStack>
                       <AiFillFacebook size={20} />
@@ -214,6 +221,17 @@ const ProductDetail = ({ slug }) => {
           </Flex>
         </Center>
       )}
+      <Heading
+        as="h3"
+        textAlign="center"
+        fontSize="3xl"
+        fontWeight="700"
+        w="full"
+        mt={4}
+      >
+        Sản phầm cùng loại
+      </Heading>
+      <ProductSlider data={products} />
     </Container>
   );
 };
