@@ -24,10 +24,10 @@ const userSchema = new Schema(
       max: [11, "Tối đa 11 số"],
     },
     isAdmin: { type: Boolean, default: false },
-    cart: {
-      type: Array,
-      default: [],
-    },
+    // cart: {
+    //   type: Array,
+    //   default: [],
+    // },
   },
   {
     timestamps: true,

@@ -15,7 +15,7 @@ import {
 const cartReducers = (
   state = {
     cartItems: JSON.parse(localStorage.getItem('cartItems')) || [],
-    price: [],
+    price: null,
   },
   action
 ) => {
@@ -25,7 +25,7 @@ const cartReducers = (
     case UPDATE_CART_SUCCESS:
       return { loading: false, cartItems: action.payload };
     case UPDATE_CART_FAIL:
-      return { loading: false, error: action.payload, cartItems: [] };
+      return { loading: true, error: action.payload, cartItems: [] };
 
     case GET_CART_REQUEST:
       return {

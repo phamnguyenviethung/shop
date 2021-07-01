@@ -1,34 +1,38 @@
-const CartModel = require("../models/Cart");
+const factory = require("./handlerFactory");
+const Cart = require("../models/Cart");
+const catchAsync = require("../../utils/catchAsync");
+const AppError = require("../../utils/appError");
 
-class CartController {
-  // [GET] /cart/:id
-  getCart(req, res) {
-    const { id } = req.params;
+exports.updateCart = catchAsync(async (req, res, next) => {
+  const { id } = req.params;
+  const doc = await Cart.findOneAndUpdate({ userId: id }, req.body, {
+    new: true,
+    runValidators: true,
+  });
 
-    CartModel.findOne({ userId: id })
-      .then((cart) => res.send(cart.productList))
-      .catch((err) => res.send(err));
+  if (!doc) {
+    return next(new AppError("No document found with that ID", 404));
   }
-  // [POST] /cart/update
-  async updateCart(req, res) {
-    const { id, cart } = req.body;
 
-    const user = await CartModel.find({ userId: id });
-    if (!user) return res.status(400).send("User doesnt exist");
+  res.status(200).json({
+    status: "success",
+    data: {
+      data: doc,
+    },
+  });
+});
 
-    CartModel.findOneAndUpdate(
-      { _id: user[0].id },
-      { productList: cart },
-
-      (err) => {
-        if (err) {
-          console.log(err);
-        }
-      }
-    )
-      .then((cart) => res.send(cart.productList))
-      .catch(() => res.send("cannot update"));
+exports.getUserCart = catchAsync(async (req, res, next) => {
+  const { id } = req.params;
+  const doc = await Cart.findOne({ userId: id });
+  if (!doc) {
+    return next(new AppError("No document found with that ID", 404));
   }
-}
 
-module.exports = new CartController();
+  res.status(200).json({
+    status: "success",
+    data: {
+      data: doc,
+    },
+  });
+});

@@ -44,7 +44,7 @@ export const getCart = () => async (dispatch, getState) => {
       const id = decode(currentUserToken)._id;
 
       const data = await userApi.getCartData(id);
-      const cart = data.cart || [];
+      const cart = data.productList || [];
 
       localStorage.setItem('cartItems', JSON.stringify(cart));
       dispatch({
@@ -52,6 +52,7 @@ export const getCart = () => async (dispatch, getState) => {
         payload: { cart, price: calcPrice(cart) },
       });
     } catch (error) {
+      console.log(error);
       dispatch({
         type: GET_CART_FAIL,
         payload: [],
@@ -74,7 +75,7 @@ export const updateCart = () => async (dispatch, getState) => {
     const id = decode(currentUserToken)._id;
 
     const response = await userApi.updateCart(id, data);
-    localStorage.setItem('cartItems', JSON.stringify(response));
+    localStorage.setItem('cartItems', JSON.stringify(response.productList));
   } catch (error) {
     dispatch({
       type: UPDATE_CART_FAIL,
@@ -87,17 +88,34 @@ export const updateCart = () => async (dispatch, getState) => {
 };
 
 export const addToCart =
-  (product, size, color) => async (dispatch, getState) => {
+  (product, selectSize, selectColor) => async (dispatch, getState) => {
     const cartItems = getState().cart.cartItems.slice();
+    const { thumb, quantity, price, name, slug, discount } = product;
+    console.log(selectSize, selectColor);
+
     let alreadyExists = false;
     cartItems.forEach(x => {
-      if (x._id === product._id && x.size === size && x.color === color) {
+      if (
+        x.slug === product.slug &&
+        x.size === selectSize &&
+        x.color === selectColor
+      ) {
         alreadyExists = true;
         x.count++;
       }
     });
     if (!alreadyExists) {
-      cartItems.push({ ...product, count: 1, size, color });
+      cartItems.push({
+        name,
+        price,
+        thumb,
+        quantity,
+        slug,
+        count: 1,
+        size: selectSize,
+        color: selectColor,
+        discount,
+      });
     }
 
     localStorage.setItem('cartItems', JSON.stringify(cartItems));

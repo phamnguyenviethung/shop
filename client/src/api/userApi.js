@@ -23,7 +23,7 @@ const userApi = {
   updateCart: (id, data) => {
     const url = `/cart/${id}`;
     const params = {
-      cart: data,
+      productList: data,
     };
     return axiosClient.patch(url, params);
   },
