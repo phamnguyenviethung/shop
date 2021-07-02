@@ -11,8 +11,8 @@ import * as yup from 'yup';
 import orderApi from '../../api/orderApi';
 
 const UserInfo = ({ data }) => {
-  const reducer = (a, item) => a + item.count * item.price;
-  const total = data.reduce(reducer, 0);
+  const cartItems = [...data.cartItems];
+
   const initialValues = {
     name: '',
     email: '',
@@ -24,27 +24,30 @@ const UserInfo = ({ data }) => {
 
   const createOrder = async values => {
     try {
+      // Xóa những key - value không cần thiết
+      const exclueKey = ['quantity', 'slug'];
+      cartItems.forEach(i => {
+        exclueKey.forEach(key => delete i[key]);
+      });
+
       const { name, address, email, phone, payment, note } = values;
 
       const orderInfo = {
         isPaid: false,
         isDelivered: false,
         deliveredAt: Date.now(),
-        products: data,
+        products: cartItems,
         fullname: name,
         address,
         email,
         phone,
         payment,
         note,
-        total,
         shipping: 0,
+        ...data.price,
       };
 
-      const params = { orderInfo };
-      console.log('params ', params);
-
-      await orderApi.create(params);
+      await orderApi.create(orderInfo);
       alert('thanh cong');
     } catch (error) {
       console.log('cannot create order', error);
@@ -70,8 +73,8 @@ const UserInfo = ({ data }) => {
         onSubmit={values => console.log('submit', values)}
       >
         {formikProps => {
-          const { values, errors, touched } = formikProps;
-          console.log({ values, errors, touched });
+          const { values } = formikProps;
+          // console.log({ values, errors, touched });
           return (
             <Flex direction="column">
               <Form mb={2}>
@@ -103,7 +106,6 @@ const UserInfo = ({ data }) => {
                 />
 
                 <FastField
-                  // required={true}
                   name="address"
                   component={InputField}
                   label="Địa chỉ"
@@ -111,10 +113,8 @@ const UserInfo = ({ data }) => {
                 />
 
                 <FastField
-                  // required={true}
                   name="payment"
                   component={SelectField}
-                  // required={true}
                   label="Phương thức thanh toán"
                   placeholder="Chọn phương thức"
                   options={paymentOptions}

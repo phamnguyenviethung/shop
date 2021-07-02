@@ -1,4 +1,3 @@
-import { Button } from '@chakra-ui/button';
 import {
   Divider,
   Flex,
@@ -6,50 +5,107 @@ import {
   ListItem,
   Text,
   UnorderedList,
+  VStack,
+  Badge,
 } from '@chakra-ui/layout';
 import formartCurrency from '../../utils/formatCurrency';
 
 import React from 'react';
+import formatCurrency from '../../utils/formatCurrency';
 
 const OrderInfo = ({ data }) => {
-  //  Total price
-  const reducer = (a, item) => a + item.count * item.price;
-  const total = data.reduce(reducer, 0);
+  const quantityProduct = data.cartItems.reduce((a, item) => a + item.count, 0);
+
   return (
     <Flex direction="column" flex="1" ml={10}>
-      <Heading as="h4" size="md" color="gray.500" fontWeight="600" mb={4}>
-        Your Order
-      </Heading>
+      <Flex>
+        <Heading
+          as="h4"
+          size="md"
+          color="gray.500"
+          fontWeight="600"
+          mb={4}
+          flex="1"
+        >
+          Your Order
+        </Heading>
+        <Heading as="h4" size="md" color="gray.500" fontWeight="600" mb={4}>
+          {quantityProduct} sản phẩm
+        </Heading>
+      </Flex>
       <Flex direction="column" bgColor="gray.50" p={10}>
         <Flex justifyContent="space-between">
           <Text>Product</Text>
           <Text>Total</Text>
         </Flex>
         <Divider my={4} />
-        {data.map((item, key) => {
-          return (
-            <UnorderedList listStyleType="none" m={0}>
-              <ListItem>
+        <UnorderedList listStyleType="none" m={0}>
+          {data.cartItems.map((item, key) => {
+            return (
+              <ListItem key={key} mb={1}>
                 <Flex>
-                  <Text
-                    flex="1"
-                    fontFamily="Poppins, sans-serif"
-                    fontWeight="400"
-                  >
-                    {item.name} x {item.count}
-                  </Text>
+                  <VStack flex="1" mr={1}>
+                    <Text
+                      flex="1"
+                      fontFamily="Poppins, sans-serif"
+                      fontWeight="800"
+                      fontSize="md"
+                      w="full"
+                    >
+                      {item.name}
+                      <Text
+                        fontFamily="Poppins, sans-serif"
+                        fontWeight="300"
+                        display="inline-block"
+                        ml={1}
+                      >
+                        x {item.count}
+                      </Text>
+                    </Text>
+
+                    <Text
+                      w="full"
+                      fontFamily="Poppins, sans-serif"
+                      fontWeight="300"
+                      fontSize="sm"
+                    >
+                      {item.size}/{item.color}
+                    </Text>
+                  </VStack>
                   <Text fontFamily="Poppins, sans-serif" fontWeight="400">
                     {formartCurrency(item.price * item.count)}
                   </Text>
                 </Flex>
               </ListItem>
-            </UnorderedList>
-          );
-        })}
+            );
+          })}
+        </UnorderedList>
         <Divider my={4} />
-        <Flex justifyContent="space-between" my={4}>
+        <Flex justifyContent="space-between" mt={4}>
           <Text fontFamily="Poppins, sans-serif" fontWeight="400">
-            Shipping
+            Tạm tính:
+          </Text>
+
+          <Text fontFamily="Poppins, sans-serif" fontWeight="400">
+            {formartCurrency(data.price.total)}
+          </Text>
+        </Flex>
+        <Flex justifyContent="space-between" mt={2}>
+          <Text fontFamily="Poppins, sans-serif" fontWeight="400">
+            Giảm giá:
+          </Text>
+          <Flex>
+            <Badge mx="2" colorScheme="red" fontSize="sm">
+              -{data.price.percent}%
+            </Badge>
+            <Text fontFamily="Poppins, sans-serif" fontWeight="400">
+              {formatCurrency(data.price.discount)}
+            </Text>
+          </Flex>
+        </Flex>
+        <Flex justifyContent="space-between" mt={2} mb={4}>
+          <Text fontFamily="Poppins, sans-serif" fontWeight="400">
+            Shipping:
           </Text>
           <Text fontFamily="Poppins, sans-serif" fontWeight="400">
             {formartCurrency(0)}
@@ -58,14 +114,15 @@ const OrderInfo = ({ data }) => {
         <Divider my={4} />
         <Flex justifyContent="space-between" my={4}>
           <Text fontFamily="Poppins, sans-serif" fontWeight="400">
-            Total
+            Total:
           </Text>
           <Text
             fontFamily="Poppins, sans-serif"
             fontWeight="700"
             color="teal.600"
+            fontSize="xl"
           >
-            {formartCurrency(total)}
+            {formartCurrency(data.price.total - data.price.discount)}
           </Text>
         </Flex>
         <Divider my={4} />

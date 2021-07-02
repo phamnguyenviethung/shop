@@ -4,30 +4,36 @@ const Schema = mongoose.Schema;
 
 const OrderSchema = new Schema(
   {
-    // id: { type: Number, required: true },
-
     shipping: { type: Number, required: true },
     total: { type: Number, required: true },
+    discount: { type: Number, required: true },
+    percent: { type: Number, required: true },
 
     isPaid: { type: Boolean, default: false },
     isDelivered: { type: Boolean, default: false },
-    deliveredAt: { type: Date },
+    deliveredAt: { type: Date, default: null },
 
     products: [
       {
         name: { type: String, required: true },
         count: { type: Number, required: true },
-        thumb: { type: String, required: true },
+        thumb: { type: Array, required: true },
         price: { type: Number, required: true },
+        discount: { type: Number, required: true },
+        size: { type: String, required: true },
+        color: { type: String, required: true },
       },
     ],
 
     fullname: { type: String, required: true },
     address: { type: String, required: true },
     email: { type: String, required: true },
-    phone: { type: Number, required: true },
-    payment: { type: String, required: true },
-    note: { type: String, required: false },
+    phone: { type: String, required: true },
+    payment: {
+      type: String,
+      required: [true, "Vui lòng cung cấp phương thức thanh toán"],
+    },
+    note: { type: String },
   },
   {
     timestamps: true,
