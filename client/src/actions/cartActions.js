@@ -35,13 +35,9 @@ export const getCart = () => async (dispatch, getState) => {
     payload: [],
   });
   const token = getState().user.user.accessToken;
-
   if (token) {
     try {
-      const currentUserToken = JSON.parse(
-        localStorage.getItem('userInfo')
-      ).accessToken;
-      const id = decode(currentUserToken)._id;
+      const id = decode(token)._id;
 
       const data = await userApi.getCartData(id);
       const cart = data.productList || [];
@@ -67,23 +63,24 @@ export const getCart = () => async (dispatch, getState) => {
 };
 
 export const updateCart = () => async (dispatch, getState) => {
-  try {
-    const data = getState().cart.cartItems;
-    const currentUserToken = JSON.parse(
-      localStorage.getItem('userInfo')
-    ).accessToken;
-    const id = decode(currentUserToken)._id;
+  const currentUserToken = getState().user.user.accessToken;
 
-    const response = await userApi.updateCart(id, data);
-    localStorage.setItem('cartItems', JSON.stringify(response.productList));
-  } catch (error) {
-    dispatch({
-      type: UPDATE_CART_FAIL,
-      payload:
-        error.response && error.response.data.message
-          ? error.response.data.message
-          : error.response.data,
-    });
+  if (currentUserToken) {
+    try {
+      const data = getState().cart.cartItems;
+      const id = decode(currentUserToken)._id;
+
+      const response = await userApi.updateCart(id, data);
+      localStorage.setItem('cartItems', JSON.stringify(response.productList));
+    } catch (error) {
+      dispatch({
+        type: UPDATE_CART_FAIL,
+        payload:
+          error.response && error.response.data.message
+            ? error.response.data.message
+            : error.response.data,
+      });
+    }
   }
 };
 
@@ -91,7 +88,6 @@ export const addToCart =
   (product, selectSize, selectColor) => async (dispatch, getState) => {
     const cartItems = getState().cart.cartItems.slice();
     const { thumb, quantity, price, name, slug, discount } = product;
-    console.log(selectSize, selectColor);
 
     let alreadyExists = false;
     cartItems.forEach(x => {
