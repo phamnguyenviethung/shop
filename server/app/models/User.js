@@ -6,10 +6,12 @@ const Schema = mongoose.Schema;
 const userSchema = new Schema(
   {
     name: { type: String, required: [true, "User must have name"], trim: true },
+    uid: { type: Number, required: [true, "User must have id"], trim: true },
     email: {
       type: String,
       required: [true, "User need provide email"],
       unique: true,
+      trim: true,
     },
     password: {
       type: String,
@@ -24,15 +26,23 @@ const userSchema = new Schema(
       max: [11, "Tối đa 11 số"],
     },
     isAdmin: { type: Boolean, default: false },
-    // cart: {
-    //   type: Array,
-    //   default: [],
-    // },
   },
   {
     timestamps: true,
   }
 );
+
+userSchema.pre("save", async function (next) {
+  // Only run this function if password was actually modified
+  if (!this.isModified("password")) return next();
+
+  // Hash the password with cost of 12
+  this.password = await bcrypt.hash(this.password, 12);
+
+  // Delete passwordConfirm field
+  this.confirm = undefined;
+  next();
+});
 
 userSchema.methods.correctPassword = async function (
   candidatePassword,

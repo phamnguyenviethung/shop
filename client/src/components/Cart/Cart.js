@@ -1,10 +1,9 @@
-import React, { useEffect } from 'react';
+import React from 'react';
 import { Container } from '@chakra-ui/react';
 import CartTable from './CartTable';
 import CartEmpty from './CartEmpty';
-import { useDispatch, useSelector } from 'react-redux';
+import { useSelector } from 'react-redux';
 import { Redirect } from 'react-router';
-import { updateCart } from '../../actions/cartActions';
 
 const Cart = () => {
   const cart = useSelector(state => state.cart.cartItems);
