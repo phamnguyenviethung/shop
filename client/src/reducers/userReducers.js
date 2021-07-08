@@ -12,33 +12,45 @@ import {
 const userReducers = (
   state = {
     user: JSON.parse(localStorage.getItem('userInfo')) || {},
+    isLogged:
+      Object.keys(JSON.parse(localStorage.getItem('userInfo')) || {}).length >
+        0 || false,
   },
   action
 ) => {
   switch (action.type) {
     case USER_LOGIN_REQUEST:
-      return { loading: true, user: action.payload };
+      return {
+        isLogged: false,
+        loading: true,
+        user: action.payload,
+      };
     case USER_LOGIN_SUCCESS:
       return {
-        loading: false,
         isLogged: true,
+        loading: false,
         user: action.payload,
       };
     case USER_LOGIN_FAIL:
-      return { loading: false, user: action.payload };
+      return {
+        isLogged: false,
+        loading: false,
+        user: {},
+        ...action.payload,
+      };
 
     case USER_REGISTER_REQUEST:
-      return { loading: true, user: action.payload };
+      return { isLogged: false, loading: true, user: action.payload };
     case USER_REGISTER_SUCCESS:
-      return { loading: false, user: action.payload };
+      return { isLogged: false, loading: false, user: action.payload };
     case USER_REGISTER_FAIL:
-      return { loading: false, user: action.payload };
+      return { isLogged: false, loading: false, user: {}, ...action.payload };
 
     case USER_SIGN_OUT:
-      return { loading: false, user: {} };
+      return { isLogged: false, user: {} };
 
     case USER_VERIFY_TOKEN:
-      return { loading: false, user: action.payload };
+      return { isLogged: true, user: action.payload };
 
     default:
       return state;

@@ -2,8 +2,7 @@ import { ChakraProvider, theme } from '@chakra-ui/react';
 import React, { useEffect } from 'react';
 import { Route, Switch } from 'react-router-dom';
 
-import Login from './pages/Auth/Login';
-import Register from './pages/Auth/Register';
+import Account from './pages/Account';
 import Cart from './components/Cart/Cart';
 import Navbar from './components/Navbar/';
 import Checkout from './pages/Checkout';
@@ -26,7 +25,7 @@ function App() {
   const dispatch = useDispatch();
   const cart = useSelector(state => state.cart.cartItems);
   const user = useSelector(state => state.user.user);
-  const auth = Object.keys(user).length > 0;
+  const auth = user.isLogged;
 
   useEffect(() => {
     if (auth) {
@@ -45,7 +44,6 @@ function App() {
   return (
     <ChakraProvider theme={theme}>
       <Navbar cart={cart} />
-
       <Switch>
         <Route exact path="/" component={Home}></Route>
 
@@ -59,8 +57,7 @@ function App() {
 
         <Route path="/profile" component={Profile}></Route>
 
-        <Route path="/login" component={Login}></Route>
-        <Route path="/register" component={Register}></Route>
+        <Route path="/account" component={Account}></Route>
 
         <Route path="*" component={NotFound}></Route>
       </Switch>

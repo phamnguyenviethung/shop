@@ -11,37 +11,60 @@ import {
 import userApi from '../api/userApi';
 import checkTokenExpire from '../utils/checkTokenExpire';
 
-export const login = (email, password) => async dispatch => {
-  dispatch({ type: USER_LOGIN_REQUEST, payload: {} });
+export const login = (values, toast) => async dispatch => {
+  const { email, password } = values;
+  dispatch({
+    type: USER_LOGIN_REQUEST,
+    payload: {},
+  });
 
   try {
     const params = { email, password };
 
     const data = await userApi.login(params);
 
-    dispatch({ type: USER_LOGIN_SUCCESS, payload: data });
+    dispatch({
+      type: USER_LOGIN_SUCCESS,
+      payload: data,
+    });
     localStorage.setItem('userInfo', JSON.stringify(data));
 
-    // window.location.replace('/');
+    toast({
+      title: 'Đăng nhập thành công',
+      status: 'success',
+      position: 'bottom-right',
+      isClosable: true,
+      duration: 1200,
+    });
+
+    setTimeout(() => {
+      window.location.replace('/');
+    }, 1200);
   } catch (error) {
     dispatch({
       type: USER_LOGIN_FAIL,
       payload: {
-        error:
-          error.response && error.response.data.message
-            ? error.response.data.message
-            : error.response.data,
-        status: 'Failed',
+        error: error.message,
       },
+    });
+
+    toast({
+      title: 'Đăng nhập thất bại',
+      description: error.message,
+      status: 'error',
+      position: 'bottom-right',
+      isClosable: true,
+      duration: 1200,
     });
   }
 };
 
-export const register = (name, email, password) => async dispatch => {
+export const register = (values, toast) => async dispatch => {
+  const { name, email, password, confirm } = values;
   dispatch({ type: USER_REGISTER_REQUEST, payload: {} });
 
   try {
-    const params = { name, email, password };
+    const params = { name, email, password, confirm };
     const data = await userApi.register(params);
 
     dispatch({
@@ -51,18 +74,31 @@ export const register = (name, email, password) => async dispatch => {
         user: { email: data.email, name: data.name, isAdmin: data.isAdmin },
       },
     });
+
+    toast({
+      title: 'Đăng ký thành công',
+      status: 'success',
+      position: 'bottom-right',
+      isClosable: true,
+      duration: 1200,
+    });
+
     // window.location.replace('/');
   } catch (error) {
-    console.log();
     dispatch({
       type: USER_REGISTER_FAIL,
       payload: {
-        error:
-          error.response && error.response.data.message
-            ? error.response.data.message
-            : error.response.data,
-        status: 'Failed',
+        error: error.message,
       },
+    });
+
+    toast({
+      title: 'Đăng ký thất bại',
+      status: 'error',
+      description: error.message,
+      position: 'bottom-right',
+      isClosable: true,
+      duration: 1200,
     });
   }
 };
@@ -70,7 +106,6 @@ export const register = (name, email, password) => async dispatch => {
 export const signout = () => dispatch => {
   localStorage.removeItem('userInfo');
   localStorage.removeItem('cartItems');
-  localStorage.setItem('status', JSON.stringify({ isLogged: false }));
   dispatch({ type: USER_SIGN_OUT, payload: {} });
   window.location.replace('/');
 };
@@ -96,6 +131,6 @@ export const verifyToken = () => async (dispatch, getState) => {
 
     dispatch({ type: USER_VERIFY_TOKEN, payload: updateToken });
   } catch (error) {
-    console.log(error);
+    dispatch(signout());
   }
 };

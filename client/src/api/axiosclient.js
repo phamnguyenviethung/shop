@@ -26,10 +26,16 @@ axiosClient.interceptors.response.use(
     }
     return response;
   },
-  error => {
+  err => {
+    const response = err.response;
     // Handle errors
-    console.log(error);
-    throw error;
+    const errors = {
+      status: 'Failed',
+      statusCode: response.status,
+      message: response.data.message,
+    };
+
+    throw errors;
   }
 );
 

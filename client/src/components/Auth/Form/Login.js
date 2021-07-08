@@ -1,21 +1,14 @@
 import { Button } from '@chakra-ui/button';
 import { Flex } from '@chakra-ui/layout';
-import { FastField, Form, Formik, useFormik } from 'formik';
+import { FastField, Form, Formik } from 'formik';
 import React from 'react';
 import * as yup from 'yup';
 import InputField from '../../../Fields/Inputs';
 import { useDispatch } from 'react-redux';
 import { login } from '../../../actions/userActions';
 
-const Login = () => {
+const Login = ({ toast }) => {
   const dispatch = useDispatch();
-
-  const formik = useFormik({
-    initialValues: {
-      email: '',
-      password: '',
-    },
-  });
 
   const validationSchema = yup.object().shape({
     email: yup
@@ -25,25 +18,23 @@ const Login = () => {
     password: yup.string().required('Vui lòng nhập mật khẩu.').min(6),
   });
 
-  const submitHandler = values => {
-    const { email, password } = values;
-    dispatch(login(email, password));
-  };
-
   return (
     <Formik
-      initialValues={formik.initialValues}
+      initialValues={{
+        email: '',
+        password: '',
+      }}
       validationSchema={validationSchema}
-      onSubmit={values => submitHandler(values)}
+      onSubmit={values => {
+        dispatch(login(values, toast));
+      }}
+      validateOnBlur={false}
+      validateOnChange={false}
     >
-      {() => {
-        const { email, password } = formik.values;
+      {formik => {
+        console.log(formik);
         return (
-          <Flex
-            justifyContent="space-between"
-            direction="column"
-            w={['50%', '20%']}
-          >
+          <Flex justifyContent="space-between" direction="column" w="full">
             <Form mb={2}>
               <FastField
                 name="email"
@@ -52,7 +43,6 @@ const Login = () => {
                 placeholder="Nhập địa chỉ email"
                 bgColor="white"
                 onChange={formik.handleChange}
-                value={email}
               />
 
               <FastField
@@ -62,13 +52,15 @@ const Login = () => {
                 placeholder="Nhập password"
                 bgColor="white"
                 onChange={formik.handleChange}
-                value={password}
+                type="password"
               />
               <Button
                 mt={6}
                 borderRadius="4px"
-                colorScheme="teal"
+                colorScheme="black"
                 type="submit"
+                w="full"
+                variant="outline"
               >
                 Đăng nhập
               </Button>
