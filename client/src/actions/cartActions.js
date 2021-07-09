@@ -37,7 +37,7 @@ export const getCart = () => async (dispatch, getState) => {
   const token = getState().user.user.accessToken;
   if (token) {
     try {
-      const id = decode(token)._id;
+      const id = decode(token).uid;
 
       const data = await userApi.getCartData(id);
       const cart = data.productList || [];
@@ -68,7 +68,7 @@ export const updateCart = () => async (dispatch, getState) => {
   if (currentUserToken) {
     try {
       const data = getState().cart.cartItems;
-      const id = decode(currentUserToken)._id;
+      const id = decode(currentUserToken).uid;
 
       const response = await userApi.updateCart(id, data);
       localStorage.setItem('cartItems', JSON.stringify(response.productList));

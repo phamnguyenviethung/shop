@@ -69,6 +69,7 @@ const CartTable = ({ data }) => {
                             minW="0"
                             isTruncated
                             mb={1}
+                            flex="1"
                           >
                             {item.name}
                           </Heading>

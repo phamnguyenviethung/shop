@@ -24,16 +24,16 @@ import NotFound from './pages/NotFound';
 function App() {
   const dispatch = useDispatch();
   const cart = useSelector(state => state.cart.cartItems);
-  const user = useSelector(state => state.user.user);
+  const user = useSelector(state => state.user);
   const auth = user.isLogged;
 
   useEffect(() => {
     if (auth) {
-      if (checkTokenExpire(user.accessToken)) {
+      if (checkTokenExpire(user.user.accessToken)) {
         dispatch(verifyToken());
       }
     }
-  }, [auth, dispatch, user.accessToken]);
+  }, [auth, dispatch, user.user.accessToken]);
 
   useEffect(() => {
     if (auth) {
