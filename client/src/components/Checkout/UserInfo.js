@@ -1,86 +1,99 @@
 import React from 'react';
 
-import { Button, Flex, Heading } from '@chakra-ui/react';
+import { Button, Flex, Heading, useToast } from '@chakra-ui/react';
 import { Formik, Form, FastField } from 'formik';
 import InputField from '../../Fields/Inputs/';
 import SelectField from '../../Fields/Select/';
 import TextareaField from '../../Fields/Textarea/';
 import { paymentOptions } from './paymentOptions';
 import * as yup from 'yup';
-
+import { useSelector } from 'react-redux';
+import moment from 'moment';
 import orderApi from '../../api/orderApi';
 
-const UserInfo = ({ data }) => {
-  const cartItems = [...data.cartItems];
+const UserInfo = ({ cart }) => {
+  const toast = useToast();
+  const user = useSelector(state => state.user);
 
-  const initialValues = {
-    name: '',
-    email: '',
-    phone: null,
-    address: '',
-    payment: '',
-    note: '',
-  };
-
-  const createOrder = async values => {
+  const createOrder = async info => {
     try {
       // Xóa những key - value không cần thiết
       const exclueKey = ['quantity', 'slug'];
-      cartItems.forEach(i => {
+      cart.cartItems.forEach(i => {
         exclueKey.forEach(key => delete i[key]);
       });
 
-      const { name, address, email, phone, payment, note } = values;
+      const { name, address, email, phone, payment, note } = info;
 
       const orderInfo = {
         isPaid: false,
         isDelivered: false,
-        deliveredAt: Date.now(),
-        products: cartItems,
+        deliveredAt: moment().format('LTS') + ' ' + moment().format('L'),
+        products: cart.cartItems,
         fullname: name,
         address,
         email,
+        uid: user.user.uid,
         phone,
         payment,
         note,
         shipping: 0,
-        ...data.price,
+        ...cart.price,
       };
 
       await orderApi.create(orderInfo);
-      alert('thanh cong');
+
+      toast({
+        title: 'Đặt hàng thành công',
+        status: 'success',
+        position: 'bottom-right',
+        isClosable: true,
+        duration: 1200,
+      });
     } catch (error) {
-      console.log('cannot create order', error);
+      console.log(error);
+      toast({
+        title: 'Có lỗi xảy ra...',
+        status: 'error',
+        position: 'bottom-right',
+        isClosable: true,
+        duration: 1200,
+      });
     }
   };
 
   const validationSchema = yup.object().shape({
     name: yup.string().required('Vui lòng nhập họ tên. '),
-    phone: yup.number().required().nullable(),
+    phone: yup.number().required('Vui lòng nhập số điện thoại.').nullable(),
     email: yup.string().email().required('Vui lòng nhập email.'),
     payment: yup.string().required('Vui lòng chọn phương thức thanh toán. '),
-    // address: yup.required(),
+    address: yup.string().required('Vui lòng nhập địa chỉ'),
   });
 
   return (
     <Flex direction="column" flex="2">
       <Heading as="h4" size="md" color="gray.500" fontWeight="600" mb={4}>
-        Billing Details
+        Thông tin đơn hàng
       </Heading>
       <Formik
-        initialValues={initialValues}
+        initialValues={{
+          name: '',
+          email: '',
+          phone: '',
+          address: '',
+          payment: '',
+          note: '',
+        }}
         validationSchema={validationSchema}
-        onSubmit={values => console.log('submit', values)}
+        validateOnChange={false}
+        onSubmit={values => createOrder(values)}
       >
-        {formikProps => {
-          const { values } = formikProps;
-          // console.log({ values, errors, touched });
+        {() => {
           return (
             <Flex direction="column">
               <Form mb={2}>
                 <Flex justifyContent="space-between">
                   <FastField
-                    // required={true}
                     maxW="94%"
                     name="name"
                     component={InputField}
@@ -89,7 +102,6 @@ const UserInfo = ({ data }) => {
                   />
 
                   <FastField
-                    // required={true}
                     name="email"
                     component={InputField}
                     label="Email"
@@ -98,7 +110,6 @@ const UserInfo = ({ data }) => {
                 </Flex>
 
                 <FastField
-                  // required={true}
                   name="phone"
                   component={InputField}
                   label="Số điện thoại"
@@ -131,9 +142,8 @@ const UserInfo = ({ data }) => {
                     borderRadius="4px"
                     colorScheme="teal"
                     type="submit"
-                    onClick={() => createOrder(values)}
                   >
-                    Place Order
+                    Đặt hàng
                   </Button>
                 </Flex>
               </Form>

@@ -58,13 +58,13 @@ function SelectField({
 
   return (
     <FormControl isRequired={required}>
-      {label && <FormLabel for={name}>{label}</FormLabel>}
+      {label && <FormLabel htmlFor={name}>{label}</FormLabel>}
 
       <Select
         mb={2}
         id={name}
         {...field}
-        value={selectedOption}
+        value={selectedOption || ''}
         onChange={handleSelectedOptionChange}
         placeholder={placeholder}
         isDisabled={disabled}

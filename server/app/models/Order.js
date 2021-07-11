@@ -11,7 +11,7 @@ const OrderSchema = new Schema(
 
     isPaid: { type: Boolean, default: false },
     isDelivered: { type: Boolean, default: false },
-    deliveredAt: { type: Date, default: null },
+    deliveredAt: { type: String, default: null },
 
     products: [
       {
@@ -25,6 +25,9 @@ const OrderSchema = new Schema(
       },
     ],
 
+    code: { type: String, required: true },
+
+    uid: { type: Number, required: true },
     fullname: { type: String, required: true },
     address: { type: String, required: true },
     email: { type: String, required: true },

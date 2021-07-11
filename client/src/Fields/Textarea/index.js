@@ -1,6 +1,5 @@
 import PropTypes from 'prop-types';
 import React from 'react';
-import { ErrorMessage } from 'formik';
 import {
   FormControl,
   FormLabel,
@@ -39,10 +38,11 @@ function TextareaField({
   const { name } = field;
   const { errors, touched } = form;
   const showError = errors[name] && touched[name];
+  console.log(field);
 
   return (
     <FormControl isRequired={required}>
-      {label && <FormLabel for={name}>{label}</FormLabel>}
+      {label && <FormLabel htmlFor={name}>{label}</FormLabel>}
 
       <Textarea
         mb={2}
@@ -54,7 +54,7 @@ function TextareaField({
         invalid={showError}
       />
 
-      <ErrorMessage name={name} component={FormErrorMessage} />
+      {showError && <FormErrorMessage>{errors[name]}</FormErrorMessage>}
     </FormControl>
   );
 }

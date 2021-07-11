@@ -10,7 +10,7 @@ const Checkout = () => {
   return (
     <Container w="full" maxW={['full', '75%']}>
       <Flex direction={['column', 'column', 'row']}>
-        <UserInfo data={data} />
+        <UserInfo cart={data} />
         <OrderInfo data={data} />
       </Flex>
     </Container>

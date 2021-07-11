@@ -5,9 +5,9 @@ import {
   ListItem,
   Text,
   UnorderedList,
-  VStack,
   Badge,
-} from '@chakra-ui/layout';
+  chakra,
+} from '@chakra-ui/react';
 import formartCurrency from '../../utils/formatCurrency';
 
 import React from 'react';
@@ -27,7 +27,7 @@ const OrderInfo = ({ data }) => {
           mb={4}
           flex="1"
         >
-          Your Order
+          Đơn hàng của bạn
         </Heading>
         <Heading as="h4" size="md" color="gray.500" fontWeight="600" mb={4}>
           {quantityProduct} sản phẩm
@@ -35,8 +35,8 @@ const OrderInfo = ({ data }) => {
       </Flex>
       <Flex direction="column" bgColor="gray.50" p={10}>
         <Flex justifyContent="space-between">
-          <Text>Product</Text>
-          <Text>Total</Text>
+          <Text>Sản phẩm</Text>
+          <Text>Tổng cộng</Text>
         </Flex>
         <Divider my={4} />
         <UnorderedList listStyleType="none" m={0}>
@@ -44,7 +44,7 @@ const OrderInfo = ({ data }) => {
             return (
               <ListItem key={key} mb={1}>
                 <Flex>
-                  <VStack flex="1" mr={1}>
+                  <Flex flex="1" direction="column">
                     <Text
                       flex="1"
                       fontFamily="Poppins, sans-serif"
@@ -53,14 +53,14 @@ const OrderInfo = ({ data }) => {
                       w="full"
                     >
                       {item.name}
-                      <Text
+                      <chakra.span
                         fontFamily="Poppins, sans-serif"
                         fontWeight="300"
-                        display="inline-block"
+                        display="inline"
                         ml={1}
                       >
                         x {item.count}
-                      </Text>
+                      </chakra.span>
                     </Text>
 
                     <Text
@@ -71,7 +71,7 @@ const OrderInfo = ({ data }) => {
                     >
                       {item.size}/{item.color}
                     </Text>
-                  </VStack>
+                  </Flex>
                   <Text fontFamily="Poppins, sans-serif" fontWeight="400">
                     {formartCurrency(item.price * item.count)}
                   </Text>

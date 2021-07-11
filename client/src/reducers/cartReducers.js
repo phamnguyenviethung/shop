@@ -15,7 +15,7 @@ import {
 const cartReducers = (
   state = {
     cartItems: JSON.parse(localStorage.getItem('cartItems')) || [],
-    price: null,
+    price: 0,
   },
   action
 ) => {

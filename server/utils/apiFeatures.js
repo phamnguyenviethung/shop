@@ -25,7 +25,6 @@ class APIFeatures {
     } else {
       this.query = this.query.find(JSON.parse(queryStr));
     }
-
     return this;
   }
 
