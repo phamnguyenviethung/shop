@@ -1,10 +1,13 @@
 const express = require("express");
 const router = express.Router();
-const verify = require("../app/middleware/verifyToken");
+const protect = require("../app/middleware/protect");
 
 const cartController = require("../app/controllers/cartController");
 
-router.get("/:id", cartController.getUserCart);
-router.patch("/:id", cartController.updateCart);
+router.use(protect);
+
+router
+  .get("/:id", cartController.getUserCart)
+  .patch("/:id", cartController.updateCart);
 
 module.exports = router;

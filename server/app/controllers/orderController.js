@@ -8,7 +8,6 @@ exports.create = catchAsync(async (req, res) => {
     ...req.body,
     code: randomCode(),
   };
-  console.log(data);
 
   const doc = await Order.create(data);
 
@@ -21,3 +20,17 @@ exports.create = catchAsync(async (req, res) => {
 });
 exports.getAll = factory.getAll(Order);
 exports.getOne = factory.getOne(Order);
+exports.getByUID = catchAsync(async (req, res, next) => {
+  const doc = await Order.find({ uid: req.params.uid });
+
+  if (!doc) {
+    return next(new AppError("Không tìm thấy đơn hàng nào của ID.", 404));
+  }
+
+  res.status(200).json({
+    status: "success",
+    data: {
+      data: doc,
+    },
+  });
+});

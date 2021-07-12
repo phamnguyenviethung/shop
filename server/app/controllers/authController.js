@@ -1,9 +1,8 @@
 const User = require("../models/User");
 const Cart = require("../models/Cart");
-const generateToken = require("../../utils/token");
+const generateToken = require("../../utils/generateToken");
 const catchAsync = require("../../utils/catchAsync");
 const jwt = require("jsonwebtoken");
-const factory = require("./handlerFactory");
 const faker = require("faker");
 
 const {
@@ -52,7 +51,7 @@ exports.login = catchAsync(async (req, res, next) => {
 
   // Check if email and password does not exist
   if (!email || !password) {
-    return next(new AppError("Please provide email and password!", 400));
+    return next(new AppError("Vui lòng nhập email và mật khẩu", 400));
   }
 
   // Validate
@@ -71,9 +70,12 @@ exports.login = catchAsync(async (req, res, next) => {
   }
 
   // Create token
-  const { accessToken, refreshToken } = generateToken({ uid: user.uid });
+  const { accessToken, refreshToken } = generateToken({
+    uid: user.uid,
+    role: user.role,
+  });
 
-  const { name, isAdmin, uid } = user;
+  const { name, isAdmin, uid, role } = user;
 
   res.status(200).json({
     status: "success",
@@ -85,6 +87,7 @@ exports.login = catchAsync(async (req, res, next) => {
         email: user.email,
         accessToken,
         refreshToken,
+        role,
       },
     },
   });
@@ -92,13 +95,16 @@ exports.login = catchAsync(async (req, res, next) => {
 
 exports.refreshToken = catchAsync(async (req, res, next) => {
   const { refresh } = req.body;
-  if (!refresh) return next(new AppError("No refresh token provide"), 400);
+  if (!refresh) return next(new AppError("Không tìm thấy token"), 400);
 
   const verified = jwt.verify(refresh, process.env.REFRESH_TOKEN_SECRET);
   const user = await User.find({ _id: verified._id });
-  if (!user) return next(new AppError("Invalid token"), 400);
+  if (!user) return next(new AppError("Token không hợp lệ"), 400);
 
-  const { accessToken, refreshToken } = generateToken({ uid: user.uid });
+  const { accessToken, refreshToken } = generateToken({
+    uid: user.uid,
+    role: user.role,
+  });
 
   res.status(201).json({
     status: "success",

@@ -5,27 +5,32 @@ const Schema = mongoose.Schema;
 
 const userSchema = new Schema(
   {
-    name: { type: String, required: [true, "User must have name"], trim: true },
-    uid: { type: Number, required: [true, "User must have id"], trim: true },
+    name: {
+      type: String,
+      required: [true, "Yêu cầu phải có tên người dùng"],
+      trim: true,
+    },
+    uid: { type: Number, required: [true, "Yêu cầu phải có UID"], trim: true },
     email: {
       type: String,
-      required: [true, "User need provide email"],
+      required: [true, "Yêu cầu phải có email"],
       unique: true,
       trim: true,
     },
     password: {
       type: String,
-      required: [true, "Please provide a password"],
+      required: [true, "Yêu cầu phải có mật khẩu"],
       min: [6, "Tối thiếu 6 ký tự"],
       max: [1024, "Quá nhiều ký tự"],
     },
-    address: { type: String },
+    address: { type: String, default: "" },
     phone: {
       type: Number,
       min: [8, "Tối thiểu 8 số"],
       max: [11, "Tối đa 11 số"],
+      default: null,
     },
-    isAdmin: { type: Boolean, default: false },
+    role: { type: String, default: "user" },
   },
   {
     timestamps: true,

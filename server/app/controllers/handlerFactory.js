@@ -68,7 +68,6 @@ exports.getOne = (Model, popOptions) =>
 exports.getAll = (Model) =>
   catchAsync(async (req, res, next) => {
     // To allow for nested GET  (hack)
-    console.log(req.query);
     let filter = {};
     if (req.params.id) filter = { _id: req.params.id };
 
