@@ -27,6 +27,11 @@ const userApi = {
     };
     return axiosClient.patch(url, params);
   },
+
+  getOrderByID: uid => {
+    const url = `/order/user/${uid}`;
+    return axiosClient.get(url);
+  },
 };
 
 export default userApi;

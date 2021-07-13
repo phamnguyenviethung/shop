@@ -11,9 +11,10 @@ const axiosClient = axios.create({
 });
 
 axiosClient.interceptors.request.use(async config => {
-  const token = store.getState().user.user.token;
-  if (token) {
-    config.headers.auth = token;
+  const user = store.getState().user.user;
+  if (Object.keys(user).length > 0) {
+    config.headers.at = user.accessToken;
+    config.headers.rt = user.refreshToken;
   }
 
   return config;
