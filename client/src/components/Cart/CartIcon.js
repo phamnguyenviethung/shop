@@ -32,7 +32,7 @@ export const CartIconDetails = ({ cart }) => {
       <Text
         pos="absolute"
         bottom="60%"
-        left="65%"
+        left="50%"
         px={3}
         py={1}
         bgColor="red.600"

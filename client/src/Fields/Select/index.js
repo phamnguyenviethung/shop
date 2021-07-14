@@ -40,7 +40,8 @@ function SelectField({
   const { errors, touched } = form;
   const showError = errors[name] && touched[name];
 
-  const selectedOption = options.find(option => option.value === value);
+  // const selectedOption =
+  //   options.find(option => option.value === value) || placeholder;
 
   const handleSelectedOptionChange = selectedOption => {
     const selectedValue = selectedOption
@@ -64,7 +65,7 @@ function SelectField({
         mb={2}
         id={name}
         {...field}
-        value={selectedOption || ''}
+        // value={selectedOption}
         onChange={handleSelectedOptionChange}
         placeholder={placeholder}
         isDisabled={disabled}

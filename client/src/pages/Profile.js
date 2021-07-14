@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { Container, Heading, Text, Flex } from '@chakra-ui/react';
+import { Container, Heading, Text, Box } from '@chakra-ui/react';
 import OrderList from '../components/Profile/OrderList';
 import { useSelector } from 'react-redux';
 
@@ -24,15 +24,15 @@ const Profile = () => {
   }, [uid]);
 
   return (
-    <Flex py={10} my={10} minH="550px">
-      <Container maxW="full" w="90%">
+    <Box py={10} my={10} minH="550px" overflowX="auto">
+      <Container maxW="full" w="full">
         <Heading as="h2" fontSize="2xl" fontWeight="700">
           Thông tin tài khoản
         </Heading>
         <Text>Xin chào, </Text>
         <OrderList data={orders} />
       </Container>
-    </Flex>
+    </Box>
   );
 };
 

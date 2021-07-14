@@ -177,11 +177,20 @@ export const decrease =
     dispatch(updateCart());
   };
 
-export const clearCart = () => {
+export const clearCart = () => dispatch => {
   const cartItems = [];
   localStorage.setItem('cartItems', JSON.stringify(cartItems));
-  return {
+  dispatch({
     type: CLEAR_CART,
-    payload: { cartItems, price: calcPrice(cartItems) },
-  };
+    payload: {
+      cartItems,
+      price: {
+        total: 0,
+        percent: 0,
+        discount: 0,
+      },
+    },
+  });
+
+  dispatch(updateCart());
 };
