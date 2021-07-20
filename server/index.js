@@ -7,8 +7,6 @@ const route = require("./routes");
 const dotenv = require("dotenv");
 const morgan = require("morgan");
 
-
-
 dotenv.config();
 
 const AppError = require("./utils/appError");
@@ -29,7 +27,7 @@ app.all("*", (req, res, next) => {
 
 app.use(globalErrorHandler);
 
-const PORT = 3001;
+const PORT = proccess.env.PORT || 3001;
 app.listen(PORT, () => {
   console.log(`Server running on ${PORT}`);
 });
