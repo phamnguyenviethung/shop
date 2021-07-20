@@ -98,9 +98,9 @@ const Settings = () => {
   };
 
   return (
-    <Container maxW="90%" w="full" minH="600px" mt={4}>
+    <Container maxW={['full', '90%']} w="full" minH="600px" mt={4}>
       <Flex direction={['column', 'column', 'row']}>
-        <Center flex="1">
+        <Center display={['none', 'none', 'flex']} flex="1">
           <Box
             maxW={'300px'}
             w={'full'}
