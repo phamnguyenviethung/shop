@@ -1,12 +1,4 @@
-import {
-  Center,
-  Flex,
-  Heading,
-  Container,
-  Badge,
-  VStack,
-  Image,
-} from '@chakra-ui/react';
+import { Center, Flex, Container, Badge } from '@chakra-ui/react';
 import React, { useEffect, useState } from 'react';
 import { useParams } from 'react-router-dom';
 import searchApi from '../api/searchApi';
@@ -14,6 +6,7 @@ import Products from '../components/Products/Products';
 import Sort from '../components/Filter/Sort';
 import { useSelector } from 'react-redux';
 import faker from 'faker';
+import NotFound from './NotFound';
 
 const Category = () => {
   const [data, setData] = useState([]);
@@ -47,14 +40,7 @@ const Category = () => {
   return (
     <Container maxW="full" mt={2}>
       {data.length === 0 ? (
-        <Center w="full" h="800px">
-          <VStack>
-            <Image src="https://i.imgur.com/imsIU6S.jpg" alt="empty" />
-            <Heading fontSize={['lg', 'xl']} color="gray.700" fontWeight="600">
-              Mục bạn truy cập không tồn tại
-            </Heading>
-          </VStack>
-        </Center>
+        <NotFound />
       ) : (
         <>
           <Center maxW="full" pos="relative" mb={6}>

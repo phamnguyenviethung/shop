@@ -78,14 +78,14 @@ const ProductDetail = ({ slug }) => {
     quantity,
     discount,
   } = product;
-  const getProductListByCategory = category => {
-    const data = [...products] || [];
-    const result = data.filter(i => i.categories.includes(category));
-    return result;
-  };
+  // const getProductListByCategory = category => {
+  //   const data = [...products] || [];
+  //   const result = data.filter(i => i.categories.includes(category));
+  //   return result;
+  // };
 
   useEffect(() => {
-    color && setSelectColor(color[0].value);
+    color && setSelectColor(color[0].name);
   }, [color]);
 
   return (
@@ -140,7 +140,7 @@ const ProductDetail = ({ slug }) => {
                               <Tab
                                 mr={2}
                                 bgColor={item.value}
-                                value={item.value}
+                                value={item.name}
                                 p={0}
                                 h="30px"
                                 w="30px"

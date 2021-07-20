@@ -11,7 +11,7 @@ exports.updateCart = catchAsync(async (req, res, next) => {
   });
 
   if (!doc) {
-    return next(new AppError("No document found with that ID", 404));
+    return next(new AppError("Không tìm thấy dữ liệu của UID được cấp", 404));
   }
 
   res.status(200).json({
@@ -26,7 +26,7 @@ exports.getUserCart = catchAsync(async (req, res, next) => {
   const { id } = req.params;
   const doc = await Cart.findOne({ userId: id });
   if (!doc) {
-    return next(new AppError("No document found with that ID", 404));
+    return next(new AppError("Không tìm thấy dữ liệu của UID được cấp", 404));
   }
 
   res.status(200).json({

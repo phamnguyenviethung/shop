@@ -2,7 +2,7 @@ import { Box, SimpleGrid } from '@chakra-ui/layout';
 import { SkeletonCircle, SkeletonText } from '@chakra-ui/skeleton';
 import React from 'react';
 
-const FeaturesLoading = () => {
+const SlideLoading = () => {
   return (
       <SimpleGrid columns={[1, 2, 3]} spacing={10}>
         <Box padding="6" boxShadow="lg" bg="white">
@@ -21,4 +21,4 @@ const FeaturesLoading = () => {
   );
 };
 
-export default FeaturesLoading;
+export default SlideLoading;

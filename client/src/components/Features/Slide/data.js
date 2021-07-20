@@ -15,4 +15,20 @@ export const images = [
     src: 'https://shop-redq.vercel.app/_next/static/images/offer-1-1f7a4c9ea0ba5a216bc7af1f60d044e0.png',
     alt: 'coupons',
   },
+  // {
+  //   src: 'https://i.imgur.com/FIJNqAO.png',
+  //   alt: 'coupons',
+  // },
+  // {
+  //   src: 'https://i.imgur.com/zeD2cjR.png',
+  //   alt: 'coupons',
+  // },
+  // {
+  //   src: 'https://i.imgur.com/aUZEJtW.png',
+  //   alt: 'coupons',
+  // },
+  // {
+  //   src: 'https://i.imgur.com/StQMyTi.png',
+  //   alt: 'coupons',
+  // },
 ];

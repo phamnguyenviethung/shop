@@ -9,6 +9,7 @@ const rootReducer = combineReducers({
   user: userReducers,
   product: productReducers,
   filter: filterReducers,
+  
 });
 
 export default rootReducer;

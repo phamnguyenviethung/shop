@@ -32,7 +32,6 @@ const Login = ({ toast }) => {
       validateOnChange={false}
     >
       {formik => {
-        console.log(formik);
         return (
           <Flex justifyContent="space-between" direction="column" w="full">
             <Form mb={2}>

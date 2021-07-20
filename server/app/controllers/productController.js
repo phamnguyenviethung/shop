@@ -3,7 +3,6 @@ const ProductModel = require("../models/Product");
 const catchAsync = require("../../utils/catchAsync");
 const AppError = require("../../utils/appError");
 
-
 exports.getAll = factory.getAll(ProductModel);
 exports.getByID = factory.getOne(ProductModel);
 exports.create = factory.createOne(ProductModel);
@@ -22,6 +21,4 @@ exports.getBySlug = catchAsync(async (req, res, next) => {
       data: doc,
     },
   });
-
-  db.products.find({name: {$text: {$search: "s"}}})
 });

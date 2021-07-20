@@ -57,19 +57,20 @@ export const drawerItems = [
     label: 'Shop',
     list: [
       {
-        path: '/',
+        path: '/category/shirt',
         label: 'T-shirt',
       },
       {
-        path: '/',
+        path: '/category/jean',
+
         label: 'Jean',
       },
       {
-        path: '/',
+        path: '/category/hoodie',
         label: 'Hoodie',
       },
       {
-        path: '/',
+        path: '/category/jacket',
         label: 'Jacket',
       },
     ],

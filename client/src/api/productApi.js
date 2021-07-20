@@ -1,8 +1,9 @@
 import axiosClient from './axiosclient';
 
 const productApi = {
-  list: () => {
-    const url = '/products/';
+  getAllProducts: limitData => {
+    const limit = `/?limit=${limitData}` || '/';
+    const url = `/products${limit}`;
     return axiosClient.get(url);
   },
   getProduct: slug => {
@@ -16,4 +17,3 @@ const productApi = {
 };
 
 export default productApi;
-

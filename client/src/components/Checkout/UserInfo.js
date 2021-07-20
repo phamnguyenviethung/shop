@@ -7,18 +7,19 @@ import SelectField from '../../Fields/Select/';
 import TextareaField from '../../Fields/Textarea/';
 import { paymentOptions } from './paymentOptions';
 import * as yup from 'yup';
-import { useSelector } from 'react-redux';
-import moment from 'moment';
+import { useSelector, useDispatch } from 'react-redux';
 import orderApi from '../../api/orderApi';
+import { clearCart } from '../../actions/cartActions';
 
 const UserInfo = ({ cart }) => {
   const toast = useToast();
   const user = useSelector(state => state.user);
+  const dispatch = useDispatch();
 
-  const createOrder = async info => {
+  const createOrder = async (info, reset) => {
     try {
       // Xóa những key - value không cần thiết
-      const exclueKey = ['quantity', 'slug'];
+      const exclueKey = ['quantity', '_id'];
       cart.cartItems.forEach(i => {
         exclueKey.forEach(key => delete i[key]);
       });
@@ -26,9 +27,6 @@ const UserInfo = ({ cart }) => {
       const { name, address, email, phone, payment, note } = info;
 
       const orderInfo = {
-        isPaid: false,
-        isDelivered: false,
-        deliveredAt: moment().format('LTS') + ' ' + moment().format('L'),
         products: cart.cartItems,
         fullname: name,
         address,
@@ -50,8 +48,9 @@ const UserInfo = ({ cart }) => {
         isClosable: true,
         duration: 1200,
       });
+      dispatch(clearCart());
+      reset();
     } catch (error) {
-      console.log(error);
       toast({
         title: 'Có lỗi xảy ra...',
         status: 'error',
@@ -86,7 +85,7 @@ const UserInfo = ({ cart }) => {
         }}
         validationSchema={validationSchema}
         validateOnChange={false}
-        onSubmit={values => createOrder(values)}
+        onSubmit={(values, e) => createOrder(values, e.resetForm)}
       >
         {() => {
           return (

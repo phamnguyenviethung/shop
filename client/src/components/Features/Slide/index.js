@@ -4,10 +4,10 @@ import React from 'react';
 import Slider from 'react-slick';
 import { images } from './data';
 import { Prev, Next } from './Arrows';
-import FeaturesLoading from '../shared/Loading/FeaturesLoading';
+import FeaturesLoading from '../../shared/Loading/SlideLoading';
 import { useSelector } from 'react-redux';
 
-const Features = () => {
+const SlideFeatures = () => {
   const product = useSelector(state => state.product.productList);
   const loading = product.length === 0;
 
@@ -57,4 +57,4 @@ const Features = () => {
   );
 };
 
-export default Features;
+export default SlideFeatures;

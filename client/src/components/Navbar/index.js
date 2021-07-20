@@ -15,10 +15,8 @@ import { ChevronDownIcon } from '@chakra-ui/icons';
 import React from 'react';
 import { VscAccount } from 'react-icons/vsc';
 import { useDispatch, useSelector } from 'react-redux';
-import { useLocation } from 'react-router';
 import { Link } from 'react-router-dom';
 import { signout } from '../../actions/userActions';
-import checkPathName from '../../utils/checkPathName';
 import { CartIcon } from '../Cart/CartIcon';
 import { navbarItems } from './data';
 import { DrawerMobile } from './Drawer';
@@ -26,16 +24,10 @@ import Search from './SearchBox';
 
 const Navbar = ({ cart }) => {
   const [isMobile] = useMediaQuery('(max-width: 768px)');
-  const location = useLocation();
-
-  const path = checkPathName(location.pathname);
 
   const dispatch = useDispatch();
 
   const user = useSelector(state => state.user.user.name);
-  if (!path) {
-    return null;
-  }
 
   return (
     <>
@@ -134,18 +126,20 @@ const Navbar = ({ cart }) => {
 
               {user ? (
                 <MenuList>
-                  <MenuItem>My Account</MenuItem>
+                  <Link to="/profile">
+                    <MenuItem>My Account</MenuItem>
+                  </Link>
                   <MenuItem onClick={() => dispatch(signout())}>
                     Sign out
                   </MenuItem>
                 </MenuList>
               ) : (
                 <MenuList>
-                  <Link to="/login">
+                  <Link to="/account">
                     <MenuItem>Login</MenuItem>
                   </Link>
 
-                  <Link to="/register">
+                  <Link to="/account">
                     <MenuItem>Register</MenuItem>
                   </Link>
                 </MenuList>

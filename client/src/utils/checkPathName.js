@@ -1,6 +1,6 @@
 // Do not render in these paths
 
-const paths = ['/login', '/register'];
+const paths = [];
 
 export default function checkPathName(pathName) {
   const match = paths.indexOf(pathName);

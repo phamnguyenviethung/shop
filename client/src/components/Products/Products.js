@@ -3,7 +3,15 @@ import { Container, SimpleGrid } from '@chakra-ui/react';
 import Product from './Product/Product';
 import { useSelector } from 'react-redux';
 
-import { Tabs, TabList, TabPanels, Tab, TabPanel } from '@chakra-ui/react';
+import {
+  Tabs,
+  TabList,
+  TabPanels,
+  Tab,
+  TabPanel,
+  Button,
+  Center,
+} from '@chakra-ui/react';
 import ProductsListGridLoading from '../shared/Loading/ProductsListGridLoading';
 
 const Products = ({ list, hideTabs, item = 6 }) => {
@@ -31,56 +39,74 @@ const Products = ({ list, hideTabs, item = 6 }) => {
           <ProductsListGridLoading item={item} />
         </Container>
       ) : (
-        <Tabs align="center" variant="unstyled">
-          <TabList border="0">
-            <Tab
-              _selected={{
-                fontWeight: 'bold',
-              }}
-              color="gray.700"
-              fontSize="md"
+        <>
+          <Tabs align="center" variant="unstyled">
+            <TabList border="0">
+              <Tab
+                _selected={{
+                  fontWeight: 'bold',
+                }}
+                color="gray.700"
+                fontSize="md"
+                _focus={{
+                  boxShadow: 'none',
+                }}
+              >
+                New Arrival
+              </Tab>
+              <Tab
+                _selected={{
+                  fontWeight: 'bold',
+                }}
+                color="gray.700"
+                fontSize="md"
+                _focus={{
+                  boxShadow: 'none',
+                }}
+              >
+                Sale off
+              </Tab>
+            </TabList>
+
+            <TabPanels>
+              <TabPanel w="full" maxW="full" mt={10} p={0}>
+                <Container maxW="full">
+                  <SimpleGrid columns={[1, 1, 2, 3]} spacing={10}>
+                    {data.map((item, key) => {
+                      return <Product key={key} item={item} />;
+                    })}
+                  </SimpleGrid>
+                </Container>
+              </TabPanel>
+
+              <TabPanel w="full" maxW="full" mt={10}>
+                <Container maxW="full">
+                  <SimpleGrid columns={[1, 1, 2, 3]} spacing={10}>
+                    {discount.map((item, key) => {
+                      return <Product key={key} item={item} />;
+                    })}
+                  </SimpleGrid>
+                </Container>
+              </TabPanel>
+            </TabPanels>
+          </Tabs>
+          <Center mt={2}>
+            <Button
+              colorScheme="white"
+              variant="outline"
+              borderRadius="4px"
               _focus={{
-                boxShadow: 'none',
+                boxShadow: 0,
+              }}
+              _hover={{
+                backgroundColor: 'black',
+                color: 'white',
               }}
             >
-              New Arrival
-            </Tab>
-            <Tab
-              _selected={{
-                fontWeight: 'bold',
-              }}
-              color="gray.700"
-              fontSize="md"
-              _focus={{
-                boxShadow: 'none',
-              }}
-            >
-              Sale off
-            </Tab>
-          </TabList>
-
-          <TabPanels>
-            <TabPanel w="full" maxW="full" mt={10} p={0}>
-              <Container maxW="full">
-                <SimpleGrid columns={[1, 1, 2, 3]} spacing={10}>
-                  {data.map((item, key) => {
-                    return <Product key={key} item={item} />;
-                  })}
-                </SimpleGrid>
-              </Container>
-            </TabPanel>
-
-            <TabPanel w="full" maxW="full" mt={10}>
-              <Container maxW="full">
-                <SimpleGrid columns={[1, 1, 2, 3]} spacing={10}>
-                  {discount.map((item, key) => {
-                    return <Product key={key} item={item} />;
-                  })}
-                </SimpleGrid>
-              </Container>
-            </TabPanel>
-          </TabPanels>
-        </Tabs>
+              Xem thêm
+            </Button>
+          </Center>
+        </>
       )}
     </>
   );

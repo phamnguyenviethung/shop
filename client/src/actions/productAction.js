@@ -6,11 +6,11 @@ import {
   PRODUCT_FILTER,
 } from './actionsTypes';
 
-export const getProductList = () => async dispatch => {
+export const getProductList = limit => async dispatch => {
   dispatch({ type: GET_PRODUCT_LIST_REQUEST, payload: [] });
 
   try {
-    const productList = await productApi.list();
+    const productList = await productApi.getAllProducts(limit);
 
     localStorage.setItem('products', JSON.stringify(productList));
 

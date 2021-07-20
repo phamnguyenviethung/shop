@@ -19,7 +19,7 @@ export const productPropsHandler = (arr, type) => {
     );
 
     // push to data
-    colors.forEach((item, index) => {
+    colors.forEach(item => {
       data.push(item);
     });
   } else {

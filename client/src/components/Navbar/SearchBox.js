@@ -100,6 +100,7 @@ const Search = () => {
               initialValues={formik.initialValues}
               onSubmit={values => {
                 history.push(`/search?name=${values.search}`);
+                onClose();
               }}
             >
               {props => {
