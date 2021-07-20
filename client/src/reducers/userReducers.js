@@ -7,6 +7,7 @@ import {
   USER_REGISTER_FAIL,
   USER_SIGN_OUT,
   USER_VERIFY_TOKEN,
+  UPDATE_USER_INFO,
 } from '../actions/actionsTypes';
 
 const userReducers = (
@@ -22,19 +23,16 @@ const userReducers = (
     case USER_LOGIN_REQUEST:
       return {
         isLogged: false,
-        loading: true,
         user: action.payload,
       };
     case USER_LOGIN_SUCCESS:
       return {
         isLogged: true,
-        loading: false,
         user: action.payload,
       };
     case USER_LOGIN_FAIL:
       return {
         isLogged: false,
-        loading: false,
         user: {},
         ...action.payload,
       };
@@ -45,6 +43,9 @@ const userReducers = (
       return { isLogged: false, loading: false, user: action.payload };
     case USER_REGISTER_FAIL:
       return { isLogged: false, loading: false, user: {}, ...action.payload };
+
+    case UPDATE_USER_INFO:
+      return { isLogged: true, user: action.payload };
 
     case USER_SIGN_OUT:
       return { isLogged: false, user: {} };

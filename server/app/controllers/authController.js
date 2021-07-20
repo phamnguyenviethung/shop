@@ -4,6 +4,7 @@ const generateToken = require("../../utils/generateToken");
 const catchAsync = require("../../utils/catchAsync");
 const jwt = require("jsonwebtoken");
 const faker = require("faker");
+const { changePasswordValidation } = require("../../utils/Validation");
 
 const {
   registerValidation,
@@ -75,7 +76,7 @@ exports.login = catchAsync(async (req, res, next) => {
     role: user.role,
   });
 
-  const { name, isAdmin, uid, role } = user;
+  const { name, isAdmin, uid, role, phone, address } = user;
 
   res.status(200).json({
     status: "success",
@@ -84,11 +85,38 @@ exports.login = catchAsync(async (req, res, next) => {
         name,
         uid,
         isAdmin,
+        phone,
+        address,
         email: user.email,
+        role,
         accessToken,
         refreshToken,
-        role,
       },
+    },
+  });
+});
+
+exports.changePassword = catchAsync(async (req, res, next) => {
+  const { password, newPassword } = req.body;
+
+  const { error } = changePasswordValidation(req.body);
+  if (error) return next(new AppError(error.details[0].message, 400));
+
+  const user = await User.findOne({ uid: req.user.uid }).select("+password");
+
+  // 2) Check if POSTed current password is correct
+  if (!(await user.correctPassword(password, user.password))) {
+    return next(new AppError("Mật khẩu hiện tại không hợp lệ", 401));
+  }
+
+  // 3) If so, update password
+  user.password = newPassword;
+  await user.save();
+
+  res.status(200).json({
+    status: "success",
+    data: {
+      data: "Thay đổi mật khẩu thành công",
     },
   });
 });

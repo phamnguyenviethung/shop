@@ -1,22 +1,31 @@
-import React from 'react';
 import {
-  Container,
-  VStack,
-  Flex,
   Box,
-  HStack,
-  Heading,
   Button,
+  Container,
+  Flex,
+  Heading,
+  HStack,
+  useToast,
+  VStack,
+  Text,
+  Stack,
+  Image,
+  Center,
+  Avatar,
 } from '@chakra-ui/react';
-import Card from '../components/Settings/Card';
-import userApi from '../api/userApi';
-import { useSelector } from 'react-redux';
 import { FastField, Form, Formik } from 'formik';
-import InputField from '../Fields/Inputs';
+import React from 'react';
+import { useDispatch, useSelector } from 'react-redux';
 import * as yup from 'yup';
+import userApi from '../api/userApi';
+import authApi from '../api/authApi';
+import InputField from '../Fields/Inputs';
+import { updateUserInfo } from '../actions/userActions';
 
 const Settings = () => {
+  const toast = useToast();
   const info = useSelector(state => state.user.user);
+  const dispatch = useDispatch();
 
   const infoSchema = yup.object().shape({
     name: yup.string().required('Vui lòng nhập họ và tên'),
@@ -39,10 +48,129 @@ const Settings = () => {
       .oneOf([yup.ref('newPassword'), null], 'Mật khẩu không khớp'),
   });
 
+  const updateInfo = async data => {
+    try {
+      const user = await userApi.updateuserInfo(info.uid, data);
+      dispatch(updateUserInfo(user));
+      toast({
+        title: 'Cập nhật thông tin thành công',
+        status: 'success',
+        position: 'bottom-right',
+        isClosable: true,
+        duration: 700,
+        onCloseComplete: () => {
+          window.location.reload();
+        },
+      });
+    } catch (error) {
+      toast({
+        title: 'Có lỗi xảy ra',
+        status: 'error',
+        position: 'bottom-right',
+        isClosable: true,
+        duration: 1200,
+      });
+    }
+  };
+
+  const changePass = async data => {
+    try {
+      await authApi.changepasswod(data);
+      toast({
+        title: 'Đổi mật khẩu thành công',
+        status: 'success',
+        position: 'bottom-right',
+        isClosable: true,
+        duration: 700,
+        onCloseComplete: () => {
+          window.location.reload();
+        },
+      });
+    } catch (error) {
+      toast({
+        title: 'Có lỗi xảy ra',
+        status: 'error',
+        position: 'bottom-right',
+        isClosable: true,
+        duration: 1200,
+      });
+    }
+  };
+
   return (
     <Container maxW="90%" w="full" minH="600px" mt={4}>
       <Flex direction={['column', 'column', 'row']}>
-        <Card />
+        <Center flex="1">
+          <Box
+            maxW={'300px'}
+            w={'full'}
+            bg="white"
+            boxShadow={'2xl'}
+            rounded={'md'}
+            overflow={'hidden'}
+          >
+            <Image
+              h={'120px'}
+              w={'full'}
+              src={
+                'https://images.unsplash.com/photo-1612865547334-09cb8cb455da?ixid=MXwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHw%3D&ixlib=rb-1.2.1&auto=format&fit=crop&w=634&q=80'
+              }
+              objectFit={'cover'}
+            />
+            <Flex justify={'center'} mt={-12}>
+              <Avatar
+                size={'xl'}
+                src={
+                  'https://images.unsplash.com/photo-1500648767791-00dcc994a43e?ixlib=rb-1.2.1&q=80&fm=jpg&crop=faces&fit=crop&h=200&w=200&ixid=eyJhcHBfaWQiOjE3Nzg0fQ'
+                }
+                alt={'Author'}
+                css={{
+                  border: '2px solid white',
+                }}
+              />
+            </Flex>
+
+            <Box p={6}>
+              <Stack spacing={0} align={'center'} mb={5}>
+                <Heading fontSize={'2xl'} fontWeight={500} fontFamily={'body'}>
+                  {info.name}
+                </Heading>
+                <Text color={'gray.500'}>
+                  {info.role === 'user' ? 'Thành Viên' : 'Quản trị viên'}{' '}
+                </Text>
+              </Stack>
+
+              <Stack direction={'row'} justify={'center'} spacing={6}>
+                <Stack spacing={0} align={'center'}>
+                  <Text fontWeight={600}>100</Text>
+                  <Text fontSize={'sm'} color={'gray.500'}>
+                    Điểm
+                  </Text>
+                </Stack>
+                <Stack spacing={0} align={'center'}>
+                  <Text fontWeight={600}>15</Text>
+                  <Text fontSize={'sm'} color={'gray.500'}>
+                    Đơn hàng
+                  </Text>
+                </Stack>
+              </Stack>
+
+              <Button
+                w={'full'}
+                mt={8}
+                bg="#151f21"
+                color={'white'}
+                rounded={'md'}
+                _hover={{
+                  transform: 'translateY(-2px)',
+                  boxShadow: 'lg',
+                }}
+              >
+                Follow
+              </Button>
+            </Box>
+          </Box>
+        </Center>
 
         <VStack ml={4} flex="3" spacing={4}>
           <Formik
@@ -54,8 +182,9 @@ const Settings = () => {
             }}
             validationSchema={infoSchema}
             validateOnChange={false}
+            onSubmit={(data, e) => updateInfo(data, e)}
           >
-            {props => {
+            {() => {
               return (
                 <Box w="full">
                   <Heading as="h5" mb={5} fontSize="24px">
@@ -114,6 +243,9 @@ const Settings = () => {
             }}
             validationSchema={passwordSchema}
             validateOnChange={false}
+            onSubmit={values => {
+              changePass(values);
+            }}
           >
             {() => {
               return (

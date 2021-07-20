@@ -36,7 +36,7 @@ function SelectField({
   disabled,
   required,
 }) {
-  const { name, value } = field;
+  const { name } = field;
   const { errors, touched } = form;
   const showError = errors[name] && touched[name];
 

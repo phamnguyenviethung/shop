@@ -25,10 +25,10 @@ const userSchema = new Schema(
     },
     address: { type: String, default: "" },
     phone: {
-      type: Number,
+      type: String,
       min: [8, "Tối thiểu 8 số"],
       max: [11, "Tối đa 11 số"],
-      default: null,
+      default: "",
     },
     role: { type: String, default: "user" },
   },

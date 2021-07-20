@@ -10,6 +10,11 @@ const restrict = require("../app/middleware/restrict");
 router.post("/register", auth.register);
 router.post("/login", auth.login);
 router.use(protect);
+router
+  .get("/:uid", user.getPublicInfo, user.getOne)
+  .patch("/:uid", user.updateUser);
+
+router.patch("/auth/password", auth.changePassword);
 
 router.post("/refresh", auth.refreshToken);
 

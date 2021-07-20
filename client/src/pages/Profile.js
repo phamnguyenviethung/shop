@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from 'react';
-import { Container, Heading, Text, Box } from '@chakra-ui/react';
+import { Container, Heading, Box } from '@chakra-ui/react';
 import OrderList from '../components/Profile/OrderList';
+import Info from '../components/Profile/Info';
 import { useSelector } from 'react-redux';
 
 import userApi from '../api/userApi';
@@ -29,7 +30,7 @@ const Profile = () => {
         <Heading as="h2" fontSize="2xl" fontWeight="700">
           Thông tin tài khoản
         </Heading>
-        <Text>Xin chào, </Text>
+        <Info />
         <OrderList data={orders} />
       </Container>
     </Box>

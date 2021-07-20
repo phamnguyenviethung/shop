@@ -7,10 +7,11 @@ import {
   USER_REGISTER_SUCCESS,
   USER_SIGN_OUT,
   USER_VERIFY_TOKEN,
+  UPDATE_USER_INFO,
 } from './actionsTypes';
 import userApi from '../api/userApi';
+import authApi from '../api/authApi';
 import checkTokenExpire from '../utils/checkTokenExpire';
-
 export const login = (values, toast) => async dispatch => {
   const { email, password } = values;
   dispatch({
@@ -21,7 +22,7 @@ export const login = (values, toast) => async dispatch => {
   try {
     const params = { email, password };
 
-    const data = await userApi.login(params);
+    const data = await authApi.login(params);
 
     dispatch({
       type: USER_LOGIN_SUCCESS,
@@ -65,7 +66,7 @@ export const register = (values, toast) => async dispatch => {
 
   try {
     const params = { name, email, password, confirm };
-    const data = await userApi.register(params);
+    const data = await authApi.register(params);
 
     dispatch({
       type: USER_REGISTER_SUCCESS,
@@ -83,7 +84,7 @@ export const register = (values, toast) => async dispatch => {
       duration: 1200,
     });
 
-    // window.location.replace('/');
+    window.location.replace('/');
   } catch (error) {
     dispatch({
       type: USER_REGISTER_FAIL,
@@ -108,6 +109,13 @@ export const signout = () => dispatch => {
   localStorage.removeItem('cartItems');
   dispatch({ type: USER_SIGN_OUT, payload: {} });
   window.location.replace('/');
+};
+
+export const updateUserInfo = data => (dispatch, getState) => {
+  const user = getState().user.user;
+  Object.assign(user, data);
+  dispatch({ type: UPDATE_USER_INFO, payload: user });
+  localStorage.setItem('userInfo', JSON.stringify(user));
 };
 
 export const verifyToken = () => async (dispatch, getState) => {

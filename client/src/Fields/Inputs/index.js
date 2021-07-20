@@ -40,10 +40,9 @@ function InputField({
   required,
   bgColor,
 }) {
-  const { name } = field;
+  const { name, value } = field;
   const { errors, touched } = form;
   const showError = errors[name] && touched[name];
-
   return (
     <FormControl isInvalid={showError} isRequired={required}>
       {label && <FormLabel htmlFor={name}>{label}</FormLabel>}
@@ -51,6 +50,7 @@ function InputField({
       <Input
         id={name}
         {...field}
+        value={value}
         type={type}
         disabled={disabled}
         placeholder={placeholder}

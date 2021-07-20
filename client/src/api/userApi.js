@@ -1,25 +1,19 @@
 import axiosClient from './axiosclient';
 
 const userApi = {
-  login: params => {
-    const url = '/user/login';
-    return axiosClient.post(url, params);
+  getUserInfo: uid => {
+    const url = `/user/${uid}`;
+    return axiosClient.get(url);
   },
-
-  register: params => {
-    const url = '/user/register';
-    return axiosClient.post(url, params);
-  },
-  refreshTokens: params => {
-    const url = '/user/refresh';
-    return axiosClient.post(url, params);
+  updateuserInfo: (uid, data) => {
+     const url = `/user/${uid}`;
+     return axiosClient.patch(url,data);
   },
 
   getCartData: id => {
     const url = `/cart/${id}?fields=cart`;
     return axiosClient.get(url);
   },
-
   updateCart: (id, data) => {
     const url = `/cart/${id}`;
     const params = {
