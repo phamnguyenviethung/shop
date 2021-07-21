@@ -2,7 +2,7 @@ const express = require("express");
 const router = express.Router();
 const protect = require("../app/middleware/protect");
 
-const cartController = require("../app/controllers/cartController");
+const cartController = require("../app/controllers/cartController.js");
 
 router.use(protect);
 
