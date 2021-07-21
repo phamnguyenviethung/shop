@@ -27,7 +27,7 @@ app.all("*", (req, res, next) => {
 
 app.use(globalErrorHandler);
 
-const PORT = proccess.env.PORT || 3001;
+const PORT = process.env.PORT || 3001;
 app.listen(PORT, () => {
   console.log(`Server running on ${PORT}`);
 });
