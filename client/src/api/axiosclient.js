@@ -3,7 +3,7 @@ import queryString from 'query-string';
 import store from '../store';
 
 const axiosClient = axios.create({
-  baseURL: 'http://localhost:3001/api',
+  baseURL: 'https://ecommerce-shop-api.herokuapp.com/api',
   headers: {
     'content-type': 'application/json',
   },

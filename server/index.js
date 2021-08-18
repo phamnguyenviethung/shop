@@ -21,6 +21,14 @@ app.use(morgan("combined"));
 
 route(app);
 
+if (process.env.NODE_ENV !== "development") {
+  app.get("/api/wakeup-heroku", (req, res) => res.send("ok"));
+  const timer = 25 * 60 * 1000; // 25 minutes
+  setInterval(() => {
+    https.get(`https://ecommerce-shop-api.herokuapp.com/api/wakeup-heroku`);
+  }, timer);
+}
+
 app.all("*", (req, res, next) => {
   next(new AppError(`Can't find ${req.originalUrl} on this server!`, 404));
 });
